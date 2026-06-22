@@ -6,6 +6,30 @@
   <title>MyGig Design System</title>
   <link rel="stylesheet" href="project/colors_and_type.css">
   <style>
+    /* Inline token fallbacks — ensure correct values if external CSS is cached/delayed */
+    :root {
+      --hivis-500: #DCFF1E; --hivis-50: #FAFFDB; --hivis-100: #F1FFA8;
+      --hivis-300: #E5FF5C; --hivis-700: #B8D900; --hivis-900: #6E8200;
+      --ink-0: #FAF8F4; --ink-50: #F2EFE8; --ink-100: #E5E1D7;
+      --ink-300: #A8A294; --ink-400: #6F6A60; --ink-500: #3D3A33;
+      --ink-700: #1F1D19; --ink-900: #0E0D0B;
+      --surface-0: #FFFFFF;
+      --success-50: #E8F6EE; --success-500: #1F8A4C;
+      --warn-50: #FFF3DC; --warn-500: #E89B14;
+      --danger-50: #FCE7E4; --danger-500: #D03826; --danger-700: #8F2518;
+      --info-50: #E4ECF7; --info-500: #2563C8;
+      --font-display: 'Sora', system-ui, sans-serif;
+      --font-body: 'Manrope', system-ui, sans-serif;
+      --font-script: 'Permanent Marker', cursive;
+      --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+      --r-xs: 4px; --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 28px; --r-pill: 999px;
+      --sh-stamp: 4px 4px 0 #0E0D0B; --sh-stamp-hivis: 4px 4px 0 #DCFF1E;
+      --sh-1: 0 1px 3px rgba(14,13,11,.08),0 1px 2px rgba(14,13,11,.04);
+      --sh-2: 0 4px 12px rgba(14,13,11,.08),0 2px 4px rgba(14,13,11,.04);
+      --dur-fast: 120ms; --dur-base: 200ms; --ease-out-quint: cubic-bezier(.22,1,.36,1);
+    }
+  </style>
+  <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { display: flex; min-height: 100vh; }
 
@@ -17,8 +41,7 @@
       scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.15) transparent;
     }
     .sidebar-brand { padding: 24px 20px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .sidebar-logo { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: white; }
-    .sidebar-logo span { font-family: var(--font-script); color: var(--hivis-500); }
+    .sidebar-logo img { display: block; height: 26px; width: auto; }
     .sidebar-version { margin-top: 5px; font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 0.04em; }
     .sidebar-nav { flex: 1; padding: 12px 10px 24px; }
     .nav-group { margin-bottom: 4px; }
@@ -148,7 +171,7 @@
 <!-- ══════ SIDEBAR ══════ -->
 <aside class="sidebar">
   <div class="sidebar-brand">
-    <div class="sidebar-logo"><span>my</span>Gig</div>
+    <div class="sidebar-logo"><img src="project/assets/logo-wordmark-white.png" alt="MyGig"></div>
     <div class="sidebar-version">Design System · v1.0 · May 2026</div>
   </div>
   <nav class="sidebar-nav">
@@ -218,18 +241,18 @@
 
       <div class="card">
         <div class="card-label">Wordmark — light background</div>
-        <div style="display:flex;align-items:center;justify-content:center;height:120px;background:var(--surface-0);border:1px solid var(--ink-100);border-radius:var(--r-md);">
-          <div style="font-family:var(--font-display);font-size:52px;font-weight:800;color:var(--ink-900);"><span style="font-family:var(--font-script);">my</span>Gig</div>
+        <div style="display:flex;align-items:center;justify-content:center;height:120px;background:#FAF8F4;border:1px solid #E5E1D7;border-radius:12px;">
+          <img src="project/assets/logo-wordmark-black.png" alt="MyGig wordmark" style="height:40px;width:auto;">
         </div>
         <p class="card-note">Use on light backgrounds. Clear space = cap-height of "G" on all sides. Never distort or recolour.</p>
       </div>
 
       <div class="card">
         <div class="card-label">Wordmark — dark background</div>
-        <div style="display:flex;align-items:center;justify-content:center;height:120px;background:var(--ink-900);border-radius:var(--r-md);">
-          <div style="font-family:var(--font-display);font-size:52px;font-weight:800;color:white;"><span style="font-family:var(--font-script);color:var(--hivis-500);">my</span>Gig</div>
+        <div style="display:flex;align-items:center;justify-content:center;height:120px;background:#0E0D0B;border-radius:12px;">
+          <img src="project/assets/logo-wordmark-white.png" alt="MyGig wordmark on dark" style="height:40px;width:auto;">
         </div>
-        <p class="card-note">White version on dark backgrounds. The "my" uses hi-vis on dark.</p>
+        <p class="card-note">White version on dark backgrounds. The "my" script element uses hi-vis lime on dark.</p>
       </div>
 
       <div class="card">
@@ -238,6 +261,25 @@
           <div class="mg-script" style="font-size:56px;color:var(--hivis-500);transform:rotate(-2deg);display:inline-block;line-height:1.1;">Work your Way</div>
         </div>
         <p class="card-note"><strong>Always lowercase "your".</strong> Font: Permanent Marker. Hero shots and campaign layouts only — never in buttons, navigation, or product chrome.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-label">App icon / logo mark</div>
+        <div style="display:flex;align-items:center;gap:40px;padding:24px;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+            <img src="project/assets/logo-mark-black.png" alt="MyGig mark" style="height:64px;width:auto;border-radius:12px;">
+            <span style="font-family:var(--font-mono);font-size:10px;color:#6F6A60;">64 × 64</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+            <img src="project/assets/logo-mark-black.png" alt="MyGig mark" style="height:44px;width:auto;border-radius:8px;">
+            <span style="font-family:var(--font-mono);font-size:10px;color:#6F6A60;">44 × 44</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+            <img src="project/assets/logo-mark-black.png" alt="MyGig mark" style="height:32px;width:auto;border-radius:6px;">
+            <span style="font-family:var(--font-mono);font-size:10px;color:#6F6A60;">32 × 32</span>
+          </div>
+        </div>
+        <p class="card-note">Square mark only. Used in app icons, favicons, tight-space contexts. Never stack mark + wordmark together.</p>
       </div>
     </section>
 
@@ -321,15 +363,24 @@
 
       <div class="card">
         <div class="card-label">HI-VIS — signature accent</div>
+        <!-- Large accent preview — #DCFF1E = electric lime (NOT purple) -->
+        <div style="background:#DCFF1E;border:3px solid #0E0D0B;border-radius:12px;padding:28px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-family:'Sora',system-ui,sans-serif;font-size:13px;font-weight:700;color:#0E0D0B;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">hivis-500 — THE ACCENT</div>
+            <div style="font-family:'JetBrains Mono','Courier New',monospace;font-size:28px;font-weight:700;color:#0E0D0B;">#DCFF1E</div>
+            <div style="font-family:'Manrope',system-ui,sans-serif;font-size:13px;color:#1F1D19;margin-top:4px;">Electric lime · Safety-vest nod</div>
+          </div>
+          <div style="font-size:48px;line-height:1;">🦺</div>
+        </div>
         <div class="swatch-grid" style="grid-template-columns:repeat(6,1fr);">
-          <div class="swatch"><div class="swatch-block" style="background:#FAFFDB;"><span class="swatch-hex" style="color:var(--ink-400);">#FAFFDB</span></div><div class="swatch-name">hivis-50</div><div class="swatch-role">Tint</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#F1FFA8;"><span class="swatch-hex" style="color:var(--ink-400);">#F1FFA8</span></div><div class="swatch-name">hivis-100</div><div class="swatch-role">Badge bg</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#E5FF5C;"><span class="swatch-hex" style="color:var(--ink-700);">#E5FF5C</span></div><div class="swatch-name">hivis-300</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#DCFF1E;border:2px solid var(--ink-900);"><span class="swatch-hex" style="color:var(--ink-700);font-weight:700;">#DCFF1E</span></div><div class="swatch-name">hivis-500</div><div class="swatch-role">THE ACCENT ★</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#B8D900;"><span class="swatch-hex" style="color:var(--ink-900);">#B8D900</span></div><div class="swatch-name">hivis-700</div><div class="swatch-role">Pressed</div></div>
+          <div class="swatch"><div class="swatch-block" style="background:#FAFFDB;"><span class="swatch-hex" style="color:#6F6A60;">#FAFFDB</span></div><div class="swatch-name">hivis-50</div><div class="swatch-role">Tint</div></div>
+          <div class="swatch"><div class="swatch-block" style="background:#F1FFA8;"><span class="swatch-hex" style="color:#6F6A60;">#F1FFA8</span></div><div class="swatch-name">hivis-100</div><div class="swatch-role">Badge bg</div></div>
+          <div class="swatch"><div class="swatch-block" style="background:#E5FF5C;"><span class="swatch-hex" style="color:#1F1D19;">#E5FF5C</span></div><div class="swatch-name">hivis-300</div></div>
+          <div class="swatch"><div class="swatch-block" style="background:#DCFF1E;border:2px solid #0E0D0B;"><span class="swatch-hex" style="color:#1F1D19;font-weight:700;">#DCFF1E</span></div><div class="swatch-name">hivis-500</div><div class="swatch-role">★ Core</div></div>
+          <div class="swatch"><div class="swatch-block" style="background:#B8D900;"><span class="swatch-hex" style="color:#0E0D0B;">#B8D900</span></div><div class="swatch-name">hivis-700</div><div class="swatch-role">Pressed</div></div>
           <div class="swatch"><div class="swatch-block" style="background:#6E8200;"><span class="swatch-hex" style="color:white;">#6E8200</span></div><div class="swatch-name">hivis-900</div><div class="swatch-role">Text on light</div></div>
         </div>
-        <p class="card-note">Use sparingly — one or two hits per screen. Nods to hi-vis vests in MyGig's core industries.</p>
+        <p class="card-note">Electric lime — not yellow, not green. Use sparingly: one or two hits per screen. Never use purple as the brand accent.</p>
       </div>
 
       <div class="card">
