@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyGig Business — Dashboard</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  * { box-sizing: border-box; }
+  body { background: var(--ink-0); margin: 0; color: var(--ink-700); font-size: 14px; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: var(--font-body); cursor: pointer; }
+
+  .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar { background: var(--ink-900); color: rgba(255,255,255,0.7); padding: 24px 16px; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  .side-logo { padding: 4px 12px 28px; display: flex; align-items: center; gap: 10px; }
+  .side-logo-text { font-family: var(--font-display); font-weight: 800; font-size: 22px; color: white; }
+  .side-logo-my { font-family: var(--font-script); color: var(--hivis-500); }
+  .side-section { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin: 20px 14px 8px; }
+  .side-link { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--r-sm); font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.7); transition: all var(--dur-base) var(--ease-out-quint); margin-bottom: 2px; border: none; background: none; width: 100%; text-align: left; }
+  .side-link:hover { background: rgba(255,255,255,0.05); color: white; }
+  .side-link.active { background: rgba(220,255,30,0.1); color: var(--hivis-500); font-weight: 700; }
+  .side-link .badge { margin-left: auto; background: var(--hivis-500); color: var(--ink-900); font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: var(--r-pill); }
+  .side-org { margin-top: auto; padding: 12px; background: rgba(255,255,255,0.05); border-radius: var(--r-md); display: flex; align-items: center; gap: 10px; }
+  .side-org-logo { width: 36px; height: 36px; background: var(--hivis-500); border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; color: var(--ink-900); font-size: 14px; flex-shrink: 0; }
+  .side-org .name { font-weight: 700; color: white; font-size: 13px; }
+  .side-org .sub { font-size: 11px; color: rgba(255,255,255,0.5); }
+
+  /* Main */
+  .main { display: flex; flex-direction: column; min-width: 0; }
+  .topbar { height: 64px; background: white; border-bottom: 1px solid var(--ink-100); display: flex; align-items: center; padding: 0 32px; gap: 16px; position: sticky; top: 0; z-index: 10; }
+  .crumb { font-size: 13px; color: var(--ink-400); }
+  .crumb b { color: var(--ink-900); font-weight: 700; }
+  .top-spacer { flex: 1; }
+  .icon-btn { width: 36px; height: 36px; border-radius: var(--r-sm); background: var(--ink-50); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink-700); font-size: 16px; }
+  .icon-btn:hover { background: var(--ink-100); }
+  .av-sm { width: 32px; height: 32px; border-radius: 50%; background: var(--hivis-100); border: 1.5px solid var(--ink-900); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 11px; color: var(--ink-900); }
+
+  /* Page content */
+  .page { padding: 32px; flex: 1; }
+  .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; gap: 16px; }
+  .page-title { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--ink-900); margin-bottom: 4px; }
+  .page-sub { font-size: 14px; color: var(--ink-400); }
+
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: var(--r-md); font-family: var(--font-body); font-weight: 700; font-size: 14px; cursor: pointer; border: none; line-height: 1; transition: all var(--dur-base) var(--ease-out-quint); }
+  .btn-stamp { background: var(--hivis-500); color: var(--ink-900); border: 3px solid var(--ink-900); box-shadow: var(--sh-stamp); }
+  .btn-stamp:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink-900); }
+  .btn-stamp:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--ink-900); }
+  .btn-ghost { background: transparent; color: var(--ink-700); border: 1.5px solid var(--ink-100); }
+  .btn-ghost:hover { background: var(--ink-50); }
+  .btn-sm { padding: 8px 14px; font-size: 12px; }
+
+  /* KPI cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .kpi { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-lg); padding: 20px 22px; }
+  .kpi-label { font-size: 11px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 10px; }
+  .kpi-val { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--ink-900); line-height: 1; margin-bottom: 6px; }
+  .kpi-delta { font-size: 12px; font-weight: 600; }
+  .kpi-delta.up { color: var(--success-500); }
+  .kpi-delta.down { color: var(--danger-500); }
+
+  /* Shift table */
+  .section-card { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-lg); overflow: hidden; margin-bottom: 24px; }
+  .section-head { padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--ink-50); }
+  .section-head-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--ink-900); }
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 11px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-400); text-align: left; padding: 12px 22px; background: var(--ink-50); border-bottom: 1px solid var(--ink-100); }
+  td { padding: 14px 22px; border-bottom: 1px solid var(--ink-50); color: var(--ink-700); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--ink-50); }
+
+  .pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: var(--r-pill); font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .pill-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* Worker list */
+  .worker-row { display: flex; align-items: center; gap: 12px; }
+  .av { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--ink-900); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 12px; color: var(--ink-900); flex-shrink: 0; overflow: hidden; }
+  .av img { width: 100%; height: 100%; object-fit: cover; }
+  .worker-name { font-weight: 700; color: var(--ink-900); font-size: 14px; }
+  .worker-meta { font-size: 12px; color: var(--ink-400); }
+
+  code { font-family: var(--font-mono); font-size: 12px; background: var(--ink-50); padding: 2px 6px; border-radius: var(--r-xs); }
+
+  /* Post shift modal preview */
+  .modal-preview { background: rgba(14,13,11,0.5); position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; }
+  .modal-preview.open { display: flex; }
+  .modal { background: white; border-radius: var(--r-xl); padding: 32px; width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: var(--sh-4); }
+  .modal-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--ink-900); margin-bottom: 4px; }
+  .modal-sub { font-size: 14px; color: var(--ink-400); margin-bottom: 24px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .form-field { display: flex; flex-direction: column; gap: 5px; }
+  .form-field.full { grid-column: 1 / -1; }
+  .form-label { font-size: 12px; font-weight: 700; color: var(--ink-700); }
+  .form-input { padding: 10px 13px; border: 1.5px solid var(--ink-100); border-radius: var(--r-md); font-family: var(--font-body); font-size: 14px; color: var(--ink-900); outline: none; }
+  .form-input:focus { border-color: var(--hivis-500); border-width: 2px; box-shadow: 0 0 0 4px rgba(220,255,30,0.22); }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--ink-100); }
+
+  /* Segmented */
+  .seg { display: inline-flex; padding: 4px; background: var(--ink-50); border-radius: var(--r-pill); }
+  .seg-btn { padding: 7px 16px; border-radius: var(--r-pill); background: transparent; color: var(--ink-500); border: none; font-family: var(--font-body); font-weight: 600; font-size: 13px; cursor: pointer; }
+  .seg-btn.active { background: var(--ink-900); color: white; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="side-logo">
+      <span class="side-logo-text"><span class="side-logo-my">my</span>Gig</span>
+    </div>
+
+    <span class="side-section">Operations</span>
+    <button class="side-link active">📋 Dashboard</button>
+    <button class="side-link">➕ Post a shift <span class="badge">New</span></button>
+    <button class="side-link">📅 Shift calendar</button>
+    <button class="side-link">📊 Live roster</button>
+
+    <span class="side-section">Workforce</span>
+    <button class="side-link">👥 Worker pool</button>
+    <button class="side-link">⭐ Top workers</button>
+    <button class="side-link">🔍 Find workers</button>
+
+    <span class="side-section">Finance</span>
+    <button class="side-link">💰 Invoices</button>
+    <button class="side-link">📈 Reports</button>
+
+    <span class="side-section">Settings</span>
+    <button class="side-link">🏢 Organisation</button>
+    <button class="side-link">🔔 Notifications</button>
+    <button class="side-link">🛡️ Compliance</button>
+
+    <div style="height:24px;"></div>
+
+    <div class="side-org">
+      <div class="side-org-logo">SH</div>
+      <div>
+        <div class="name">Single O Hospo</div>
+        <div class="sub">Business · NSW · EOR active</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="topbar">
+      <span class="crumb"><b>Dashboard</b></span>
+      <div class="top-spacer"></div>
+      <button class="icon-btn" title="Search">🔍</button>
+      <button class="icon-btn" title="Notifications">🔔</button>
+      <div class="av-sm">JK</div>
+    </div>
+
+    <div class="page">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Good morning, James.</div>
+          <div class="page-sub">Tuesday 26 May 2026 · Sydney, NSW · 3 shifts running today</div>
+        </div>
+        <button class="btn btn-stamp" onclick="document.getElementById('modal').classList.add('open')">➕ Post a shift</button>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-label">Fill rate (30d)</div>
+          <div class="kpi-val">94%</div>
+          <div class="kpi-delta up">↑ +4% vs last month</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Shifts this week</div>
+          <div class="kpi-val">12</div>
+          <div class="kpi-delta up">↑ 3 more than last week</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Active workers</div>
+          <div class="kpi-val">47</div>
+          <div class="kpi-delta up">↑ 8 in your pool</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Spend (this week)</div>
+          <div class="kpi-val">$4,821</div>
+          <div class="kpi-delta down">↑ $380 vs last week</div>
+        </div>
+      </div>
+
+      <!-- Shifts table -->
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-head-title">Upcoming shifts</div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div class="seg">
+              <button class="seg-btn active">All</button>
+              <button class="seg-btn">Open</button>
+              <button class="seg-btn">Confirmed</button>
+              <button class="seg-btn">Completed</button>
+            </div>
+            <button class="btn btn-ghost btn-sm">Export</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Shift</th>
+              <th>Date · Time</th>
+              <th>Role</th>
+              <th>Worker</th>
+              <th>Rate</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>MG-04823</code></td>
+              <td style="font-family:var(--font-mono);font-size:12px;">Tue 27 May · 6:30am–2:00pm</td>
+              <td><span class="pill" style="background:var(--tag-hospo);">Barista</span></td>
+              <td>
+                <div class="worker-row">
+                  <div class="av" style="background:var(--tag-hospo);">SM</div>
+                  <div><div class="worker-name">Sarah M.</div><div class="worker-meta">★ 4.9 · Top worker</div></div>
+                </div>
+              </td>
+              <td style="font-family:var(--font-mono);font-size:13px;font-weight:600;">$31.19/hr</td>
+              <td><span class="pill" style="background:var(--success-50);color:var(--success-700);"><span class="pill-dot" style="background:var(--success-500);"></span>Confirmed</span></td>
+              <td><button class="btn btn-ghost btn-sm">View</button></td>
+            </tr>
+            <tr>
+              <td><code>MG-04824</code></td>
+              <td style="font-family:var(--font-mono);font-size:12px;">Tue 27 May · 10:00am–6:00pm</td>
+              <td><span class="pill" style="background:var(--tag-events);">Event staff</span></td>
+              <td>
+                <div class="worker-row">
+                  <div class="av" style="background:var(--tag-warehouse);">JK</div>
+                  <div><div class="worker-name">James K.</div><div class="worker-meta">★ 4.8 · 89 shifts</div></div>
+                </div>
+              </td>
+              <td style="font-family:var(--font-mono);font-size:13px;font-weight:600;">$34.50/hr</td>
+              <td><span class="pill" style="background:var(--success-50);color:var(--success-700);"><span class="pill-dot" style="background:var(--success-500);"></span>Confirmed</span></td>
+              <td><button class="btn btn-ghost btn-sm">View</button></td>
+            </tr>
+            <tr>
+              <td><code>MG-04825</code></td>
+              <td style="font-family:var(--font-mono);font-size:12px;">Wed 28 May · 7:00am–3:00pm</td>
+              <td><span class="pill" style="background:var(--tag-warehouse);">Pick-packer</span></td>
+              <td><div style="color:var(--ink-400);font-style:italic;font-size:13px;">Awaiting worker…</div></td>
+              <td style="font-family:var(--font-mono);font-size:13px;font-weight:600;">$33.00/hr</td>
+              <td><span class="pill" style="background:var(--hivis-100);color:var(--ink-900);font-weight:700;"><span class="pill-dot" style="background:var(--hivis-700);"></span>Open shift</span></td>
+              <td><button class="btn btn-ghost btn-sm">View</button></td>
+            </tr>
+            <tr>
+              <td><code>MG-04826</code></td>
+              <td style="font-family:var(--font-mono);font-size:12px;">Thu 29 May · 8:00am–4:00pm</td>
+              <td><span class="pill" style="background:var(--tag-construction);">Labourer</span></td>
+              <td>
+                <div class="worker-row">
+                  <div class="av" style="background:var(--tag-construction);">RP</div>
+                  <div><div class="worker-name">Rosa P.</div><div class="worker-meta">★ 4.7 · 62 shifts</div></div>
+                </div>
+              </td>
+              <td style="font-family:var(--font-mono);font-size:13px;font-weight:600;">$38.20/hr</td>
+              <td><span class="pill" style="background:var(--warn-50);color:var(--warn-700);"><span class="pill-dot" style="background:var(--warn-500);"></span>Cert expiring</span></td>
+              <td><button class="btn btn-ghost btn-sm">View</button></td>
+            </tr>
+            <tr>
+              <td><code>MG-04820</code></td>
+              <td style="font-family:var(--font-mono);font-size:12px;">Mon 26 May · 6:30am–2:00pm</td>
+              <td><span class="pill" style="background:var(--tag-hospo);">Barista</span></td>
+              <td>
+                <div class="worker-row">
+                  <div class="av" style="background:var(--tag-agriculture);">TM</div>
+                  <div><div class="worker-name">Tom M.</div><div class="worker-meta">★ 4.6 · 34 shifts</div></div>
+                </div>
+              </td>
+              <td style="font-family:var(--font-mono);font-size:13px;font-weight:600;">$31.19/hr</td>
+              <td><span class="pill" style="background:var(--success-50);color:var(--success-700);"><span class="pill-dot" style="background:var(--success-500);"></span>Completed</span></td>
+              <td><button class="btn btn-ghost btn-sm">View</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Amy AI -->
+      <div style="background:var(--ink-900);border-radius:var(--r-lg);padding:24px 28px;display:flex;align-items:center;gap:24px;">
+        <div style="width:48px;height:48px;background:var(--hivis-500);border-radius:var(--r-md);border:2px solid var(--ink-900);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">⚡</div>
+        <div style="flex:1;">
+          <div style="font-family:var(--font-display);font-size:16px;font-weight:700;color:white;margin-bottom:4px;">Amy says: your Wed 28 May shift is unfilled with 36 hours to go.</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.6);">3 workers in your pool are available. Auto-accept your top-rated workers to fill it now.</div>
+        </div>
+        <button class="btn btn-stamp btn-sm" style="flex-shrink:0;">Auto-fill →</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Post Shift Modal -->
+<div class="modal-preview" id="modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-title">Post a shift</div>
+    <div class="modal-sub">Fill in the details — workers see it immediately.</div>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Role / position</label>
+        <input class="form-input" value="Barista" readonly>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Industry</label>
+        <select class="form-input"><option>Hospitality</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Date</label>
+        <input class="form-input" type="date" value="2026-05-29" readonly>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Pay rate (AUD/hr)</label>
+        <input class="form-input" value="$31.19" readonly>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Start time</label>
+        <input class="form-input" value="6:30am" readonly>
+      </div>
+      <div class="form-field">
+        <label class="form-label">End time</label>
+        <input class="form-input" value="2:00pm" readonly>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field full">
+        <label class="form-label">Location</label>
+        <input class="form-input" value="Reservoir St, Surry Hills NSW 2010" readonly>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field full">
+        <label class="form-label">Notes for the worker</label>
+        <textarea class="form-input" style="resize:none;height:64px;" readonly>Black t-shirt required. Ask for Sam at reception.</textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="document.getElementById('modal').classList.remove('open')">Cancel</button>
+      <button class="btn btn-stamp">Post shift →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Kit banner -->
+<div style="position:fixed;bottom:20px;right:20px;background:var(--ink-900);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r-md);padding:10px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--sh-4);z-index:200;">
+  <span style="font-family:var(--font-body);font-size:12px;color:rgba(255,255,255,0.7);">MyGig · Business Platform Kit</span>
+  <a href="../../../index.html" style="font-family:var(--font-body);font-size:12px;font-weight:700;color:var(--hivis-500);text-decoration:none;">← Style guide</a>
+</div>
+
+</body>
+</html>

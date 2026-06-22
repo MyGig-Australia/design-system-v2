@@ -1,0 +1,185 @@
+/* ========================================================================
+   MyGig — Design Tokens
+   Source-of-truth CSS variables for color, type, spacing, radii, shadow.
+   Import once at the top of any HTML file in this design system.
+   ======================================================================== */
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&family=Permanent+Marker&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  /* ── INK ─────────────────────────────────────────── */
+  --ink-0:   #FAF8F4;   /* paper / page bg          */
+  --ink-50:  #F2EFE8;   /* hover / subtle bg        */
+  --ink-100: #E5E1D7;   /* dividers / borders       */
+  --ink-200: #CCC8BC;   /* input borders            */
+  --ink-300: #A8A294;   /* placeholder text         */
+  --ink-400: #6F6A60;   /* secondary text           */
+  --ink-500: #3D3A33;   /* body text                */
+  --ink-700: #1F1D19;   /* near-black               */
+  --ink-900: #0E0D0B;   /* brand black / wordmark   */
+
+  /* ── HI-VIS ──────────────────────────────────────── */
+  --hivis-50:  #FAFFDB;
+  --hivis-100: #F1FFA8;
+  --hivis-300: #E5FF5C;
+  --hivis-500: #DCFF1E;  /* THE accent               */
+  --hivis-700: #B8D900;  /* pressed state            */
+  --hivis-900: #6E8200;  /* text on light bg         */
+
+  /* ── SEMANTIC ─────────────────────────────────────── */
+  --success-50:  #E8F6EE;
+  --success-500: #1F8A4C;
+  --success-700: #166038;
+  --warn-50:     #FFF3DC;
+  --warn-500:    #E89B14;
+  --warn-700:    #9E6A0A;
+  --danger-50:   #FCE7E4;
+  --danger-500:  #D03826;
+  --danger-700:  #8F2518;
+  --info-50:     #E4ECF7;
+  --info-500:    #2563C8;
+  --info-700:    #1A4591;
+
+  /* ── INDUSTRY TAG TINTS ───────────────────────────── */
+  --tag-hospo:        #FFD6A8;
+  --tag-events:       #F2C9FF;
+  --tag-warehouse:    #B8E2FF;
+  --tag-construction: #FFDF6B;
+  --tag-retail:       #F6B8C8;
+  --tag-mining:       #C3D3A6;
+  --tag-agriculture:  #C9E8C2;
+
+  /* ── SURFACE ──────────────────────────────────────── */
+  --surface-0: #FFFFFF;
+
+  /* ── TYPOGRAPHY ───────────────────────────────────── */
+  --font-display: 'Sora', system-ui, sans-serif;
+  --font-body:    'Manrope', system-ui, sans-serif;
+  --font-script:  'Permanent Marker', cursive;
+  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+
+  /* ── SPACING (4pt scale) ──────────────────────────── */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-20: 80px;
+  --sp-24: 96px;
+
+  /* ── RADII ────────────────────────────────────────── */
+  --r-xs:   4px;
+  --r-sm:   8px;
+  --r-md:   12px;   /* default card/input */
+  --r-lg:   18px;
+  --r-xl:   28px;   /* modals / sheets    */
+  --r-pill: 999px;  /* tags / pills       */
+
+  /* ── SHADOWS ──────────────────────────────────────── */
+  --sh-1: 0 1px 3px rgba(14,13,11,0.08), 0 1px 2px rgba(14,13,11,0.04);
+  --sh-2: 0 4px 12px rgba(14,13,11,0.08), 0 2px 4px rgba(14,13,11,0.04);
+  --sh-3: 0 8px 24px rgba(14,13,11,0.10), 0 4px 8px rgba(14,13,11,0.05);
+  --sh-4: 0 16px 48px rgba(14,13,11,0.12), 0 6px 16px rgba(14,13,11,0.06);
+
+  /* Stamp motif — hard ink offset */
+  --sh-stamp:       4px 4px 0 var(--ink-900);
+  --sh-stamp-hivis: 4px 4px 0 var(--hivis-500);
+
+  /* ── BORDERS ──────────────────────────────────────── */
+  --bw-hair:  1px;
+  --bw-rule:  1.5px;
+  --bw-heavy: 2px;
+  --bw-stamp: 3px;
+
+  /* ── MOTION ───────────────────────────────────────── */
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 400ms;
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── LAYOUT ───────────────────────────────────────── */
+  --container-wide:   1320px;
+  --container-normal: 1140px;
+  --gutter:           48px;
+}
+
+/* ── GLOBAL BASE ─────────────────────────────────────── */
+body {
+  font-family: var(--font-body);
+  background: var(--ink-0);
+  color: var(--ink-500);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── TYPE HELPERS ─────────────────────────────────────── */
+.mg-display-xl {
+  font-family: var(--font-display);
+  font-size: 88px; font-weight: 800;
+  line-height: 0.95; letter-spacing: -0.03em;
+}
+.mg-display-l {
+  font-family: var(--font-display);
+  font-size: 64px; font-weight: 800;
+  line-height: 1.00; letter-spacing: -0.025em;
+}
+.mg-display {
+  font-family: var(--font-display);
+  font-size: 44px; font-weight: 700;
+  line-height: 1.05; letter-spacing: -0.02em;
+}
+.mg-h1 {
+  font-family: var(--font-display);
+  font-size: 36px; font-weight: 700;
+  line-height: 1.10; letter-spacing: -0.015em;
+}
+.mg-h2 {
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 700;
+  line-height: 1.15; letter-spacing: -0.01em;
+}
+.mg-h3 {
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 700;
+  line-height: 1.25; letter-spacing: -0.005em;
+}
+.mg-h4 {
+  font-family: var(--font-body);
+  font-size: 18px; font-weight: 700;
+  line-height: 1.30;
+}
+.mg-body {
+  font-family: var(--font-body);
+  font-size: 16px; font-weight: 400;
+  line-height: 1.50;
+}
+.mg-body-sm {
+  font-family: var(--font-body);
+  font-size: 14px; font-weight: 400;
+  line-height: 1.45;
+}
+.mg-caption {
+  font-family: var(--font-body);
+  font-size: 12px; font-weight: 400;
+  line-height: 1.40;
+}
+.mg-eyebrow {
+  font-family: var(--font-body);
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.mg-script {
+  font-family: var(--font-script);
+  line-height: 1.1;
+}
+.mg-mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}

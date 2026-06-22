@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyGig — Workforce-as-a-Service · EOR · Australia</title>
+  <link rel="stylesheet" href="../../project/colors_and_type.css" />
+  <style>
+    /* ── RESET & BASE ──────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ── LAYOUT HELPERS ────────────────────────────────── */
+    .container {
+      max-width: var(--container-wide);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+    .section { padding-block: var(--sp-24); }
+
+    /* ── BUTTONS ────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1;
+      padding: 12px 24px;
+      border-radius: var(--r-xs);
+      cursor: pointer;
+      transition: all var(--dur-base) var(--ease-out-quint);
+      border: none;
+      white-space: nowrap;
+    }
+
+    /* Stamp button: hivis fill, 3px ink border, 4px offset shadow */
+    .btn-stamp {
+      background: var(--hivis-500);
+      color: var(--ink-900);
+      border: 3px solid var(--ink-900);
+      box-shadow: 4px 4px 0 var(--ink-900);
+    }
+    .btn-stamp:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0 var(--ink-900);
+    }
+    .btn-stamp:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--ink-900);
+    }
+
+    /* Ghost light: white border, white text */
+    .btn-ghost-light {
+      background: transparent;
+      color: rgba(255,255,255,0.85);
+      border: 2px solid rgba(255,255,255,0.35);
+    }
+    .btn-ghost-light:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.6);
+      color: #fff;
+    }
+
+    /* Ghost dark: ink border on light bg */
+    .btn-ghost-dark {
+      background: transparent;
+      color: var(--ink-900);
+      border: 2px solid var(--ink-900);
+    }
+    .btn-ghost-dark:hover {
+      background: var(--ink-900);
+      color: var(--hivis-500);
+    }
+
+    /* Nav ghost button */
+    .btn-nav-ghost {
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      padding: 8px 18px;
+      font-size: 13px;
+    }
+    .btn-nav-ghost:hover {
+      border-color: rgba(255,255,255,0.6);
+      color: #fff;
+    }
+
+    /* Stamp button on light bg (ink card) */
+    .btn-stamp-light {
+      background: var(--hivis-500);
+      color: var(--ink-900);
+      border: 3px solid var(--ink-900);
+      box-shadow: 4px 4px 0 var(--ink-900);
+    }
+    .btn-stamp-light:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0 var(--ink-900);
+    }
+
+    /* Stamp button on hivis bg */
+    .btn-stamp-ink {
+      background: var(--ink-900);
+      color: var(--hivis-500);
+      border: 3px solid var(--ink-900);
+      box-shadow: 4px 4px 0 rgba(255,255,255,0.25);
+    }
+    .btn-stamp-ink:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0 rgba(255,255,255,0.25);
+    }
+
+    /* ── 1. STICKY NAV ─────────────────────────────────── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--ink-900);
+      height: 64px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-inner {
+      max-width: var(--container-wide);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-8);
+    }
+    .nav-logo img {
+      height: 28px;
+      width: auto;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-8);
+    }
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      transition: color var(--dur-base) var(--ease-out-quint);
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+    }
+
+    /* ── 2. HERO ──────────────────────────────────────── */
+    .hero {
+      background: var(--ink-900);
+      padding-top: var(--sp-24);
+      padding-bottom: var(--sp-24);
+      overflow: hidden;
+    }
+    .hero-inner {
+      max-width: var(--container-wide);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-16);
+      align-items: center;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--hivis-700);
+      margin-bottom: var(--sp-5);
+    }
+    .hero-h1 {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.025em;
+      color: #fff;
+      margin-bottom: var(--sp-6);
+    }
+    .hero-h1 .accent { color: var(--hivis-500); }
+    .hero-sub {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.65);
+      max-width: 520px;
+      margin-bottom: var(--sp-8);
+    }
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-8);
+      flex-wrap: wrap;
+    }
+    .hero-proof {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-6);
+      flex-wrap: wrap;
+    }
+    .hero-proof-item {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+    }
+    .hero-proof-item .check {
+      color: var(--hivis-500);
+      font-size: 14px;
+    }
+    /* Hero right column */
+    .hero-visual {
+      position: relative;
+    }
+    .hero-photo-placeholder {
+      aspect-ratio: 4/3;
+      background: var(--ink-700);
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: visible;
+    }
+    .hero-photo-label {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--hivis-500);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .hero-badge {
+      position: absolute;
+      bottom: -16px;
+      left: -16px;
+      background: var(--hivis-500);
+      color: var(--ink-900);
+      border: 3px solid var(--ink-900);
+      box-shadow: 4px 4px 0 var(--ink-900);
+      border-radius: var(--r-sm);
+      padding: var(--sp-4) var(--sp-5);
+      transform: rotate(-3deg);
+      font-family: var(--font-display);
+      font-weight: 800;
+      text-align: center;
+      z-index: 2;
+    }
+    .hero-badge-value {
+      font-size: 36px;
+      line-height: 1;
+      display: block;
+    }
+    .hero-badge-label {
+      font-size: 11px;
+      font-family: var(--font-body);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── 3. LOGOS BAR ─────────────────────────────────── */
+    .logos-bar {
+      background: var(--ink-0);
+      padding-block: var(--sp-16);
+      border-top: 1px solid var(--ink-100);
+      border-bottom: 1px solid var(--ink-100);
+    }
+    .logos-bar-inner {
+      max-width: var(--container-wide);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+    .logos-bar-label {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-300);
+      text-align: center;
+      margin-bottom: var(--sp-8);
+    }
+    .logos-grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-10);
+      flex-wrap: wrap;
+    }
+    .logo-placeholder {
+      width: 120px;
+      height: 32px;
+      background: var(--ink-100);
+      border-radius: var(--r-xs);
+      opacity: 0.6;
+    }
+
+    /* ── 4. STATS ─────────────────────────────────────── */
+    .stats {
+      background: var(--ink-900);
+      padding-block: var(--sp-20);
+    }
+    .stats-inner {
+      max-width: var(--container-wide);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .stat-item {
+      padding: var(--sp-8) var(--sp-8);
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 52px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--hivis-500);
+      display: block;
+      margin-bottom: var(--sp-2);
+    }
+    .stat-label {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      display: block;
+      margin-bottom: var(--sp-2);
+    }
+    .stat-sub {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.45);
+      display: block;
+    }
+
+    /* ── 5. VALUE PROPS — FOR BUSINESSES ─────────────── */
+    .value-props {
+      background: var(--ink-0);
+      padding-block: var(--sp-24);
+    }
+    .value-props-inner {
+      max-width: var(--container-wide);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+    .section-eyebrow {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--hivis-900);
+      margin-bottom: var(--sp-3);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--ink-900);
+      margin-bottom: var(--sp-16);
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-6);
+    }
+    .card {
+      background: var(--surface-0);
+      border: 1.5px solid var(--ink-100);
+      border-radius: var(--r-md);
+      padding: var(--sp-8);
+      transition: box-shadow var(--dur-base) var(--ease-out-quint), transform var(--dur-base) var(--ease-out-quint);
+    }
+    .card:hover {
+      box-shadow: var(--sh-3);
+      transform: translateY(-2px);
+    }
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--hivis-100);
+      border-radius: var(--r-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: var(--sp-5);
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink-900);
+      margin-bottom: var(--sp-3);
+    }
+    .card-body {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--ink-400);
+    }
+
+    /* ── 6. HOW IT WORKS ──────────────────────────────── */
+    .how-it-works {
+      background: var(--surface-0);
+      padding-block: var(--sp-24);
+      border-top: 1px solid var(--ink-100);
+    }
+    .how-inner {
+      max-width: var(--container-wide);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+    .steps-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-6);
+      margin-top: var(--sp-12);
+    }
+    .step {
+      position: relative;
+      padding: var(--sp-6);
+    }
+    .step-number {
+      font-family: var(--font-display);
+      font-size: 96px;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--ink-50);
+      letter-spacing: -0.04em;
+      display: block;
+      margin-bottom: -var(--sp-4);
+      user-select: none;
+    }
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink-900);
+      margin-bottom: var(--sp-3);
+      position: relative;
+    }
+    .step-desc {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--ink-400);
+      line-height: 1.55;
+    }
+    .step-connector {
+      position: absolute;
+      top: 64px;
+      right: -20px;
+      width: 40px;
+      height: 2px;
+      background: var(--hivis-300);
+      z-index: 1;
+    }
+    .step:last-child .step-connector { display: none; }
+
+    /* ── 7. AUDIENCE SPLIT ────────────────────────────── */
+    .audience-split {
+      padding-block: var(--sp-24);
+      background: var(--ink-0);
+    }
+    .audience-inner {
+      max-width: var(--container-wide);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-6);
+    }
+    .audience-card {
+      border-radius: var(--r-xl);
+      padding: var(--sp-12) var(--sp-10);
+    }
+    .audience-card-biz {
+      background: var(--ink-900);
+      color: #fff;
+    }
+    .audience-card-worker {
+      background: var(--hivis-500);
+      color: var(--ink-900);
+      border: 3px solid var(--ink-900);
+      box-shadow: 6px 6px 0 var(--ink-900);
+    }
+    .audience-eyebrow {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: var(--sp-4);
+    }
+    .audience-card-biz .audience-eyebrow { color: var(--hivis-700); }
+    .audience-card-worker .audience-eyebrow { color: var(--ink-700); }
+    .audience-title {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--sp-8);
+    }
+    .audience-card-biz .audience-title { color: #fff; }
+    .audience-card-worker .audience-title { color: var(--ink-900); }
+    .audience-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-10);
+    }
+    .audience-bullet {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--sp-3);
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.45;
+    }
+    .audience-card-biz .audience-bullet { color: rgba(255,255,255,0.8); }
+    .audience-card-worker .audience-bullet { color: var(--ink-700); }
+    .bullet-arrow {
+      color: var(--hivis-500);
+      font-weight: 700;
+      flex-shrink: 0;
+      line-height: 1.45;
+    }
+    .audience-card-worker .bullet-arrow { color: var(--ink-900); }
+
+    /* ── 8. EOR SECTION ───────────────────────────────── */
+    .eor-section {
+      background: var(--ink-0);
+      padding-block: var(--sp-24);
+      border-top: 1px solid var(--ink-100);
+    }
+    .eor-inner {
+      max-width: var(--container-wide);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-16);
+      align-items: center;
+    }
+    .eor-title {
+      font-family: var(--font-display);
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--ink-900);
+      margin-bottom: var(--sp-8);
+    }
+    .eor-features {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-8);
+    }
+    .eor-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--sp-3);
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--ink-500);
+      line-height: 1.5;
+    }
+    .eor-check {
+      color: var(--hivis-700);
+      font-size: 16px;
+      flex-shrink: 0;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+    .eor-auth {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--ink-300);
+      margin-top: var(--sp-6);
+      font-style: italic;
+    }
+    /* EOR visual right col */
+    .eor-visual {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-6);
+    }
+    .eor-badges {
+      display: flex;
+      gap: var(--sp-6);
+      justify-content: center;
+      margin-bottom: var(--sp-4);
+    }
+    .eor-badge {
+      background: var(--hivis-500);
+      color: var(--ink-900);
+      border: 3px solid var(--ink-900);
+      box-shadow: 4px 4px 0 var(--ink-900);
+      border-radius: var(--r-sm);
+      padding: var(--sp-5) var(--sp-6);
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-align: center;
+    }
+    .eor-badge.rotate-neg { transform: rotate(-3deg); }
+    .eor-badge.rotate-pos { transform: rotate(2deg); }
+    .eor-badge-sub {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: var(--sp-1);
+    }
+    /* Mock invoice */
+    .invoice-card {
+      background: var(--surface-0);
+      border: 1.5px solid var(--ink-100);
+      border-radius: var(--r-md);
+      padding: var(--sp-6);
+      box-shadow: var(--sh-3);
+      width: 100%;
+      max-width: 360px;
+      margin-inline: auto;
+    }
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--sp-5);
+      padding-bottom: var(--sp-4);
+      border-bottom: 1px solid var(--ink-100);
+    }
+    .invoice-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink-900);
+    }
+    .invoice-number {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--ink-300);
+    }
+    .invoice-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-block: var(--sp-3);
+      border-bottom: 1px solid var(--ink-50);
+    }
+    .invoice-line:last-of-type { border-bottom: none; }
+    .invoice-line-name {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--ink-500);
+    }
+    .invoice-line-amount {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--ink-700);
+      font-weight: 600;
+    }
+    .invoice-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--sp-4);
+      margin-top: var(--sp-3);
+      border-top: 2px solid var(--ink-900);
+    }
+    .invoice-total-label {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink-900);
+    }
+    .invoice-total-amount {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--ink-900);
+    }
+
+    /* ── 9. INDUSTRIES ─────────────────────────────────── */
+    .industries {
+      background: var(--surface-0);
+      padding-block: var(--sp-20);
+    }
+    .industries-inner {
+      max-width: var(--container-wide);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+      text-align: center;
+    }
+    .industry-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-3);
+      justify-content: center;
+      margin-top: var(--sp-10);
+    }
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      padding: var(--sp-3) var(--sp-5);
+      border-radius: var(--r-pill);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-700);
+      border: 1px solid rgba(14,13,11,0.12);
+    }
+    .tag-hospo       { background: var(--tag-hospo); }
+    .tag-events      { background: var(--tag-events); }
+    .tag-warehouse   { background: var(--tag-warehouse); }
+    .tag-construction{ background: var(--tag-construction); }
+    .tag-retail      { background: var(--tag-retail); }
+    .tag-mining      { background: var(--tag-mining); }
+    .tag-agriculture { background: var(--tag-agriculture); }
+
+    /* ── 10. CTA ───────────────────────────────────────── */
+    .cta-section {
+      background: var(--ink-900);
+      padding-block: var(--sp-24);
+      text-align: center;
+    }
+    .cta-inner {
+      max-width: 720px;
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+    .cta-script {
+      font-family: var(--font-script);
+      font-size: 72px;
+      color: var(--hivis-500);
+      display: block;
+      transform: rotate(-2deg);
+      margin-bottom: var(--sp-4);
+      line-height: 1.1;
+    }
+    .cta-title {
+      font-family: var(--font-display);
+      font-size: 44px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      margin-bottom: var(--sp-5);
+    }
+    .cta-sub {
+      font-family: var(--font-body);
+      font-size: 17px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: var(--sp-8);
+      line-height: 1.55;
+    }
+    .cta-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-6);
+      flex-wrap: wrap;
+    }
+    .cta-trust {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ── 11. FOOTER ────────────────────────────────────── */
+    .site-footer {
+      background: var(--ink-900);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: var(--sp-16);
+    }
+    .footer-inner {
+      max-width: var(--container-wide);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--sp-12);
+      padding-bottom: var(--sp-12);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-brand img {
+      height: 24px;
+      margin-bottom: var(--sp-5);
+    }
+    .footer-tagline {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+      max-width: 240px;
+    }
+    .footer-col-title {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: var(--sp-5);
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-3);
+    }
+    .footer-links a {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      transition: color var(--dur-base) var(--ease-out-quint);
+    }
+    .footer-links a:hover { color: var(--hivis-500); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-block: var(--sp-6);
+      flex-wrap: wrap;
+      gap: var(--sp-4);
+    }
+    .footer-copyright {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+    }
+    .footer-eor-pills {
+      display: flex;
+      gap: var(--sp-2);
+      align-items: center;
+    }
+    .eor-pill {
+      background: rgba(220,255,30,0.12);
+      color: var(--hivis-500);
+      border: 1px solid rgba(220,255,30,0.25);
+      border-radius: var(--r-pill);
+      padding: 3px 10px;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .footer-legal-links {
+      display: flex;
+      gap: var(--sp-6);
+    }
+    .footer-legal-links a {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      transition: color var(--dur-base) var(--ease-out-quint);
+    }
+    .footer-legal-links a:hover { color: rgba(255,255,255,0.65); }
+
+    /* ── 12. KIT BANNER ─────────────────────────────────── */
+    .kit-banner {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      background: var(--ink-900);
+      border: 2px solid var(--hivis-500);
+      border-radius: var(--r-sm);
+      padding: var(--sp-3) var(--sp-5);
+      box-shadow: var(--sh-4);
+      text-align: center;
+    }
+    .kit-banner-label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .kit-banner-link {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--hivis-500);
+      transition: color var(--dur-base) var(--ease-out-quint);
+    }
+    .kit-banner-link:hover { color: var(--hivis-300); }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════
+       1. STICKY NAV
+  ═══════════════════════════════════════════════════════ -->
+  <header class="site-nav">
+    <div class="nav-inner">
+      <!-- Left: logo -->
+      <a class="nav-logo" href="/">
+        <img src="../../project/assets/logo-wordmark-white.svg" alt="MyGig" />
+      </a>
+
+      <!-- Center: nav links -->
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#">For businesses</a>
+        <a href="#">For workers</a>
+        <a href="#">Industries</a>
+        <a href="#">Pricing</a>
+        <a href="#">About</a>
+      </nav>
+
+      <!-- Right: actions -->
+      <div class="nav-actions">
+        <a href="#" class="btn btn-nav-ghost">Log in</a>
+        <a href="#" class="btn btn-stamp" style="padding: 8px 18px; font-size: 13px;">Post a shift</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════
+       2. HERO
+  ═══════════════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero-inner">
+      <!-- Left column -->
+      <div class="hero-left">
+        <p class="hero-eyebrow">Workforce-as-a-Service · EOR · Australia</p>
+        <h1 class="hero-h1">
+          Your crew.<br />
+          On shift.<br />
+          <span class="accent">No drama.</span>
+        </h1>
+        <p class="hero-sub">
+          Post a shift in under 60 seconds. MyGig sends pre-vetted, insured workers — and handles payroll, tax, and compliance as your Employer of Record.
+        </p>
+        <div class="hero-ctas">
+          <a href="#" class="btn btn-stamp">Post a shift</a>
+          <a href="#" class="btn btn-ghost-light">See how it works</a>
+        </div>
+        <div class="hero-proof">
+          <span class="hero-proof-item"><span class="check">✓</span> No interviews</span>
+          <span class="hero-proof-item"><span class="check">✓</span> 90%+ fill rate</span>
+          <span class="hero-proof-item"><span class="check">✓</span> We're the employer of record</span>
+        </div>
+      </div>
+
+      <!-- Right column -->
+      <div class="hero-visual">
+        <div class="hero-photo-placeholder">
+          <span class="hero-photo-label">Photo: worker on shift</span>
+          <div class="hero-badge">
+            <span class="hero-badge-value">90%+</span>
+            <span class="hero-badge-label">Fill rate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       3. LOGOS BAR
+  ═══════════════════════════════════════════════════════ -->
+  <section class="logos-bar">
+    <div class="logos-bar-inner">
+      <p class="logos-bar-label">Trusted by businesses across Australia</p>
+      <div class="logos-grid">
+        <div class="logo-placeholder"></div>
+        <div class="logo-placeholder"></div>
+        <div class="logo-placeholder"></div>
+        <div class="logo-placeholder"></div>
+        <div class="logo-placeholder"></div>
+        <div class="logo-placeholder"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       4. STATS
+  ═══════════════════════════════════════════════════════ -->
+  <section class="stats">
+    <div class="stats-inner">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-value">90%+</span>
+          <span class="stat-label">Fill rate</span>
+          <span class="stat-sub">Industry average is 65%</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">2%</span>
+          <span class="stat-label">No-show rate</span>
+          <span class="stat-sub">Near-zero no-shows</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">30+</span>
+          <span class="stat-label">Data points verified per worker</span>
+          <span class="stat-sub">Skills, certs, work history</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">60s</span>
+          <span class="stat-label">To post a shift</span>
+          <span class="stat-sub">No calls. No forms. Just done.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       5. VALUE PROPS — FOR BUSINESSES
+  ═══════════════════════════════════════════════════════ -->
+  <section class="value-props">
+    <div class="value-props-inner">
+      <p class="section-eyebrow">For businesses</p>
+      <h2 class="section-title">Everything you need.<br />Nothing you don't.</h2>
+      <div class="cards-grid">
+
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3 class="card-title">Post a shift in 60 seconds</h3>
+          <p class="card-body">Tell us what you need, when you need it, and where. We take care of the rest — from sourcing to scheduling.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <h3 class="card-title">We're the Employer of Record</h3>
+          <p class="card-body">No employment contracts, no payroll headaches. MyGig is the legal employer — we handle tax, super, workers' comp, and compliance in NSW, WA, TAS &amp; NT.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">⭐</div>
+          <h3 class="card-title">30+ data points verified</h3>
+          <p class="card-body">Every worker in our pool is pre-vetted: skills, certifications, work history, licences, and references — checked before they ever step on site.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <h3 class="card-title">Your workforce pool</h3>
+          <p class="card-body">Build a preferred pool of workers who know your business. Rate and favourite individuals for repeat bookings — it's your crew, managed your way.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">⏰</div>
+          <h3 class="card-title">Automated time &amp; attendance</h3>
+          <p class="card-body">GPS clock-in/out, automated timesheets, and real-time visibility. Know who's on site, when they arrived, and when breaks happen — automatically.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">💡</div>
+          <h3 class="card-title">Amy your AI operations assistant</h3>
+          <p class="card-body">Amy spots patterns in your workforce data, flags compliance risks before they become problems, and recommends shift staffing based on your history.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       6. HOW IT WORKS
+  ═══════════════════════════════════════════════════════ -->
+  <section class="how-it-works">
+    <div class="how-inner">
+      <p class="section-eyebrow" style="color: var(--hivis-900);">How it works</p>
+      <h2 class="section-title" style="margin-bottom: 0;">Four steps from problem to sorted.</h2>
+      <div class="steps-row">
+
+        <div class="step">
+          <span class="step-number">01</span>
+          <h3 class="step-title">Post your shift</h3>
+          <p class="step-desc">Tell us the role, date, time, and location. Takes under 60 seconds. No phone calls, no account managers.</p>
+          <div class="step-connector"></div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">02</span>
+          <h3 class="step-title">Workers accept</h3>
+          <p class="step-desc">Pre-vetted workers in your area get notified instantly. They accept, and you get a confirmed crew list with profiles.</p>
+          <div class="step-connector"></div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">03</span>
+          <h3 class="step-title">Shift runs</h3>
+          <p class="step-desc">Workers clock in via the app. You see real-time attendance. Any issues? Amy is watching and will alert you immediately.</p>
+          <div class="step-connector"></div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">04</span>
+          <h3 class="step-title">We pay everyone</h3>
+          <p class="step-desc">Timesheets are auto-approved. We pay workers, handle super, tax, and compliance. You get one clean invoice.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       7. AUDIENCE SPLIT
+  ═══════════════════════════════════════════════════════ -->
+  <section class="audience-split">
+    <div class="audience-inner">
+
+      <!-- Left: Business card -->
+      <div class="audience-card audience-card-biz">
+        <p class="audience-eyebrow">For businesses</p>
+        <h2 class="audience-title">Run your workforce,<br />not your paperwork.</h2>
+        <ul class="audience-bullets">
+          <li class="audience-bullet"><span class="bullet-arrow">→</span> Post shifts in seconds — any time, any day</li>
+          <li class="audience-bullet"><span class="bullet-arrow">→</span> We handle payroll, super, tax &amp; WHS compliance</li>
+          <li class="audience-bullet"><span class="bullet-arrow">→</span> 90%+ fill rate with near-zero no-shows</li>
+          <li class="audience-bullet"><span class="bullet-arrow">→</span> Pre-vetted workers with 30+ verified data points</li>
+          <li class="audience-bullet"><span class="bullet-arrow">→</span> Amy AI spots problems before they happen</li>
+        </ul>
+        <a href="#" class="btn btn-stamp">Get started →</a>
+      </div>
+
+      <!-- Right: Worker card -->
+      <div class="audience-card audience-card-worker">
+        <p class="audience-eyebrow">For workers</p>
+        <h2 class="audience-title">Work your Way.</h2>
+        <ul class="audience-bullets">
+          <li class="audience-bullet"><span class="bullet-arrow">→</span> Pick up shifts that fit your schedule — your call</li>
+          <li class="audience-bullet"><span class="bullet-arrow">→</span> Get paid fast — every week, on time, every time</li>
+          <li class="audience-bullet"><span class="bullet-arrow">→</span> We're your employer — you're covered and compliant</li>
+          <li class="audience-bullet"><span class="bullet-arrow">→</span> Build your verified skills profile as you work</li>
+          <li class="audience-bullet"><span class="bullet-arrow">→</span> Work across multiple industries with one profile</li>
+        </ul>
+        <a href="#" class="btn btn-stamp-ink">Download the app →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       8. EOR SECTION
+  ═══════════════════════════════════════════════════════ -->
+  <section class="eor-section">
+    <div class="eor-inner">
+
+      <!-- Left -->
+      <div class="eor-left">
+        <p class="section-eyebrow">Employer of Record</p>
+        <h2 class="eor-title">We take the legal weight.<br />You get the workers.</h2>
+        <ul class="eor-features">
+          <li class="eor-feature"><span class="eor-check">✓</span> Payroll tax calculated and lodged on your behalf</li>
+          <li class="eor-feature"><span class="eor-check">✓</span> Superannuation guaranteed at every pay run</li>
+          <li class="eor-feature"><span class="eor-check">✓</span> Workers' compensation insurance included</li>
+          <li class="eor-feature"><span class="eor-check">✓</span> Fair Work Act compliant engagement for all workers</li>
+          <li class="eor-feature"><span class="eor-check">✓</span> WHS induction tracking and incident reporting</li>
+          <li class="eor-feature"><span class="eor-check">✓</span> Single itemised invoice — one number for your accounts team</li>
+        </ul>
+        <a href="#" class="btn btn-stamp" style="margin-bottom: var(--sp-5);">Talk to EOR team</a>
+        <p class="eor-auth">Currently authorised in NSW, WA, TAS &amp; NT</p>
+      </div>
+
+      <!-- Right -->
+      <div class="eor-visual">
+        <div class="eor-badges">
+          <div class="eor-badge rotate-neg">
+            EOR
+            <span class="eor-badge-sub">Employer of Record</span>
+          </div>
+          <div class="eor-badge rotate-pos">
+            WHS
+            <span class="eor-badge-sub">Compliant &amp; Covered</span>
+          </div>
+        </div>
+
+        <div class="invoice-card">
+          <div class="invoice-header">
+            <span class="invoice-title">MyGig Invoice</span>
+            <span class="invoice-number">#INV-2026-0847</span>
+          </div>
+          <div class="invoice-line">
+            <span class="invoice-line-name">6× Warehouse picks · 8h</span>
+            <span class="invoice-line-amount">$1,152.00</span>
+          </div>
+          <div class="invoice-line">
+            <span class="invoice-line-name">Superannuation (11.5%)</span>
+            <span class="invoice-line-amount">$132.48</span>
+          </div>
+          <div class="invoice-line">
+            <span class="invoice-line-name">Workers' comp levy</span>
+            <span class="invoice-line-amount">$34.56</span>
+          </div>
+          <div class="invoice-line">
+            <span class="invoice-line-name">Platform fee</span>
+            <span class="invoice-line-amount">$95.00</span>
+          </div>
+          <div class="invoice-line">
+            <span class="invoice-line-name">GST (10%)</span>
+            <span class="invoice-line-amount">$141.40</span>
+          </div>
+          <div class="invoice-total-row">
+            <span class="invoice-total-label">Total due</span>
+            <span class="invoice-total-amount">$1,555.44</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       9. INDUSTRIES
+  ═══════════════════════════════════════════════════════ -->
+  <section class="industries">
+    <div class="industries-inner">
+      <p class="section-eyebrow" style="color: var(--hivis-900);">Industries we serve</p>
+      <h2 class="section-title" style="margin-bottom: 0; text-align: center;">Wherever workers are needed,<br />MyGig delivers.</h2>
+      <div class="industry-tags">
+        <span class="tag-pill tag-hospo">🍽️ Hospitality</span>
+        <span class="tag-pill tag-events">🎪 Events</span>
+        <span class="tag-pill tag-warehouse">📦 Warehousing &amp; logistics</span>
+        <span class="tag-pill tag-construction">🏗️ Construction</span>
+        <span class="tag-pill tag-retail">🛍️ Retail</span>
+        <span class="tag-pill tag-mining">⛏️ Mining &amp; resources</span>
+        <span class="tag-pill tag-agriculture">🌾 Agriculture</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       10. CTA
+  ═══════════════════════════════════════════════════════ -->
+  <section class="cta-section">
+    <div class="cta-inner">
+      <span class="cta-script">Work your Way.</span>
+      <h2 class="cta-title">Ready to fill your next shift?</h2>
+      <p class="cta-sub">
+        Join hundreds of Australian businesses that use MyGig to access a reliable, verified, fully-compliant workforce — on demand.
+      </p>
+      <div class="cta-buttons">
+        <a href="#" class="btn btn-stamp" style="font-size: 15px; padding: 14px 28px;">Post a shift</a>
+        <a href="#" class="btn btn-ghost-light" style="font-size: 15px; padding: 14px 28px;">Talk to the team</a>
+      </div>
+      <p class="cta-trust">No credit card required. Workers can be on site within hours.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       11. FOOTER
+  ═══════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+
+        <!-- Brand col -->
+        <div class="footer-brand">
+          <img src="../../project/assets/logo-wordmark-white.svg" alt="MyGig" />
+          <p class="footer-tagline">Australia's Workforce-as-a-Service platform. Pre-vetted workers, EOR compliance, and AI-powered operations — all in one place.</p>
+        </div>
+
+        <!-- For businesses -->
+        <div class="footer-col">
+          <p class="footer-col-title">For businesses</p>
+          <ul class="footer-links">
+            <li><a href="#">How it works</a></li>
+            <li><a href="#">Post a shift</a></li>
+            <li><a href="#">Employer of Record</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">Amy AI assistant</a></li>
+          </ul>
+        </div>
+
+        <!-- For workers -->
+        <div class="footer-col">
+          <p class="footer-col-title">For workers</p>
+          <ul class="footer-links">
+            <li><a href="#">Download the app</a></li>
+            <li><a href="#">How to get started</a></li>
+            <li><a href="#">Industries we hire for</a></li>
+            <li><a href="#">Payments &amp; super</a></li>
+            <li><a href="#">Worker support</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div class="footer-col">
+          <p class="footer-col-title">Company</p>
+          <ul class="footer-links">
+            <li><a href="#">About MyGig</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Contact us</a></li>
+            <li><a href="#">Partner with us</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="footer-bottom">
+        <p class="footer-copyright">© 2026 MyGig Pty Ltd. All rights reserved.</p>
+        <div class="footer-eor-pills">
+          <span style="font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.3); margin-right: 4px;">EOR authorised:</span>
+          <span class="eor-pill">NSW</span>
+          <span class="eor-pill">WA</span>
+          <span class="eor-pill">TAS</span>
+          <span class="eor-pill">NT</span>
+        </div>
+        <div class="footer-legal-links">
+          <a href="#">Privacy policy</a>
+          <a href="#">Terms of use</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════════════
+       12. KIT BANNER (fixed, bottom-right)
+  ═══════════════════════════════════════════════════════ -->
+  <div class="kit-banner" role="complementary" aria-label="Design kit navigation">
+    <span class="kit-banner-label">MyGig Design System · Marketing Kit</span>
+    <a href="../../index.html" class="kit-banner-link">← Back to style guide</a>
+  </div>
+
+</body>
+</html>
