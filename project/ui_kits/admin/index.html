@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<!-- @dsCard group="UI Kit — Admin" name="UI kit — Admin platform" subtitle="MyGig Ops, HR and Finance internal dashboard" viewport="1440x1100" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MyGig Admin — Internal</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  :root {
+    --brand-500: #6C60FF; --brand-50: #F5F4FE; --brand-100: #E8E6F9; --brand-200: #DBD8FA;
+    --brand-300: #B8B1F7; --brand-700: #4B3FD9; --brand-900: #2D2580;
+    --ink-0: #FAF8F4; --ink-50: #F2EFE8; --ink-100: #E5E1D7; --ink-200: #CFC9BA;
+    --ink-300: #A8A294; --ink-400: #6F6A60; --ink-500: #3D3A33; --ink-700: #1F1D19; --ink-900: #0E0D0B;
+    --r-xs: 4px; --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 28px; --r-pill: 999px;
+    --sh-stamp: 4px 4px 0 #0E0D0B; --sh-stamp-brand: 4px 4px 0 #6C60FF;
+    --sh-1: 0 1px 2px rgba(14,13,11,.06); --sh-2: 0 2px 6px rgba(14,13,11,.08); --sh-3: 0 8px 24px rgba(14,13,11,.10);
+    --font-display: 'Sora', system-ui, sans-serif; --font-body: 'Manrope', system-ui, sans-serif; --font-mono: 'JetBrains Mono', monospace;
+    --success-50: #D1FAE5; --success-700: #065F46;
+    --warn-50: #FEF3C7; --warn-700: #92400E;
+    --danger-50: #FEE2E2; --danger-700: #991B1B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    background: var(--ink-50);
+    color: var(--ink-700);
+    min-height: 100vh;
+    display: flex;
+    font-size: 13px;
+  }
+
+  i { font-style: normal; }
+
+  /* ══════════════════════════════════════
+     LEFT SIDEBAR
+  ══════════════════════════════════════ */
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: var(--ink-900);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-logo {
+    padding: 22px 20px 0;
+  }
+  .sidebar-logo img {
+    height: 22px;
+    display: block;
+  }
+
+  .sidebar-badge {
+    display: inline-block;
+    margin: 8px 20px 18px;
+    padding: 2px 8px;
+    background: #DC2626;
+    color: white;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: var(--r-xs);
+    font-family: var(--font-body);
+  }
+
+  .nav-group { padding: 0 12px 4px; }
+  .nav-group + .nav-group { margin-top: 6px; }
+
+  .nav-group-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); padding: 10px 8px 4px;
+    font-family: var(--font-body);
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px; border-radius: var(--r-sm);
+    font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.65);
+    cursor: pointer; transition: background 0.1s;
+    font-family: var(--font-body);
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.06); }
+  .nav-item.active {
+    background: var(--brand-500);
+    color: white;
+    font-weight: 700;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+  }
+  .nav-item .nav-icon {
+    width: 18px; text-align: center; font-size: 12px; flex-shrink: 0;
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px 12px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sidebar-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--brand-500); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 700; font-size: 12px;
+    border: 2px solid var(--brand-300); flex-shrink: 0;
+  }
+  .sidebar-user-name { font-size: 12px; font-weight: 700; color: white; line-height: 1.2; }
+  .sidebar-user-role { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+
+  /* ══════════════════════════════════════
+     MAIN CONTENT
+  ══════════════════════════════════════ */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 0;
+  }
+
+  .topbar {
+    background: white;
+    border-bottom: 1px solid var(--ink-100);
+    padding: 0 28px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .breadcrumb {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--ink-400);
+    font-family: var(--font-body);
+  }
+  .breadcrumb .sep { color: var(--ink-200); }
+  .breadcrumb .current { color: var(--ink-700); font-weight: 600; }
+
+  .content { padding: 28px 28px 40px; flex: 1; }
+
+  .page-header {
+    display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 24px;
+  }
+  .page-title {
+    font-family: var(--font-display); font-weight: 800; font-size: 26px;
+    color: var(--ink-900); line-height: 1.1;
+  }
+  .page-subtitle { font-size: 13px; color: var(--ink-400); margin-top: 4px; }
+
+  /* ── KPI strip ── */
+  .kpi-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: white; border: 1px solid var(--ink-100);
+    border-radius: var(--r-md); padding: 18px 20px;
+    box-shadow: var(--sh-1);
+  }
+  .kpi-card.warn { border-color: #FCD34D; background: var(--warn-50); }
+  .kpi-card.danger { border-color: #FCA5A5; background: var(--danger-50); }
+  .kpi-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-400); margin-bottom: 8px; font-family: var(--font-body);
+  }
+  .kpi-card.warn .kpi-label { color: #92400E; }
+  .kpi-card.danger .kpi-label { color: #991B1B; }
+  .kpi-value {
+    font-family: var(--font-display); font-weight: 800; font-size: 28px;
+    color: var(--ink-900); line-height: 1;
+  }
+  .kpi-card.warn .kpi-value { color: #92400E; }
+  .kpi-card.danger .kpi-value { color: #991B1B; }
+
+  /* ── Filter bar ── */
+  .filter-bar {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .filter-select {
+    padding: 7px 12px; border: 1.5px solid var(--ink-100); border-radius: var(--r-sm);
+    background: white; font-size: 12px; color: var(--ink-700);
+    font-family: var(--font-body); font-weight: 500;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .filter-select .caret { color: var(--ink-300); font-size: 10px; }
+  .filter-search {
+    flex: 1; min-width: 180px;
+    padding: 7px 12px; border: 1.5px solid var(--ink-100); border-radius: var(--r-sm);
+    background: white; font-size: 12px; color: var(--ink-500);
+    font-family: var(--font-body);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .filter-search .icon { color: var(--ink-300); }
+  .filter-actions { display: flex; gap: 8px; margin-left: auto; }
+
+  .btn-ghost {
+    padding: 7px 14px; border: 1.5px solid var(--ink-200); border-radius: var(--r-sm);
+    background: white; color: var(--ink-700); font-size: 12px; font-weight: 600;
+    font-family: var(--font-body); cursor: pointer;
+  }
+  .btn-primary {
+    padding: 7px 16px;
+    background: var(--brand-500); color: white;
+    border: 2px solid var(--ink-900); border-radius: var(--r-sm);
+    font-size: 12px; font-weight: 700; font-family: var(--font-display);
+    box-shadow: 3px 3px 0 var(--ink-900); cursor: pointer;
+  }
+  .btn-sm {
+    padding: 4px 10px; border-radius: var(--r-xs); font-size: 11px; font-weight: 600;
+    border: 1px solid var(--ink-200); background: white; color: var(--ink-700);
+    font-family: var(--font-body); cursor: pointer; white-space: nowrap;
+  }
+  .btn-sm-primary {
+    padding: 4px 10px; border-radius: var(--r-xs); font-size: 11px; font-weight: 700;
+    border: 1.5px solid var(--brand-700); background: var(--brand-500); color: white;
+    font-family: var(--font-body); cursor: pointer; white-space: nowrap;
+  }
+
+  /* ── Table ── */
+  .table-wrap {
+    background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md);
+    overflow: hidden; box-shadow: var(--sh-1); margin-bottom: 20px;
+  }
+  table {
+    width: 100%; border-collapse: collapse;
+  }
+  thead th {
+    padding: 10px 16px; text-align: left;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-400); background: var(--ink-0);
+    border-bottom: 1px solid var(--ink-100);
+    white-space: nowrap;
+    font-family: var(--font-body);
+  }
+  tbody tr { border-bottom: 1px solid var(--ink-50); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #FAFAF8; }
+  tbody tr:hover { background: var(--brand-50); }
+  tbody td {
+    padding: 11px 16px; font-size: 12px; color: var(--ink-700);
+    vertical-align: middle;
+  }
+  .td-id { font-family: var(--font-mono); font-size: 11px; color: var(--ink-900); font-weight: 600; }
+  .td-amount { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--ink-900); }
+
+  /* ── Status pills ── */
+  .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 9px; border-radius: var(--r-pill);
+    font-size: 10px; font-weight: 700; letter-spacing: 0.02em;
+    font-family: var(--font-body);
+  }
+  .pill::before { content:''; width:5px; height:5px; border-radius:50%; display:inline-block; flex-shrink:0; }
+  .pill-success { background: var(--success-50); color: var(--success-700); }
+  .pill-success::before { background: var(--success-700); }
+  .pill-pending { background: var(--warn-50); color: #8A5A00; }
+  .pill-pending::before { background: #D97706; }
+  .pill-failed { background: var(--danger-50); color: var(--danger-700); }
+  .pill-failed::before { background: var(--danger-700); }
+
+  .td-actions { display: flex; gap: 6px; align-items: center; }
+
+  /* ── Amy panel ── */
+  .amy-panel {
+    background: var(--brand-50); border: 1.5px solid var(--brand-200);
+    border-radius: var(--r-md); padding: 18px 20px; margin-bottom: 20px;
+  }
+  .amy-header {
+    font-family: var(--font-display); font-weight: 700; font-size: 14px;
+    color: var(--brand-700); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .amy-body {
+    font-size: 13px; color: var(--ink-700); line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .amy-actions { display: flex; gap: 10px; }
+
+  .btn-amy-primary {
+    padding: 8px 16px;
+    background: var(--brand-500); color: white;
+    border: 2px solid var(--ink-900); border-radius: var(--r-sm);
+    font-size: 12px; font-weight: 700; font-family: var(--font-display);
+    box-shadow: 3px 3px 0 var(--ink-900); cursor: pointer;
+  }
+  .btn-amy-secondary {
+    padding: 8px 16px;
+    background: white; color: var(--brand-700);
+    border: 1.5px solid var(--brand-300); border-radius: var(--r-sm);
+    font-size: 12px; font-weight: 600; font-family: var(--font-body); cursor: pointer;
+  }
+
+  /* ══════════════════════════════════════
+     RIGHT PANEL
+  ══════════════════════════════════════ */
+  .right-panel {
+    width: 280px;
+    min-width: 280px;
+    background: white;
+    border-left: 1px solid var(--ink-100);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+  }
+  .rp-header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--ink-100);
+    flex-shrink: 0;
+  }
+  .rp-title {
+    font-family: var(--font-display); font-weight: 700; font-size: 14px;
+    color: var(--ink-900); margin-bottom: 4px;
+  }
+  .rp-subtitle { font-size: 11px; color: var(--ink-400); }
+
+  .rp-body { padding: 16px 20px; flex: 1; }
+
+  .rp-status { margin-bottom: 16px; }
+  .rp-status-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 6px; }
+
+  .rp-rows { display: flex; flex-direction: column; gap: 0; }
+  .rp-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 9px 0; border-bottom: 1px solid var(--ink-50);
+  }
+  .rp-row:last-child { border-bottom: none; }
+  .rp-row-label { font-size: 12px; color: var(--ink-400); }
+  .rp-row-val { font-size: 12px; font-weight: 700; color: var(--ink-900); font-family: var(--font-body); }
+  .rp-row-val.mono { font-family: var(--font-mono); }
+
+  .rp-divider { height: 1px; background: var(--ink-100); margin: 14px 0; }
+
+  .rp-total-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 10px 0;
+  }
+  .rp-total-label { font-size: 13px; font-weight: 700; color: var(--ink-900); }
+  .rp-total-val { font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--ink-900); }
+
+  .rp-employers {
+    margin-top: 14px;
+  }
+  .rp-employers-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 8px; }
+  .rp-employer-tag {
+    display: inline-block; padding: 3px 9px; margin: 2px 3px 2px 0;
+    border-radius: var(--r-pill); font-size: 10px; font-weight: 600;
+    background: var(--ink-50); color: var(--ink-600); border: 1px solid var(--ink-100);
+    font-family: var(--font-body);
+  }
+
+  .rp-footer {
+    padding: 16px 20px 24px;
+    border-top: 1px solid var(--ink-100);
+    display: flex; flex-direction: column; gap: 8px;
+    flex-shrink: 0;
+  }
+  .btn-rp-primary {
+    width: 100%; padding: 12px;
+    background: var(--brand-500); color: white;
+    border: 2.5px solid var(--ink-900); border-radius: var(--r-md);
+    font-size: 13px; font-weight: 800; font-family: var(--font-display);
+    box-shadow: 4px 4px 0 var(--ink-900); cursor: pointer;
+  }
+  .btn-rp-ghost {
+    width: 100%; padding: 11px;
+    background: white; color: var(--ink-700);
+    border: 1.5px solid var(--ink-200); border-radius: var(--r-md);
+    font-size: 12px; font-weight: 600; font-family: var(--font-body); cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+
+  <div class="sidebar-logo">
+    <img src="../../assets/logo-wordmark-white.png" alt="MyGig">
+  </div>
+  <div class="sidebar-badge">Internal</div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Operations</div>
+    <div class="nav-item"><span class="nav-icon">⊡</span> Overview</div>
+    <div class="nav-item"><span class="nav-icon">📋</span> Shift monitor</div>
+    <div class="nav-item"><span class="nav-icon">🛡</span> Worker moderation</div>
+    <div class="nav-item"><span class="nav-icon">⚖</span> Dispute queue</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">HR</div>
+    <div class="nav-item"><span class="nav-icon">🧑‍💼</span> Onboarding queue</div>
+    <div class="nav-item"><span class="nav-icon">📄</span> Compliance docs</div>
+    <div class="nav-item"><span class="nav-icon">🔍</span> Background checks</div>
+    <div class="nav-item"><span class="nav-icon">🏅</span> Certifications</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Finance</div>
+    <div class="nav-item active"><span class="nav-icon">💸</span> Payroll runs</div>
+    <div class="nav-item"><span class="nav-icon">🧾</span> Employer invoices</div>
+    <div class="nav-item"><span class="nav-icon">📊</span> Tax reporting</div>
+    <div class="nav-item"><span class="nav-icon">⇄</span> Transactions</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Platform</div>
+    <div class="nav-item"><span class="nav-icon">👤</span> Users</div>
+    <div class="nav-item"><span class="nav-icon">📡</span> API health</div>
+    <div class="nav-item"><span class="nav-icon">🚩</span> Feature flags</div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-avatar">EV</div>
+    <div>
+      <div class="sidebar-user-name">Enguerrand V.</div>
+      <div class="sidebar-user-role">Finance</div>
+    </div>
+  </div>
+
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+  <!-- Top bar / breadcrumb -->
+  <div class="topbar">
+    <div class="breadcrumb">
+      <span>Admin</span>
+      <span class="sep">/</span>
+      <span>Finance</span>
+      <span class="sep">/</span>
+      <span class="current">Payroll runs</span>
+    </div>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:12px;">
+      <span style="font-size:11px; color:var(--ink-400); font-family:var(--font-mono);">Mon 23 Jun 2026</span>
+      <div style="width:28px; height:28px; border-radius:50%; background:var(--brand-500); color:white; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:11px; border:2px solid var(--brand-300);">EV</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Page header -->
+    <div class="page-header">
+      <div>
+        <div class="page-title">Payroll runs</div>
+        <div class="page-subtitle">Manage and approve worker payroll across all shifts</div>
+      </div>
+    </div>
+
+    <!-- KPI strip -->
+    <div class="kpi-strip">
+      <div class="kpi-card">
+        <div class="kpi-label">Payroll due</div>
+        <div class="kpi-value">$48,320</div>
+        <div style="font-size:11px; color:var(--ink-400); margin-top:6px;">This week</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">To be paid</div>
+        <div class="kpi-value">142</div>
+        <div style="font-size:11px; color:var(--ink-400); margin-top:6px;">Workers</div>
+      </div>
+      <div class="kpi-card warn">
+        <div class="kpi-label">Awaiting sign-off</div>
+        <div class="kpi-value">3</div>
+        <div style="font-size:11px; color:#92400E; margin-top:6px;">Pending approval</div>
+      </div>
+      <div class="kpi-card danger">
+        <div class="kpi-label">Payment errors</div>
+        <div class="kpi-value">2</div>
+        <div style="font-size:11px; color:var(--danger-700); margin-top:6px;">Failed runs</div>
+      </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <div class="filter-select">
+        <i>📅</i> Week of 23 Jun 2026 <span class="caret">▾</span>
+      </div>
+      <div class="filter-select">
+        All statuses <span class="caret">▾</span>
+      </div>
+      <div class="filter-search">
+        <span class="icon">🔍</span>
+        <span style="color:var(--ink-300);">Search run ID or employer…</span>
+      </div>
+      <div class="filter-actions">
+        <button class="btn-ghost">Export CSV</button>
+        <button class="btn-primary">Run payroll</button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Run ID</th>
+            <th>Period</th>
+            <th>Workers</th>
+            <th>Gross</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-id">PR-20260623</td>
+            <td>16–22 Jun</td>
+            <td>28 workers</td>
+            <td class="td-amount">$12,840.00</td>
+            <td><span class="pill pill-success">Completed</span></td>
+            <td style="color:var(--ink-400); font-size:11px;">22 Jun</td>
+            <td class="td-actions">
+              <button class="btn-sm">View</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-id">PR-20260622</td>
+            <td>16–22 Jun</td>
+            <td>34 workers</td>
+            <td class="td-amount">$15,920.50</td>
+            <td><span class="pill pill-success">Completed</span></td>
+            <td style="color:var(--ink-400); font-size:11px;">22 Jun</td>
+            <td class="td-actions">
+              <button class="btn-sm">View</button>
+            </td>
+          </tr>
+          <tr style="background:#FFFBEB;">
+            <td class="td-id">PR-20260621</td>
+            <td>16–22 Jun</td>
+            <td>19 workers</td>
+            <td class="td-amount">$8,440.00</td>
+            <td><span class="pill pill-pending">Pending approval</span></td>
+            <td style="color:var(--ink-400); font-size:11px;">22 Jun</td>
+            <td class="td-actions">
+              <button class="btn-sm-primary">Approve</button>
+              <button class="btn-sm">Review</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-id">PR-20260620</td>
+            <td>9–15 Jun</td>
+            <td>41 workers</td>
+            <td class="td-amount">$19,620.00</td>
+            <td><span class="pill pill-success">Completed</span></td>
+            <td style="color:var(--ink-400); font-size:11px;">15 Jun</td>
+            <td class="td-actions">
+              <button class="btn-sm">View</button>
+            </td>
+          </tr>
+          <tr style="background:#FFF5F5;">
+            <td class="td-id">PR-20260619</td>
+            <td>9–15 Jun</td>
+            <td>12 workers</td>
+            <td class="td-amount">$4,100.00</td>
+            <td><span class="pill pill-failed">Failed</span></td>
+            <td style="color:var(--ink-400); font-size:11px;">15 Jun</td>
+            <td class="td-actions">
+              <button class="btn-sm-primary" style="background:#DC2626; border-color:#991B1B;">Retry</button>
+              <button class="btn-sm">View</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-id">PR-20260618</td>
+            <td>2–8 Jun</td>
+            <td>38 workers</td>
+            <td class="td-amount">$17,290.00</td>
+            <td><span class="pill pill-success">Completed</span></td>
+            <td style="color:var(--ink-400); font-size:11px;">8 Jun</td>
+            <td class="td-actions">
+              <button class="btn-sm">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Amy AI panel -->
+    <div class="amy-panel">
+      <div class="amy-header">
+        ✦ Amy &middot; Payroll insights
+      </div>
+      <div class="amy-body">
+        <strong>PR-20260619</strong> failed due to 3 workers with expired bank details. I've drafted re-request emails ready to send.
+        <strong>PR-20260621</strong> is pending your approval — all 19 workers verified, no compliance flags. Safe to approve.
+      </div>
+      <div class="amy-actions">
+        <button class="btn-amy-primary">Send re-request emails (3)</button>
+        <button class="btn-amy-secondary">Approve PR-20260621</button>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- ══ RIGHT PANEL ══ -->
+<aside class="right-panel">
+  <div class="rp-header">
+    <div class="rp-title">Run details</div>
+    <div class="rp-subtitle">PR-20260621</div>
+  </div>
+
+  <div class="rp-body">
+    <div class="rp-status">
+      <div class="rp-status-label">Status</div>
+      <span class="pill pill-pending" style="font-size:11px;">Pending approval</span>
+    </div>
+
+    <div class="rp-rows">
+      <div class="rp-row">
+        <span class="rp-row-label">Period</span>
+        <span class="rp-row-val">16–22 Jun 2026</span>
+      </div>
+      <div class="rp-row">
+        <span class="rp-row-label">Workers</span>
+        <span class="rp-row-val">19</span>
+      </div>
+    </div>
+
+    <div class="rp-divider"></div>
+
+    <div class="rp-rows">
+      <div class="rp-row">
+        <span class="rp-row-label">Gross pay</span>
+        <span class="rp-row-val mono">$8,440.00</span>
+      </div>
+      <div class="rp-row">
+        <span class="rp-row-label">Super (11.5%)</span>
+        <span class="rp-row-val mono">$970.60</span>
+      </div>
+      <div class="rp-row">
+        <span class="rp-row-label">Tax withheld</span>
+        <span class="rp-row-val mono">$1,688.00</span>
+      </div>
+    </div>
+
+    <div class="rp-divider"></div>
+
+    <div class="rp-total-row">
+      <span class="rp-total-label">Net pay</span>
+      <span class="rp-total-val">$5,781.40</span>
+    </div>
+
+    <div class="rp-divider"></div>
+
+    <div class="rp-employers">
+      <div class="rp-employers-label">Employers (4)</div>
+      <span class="rp-employer-tag">Toll Logistics</span>
+      <span class="rp-employer-tag">Single O</span>
+      <span class="rp-employer-tag">SCG Events</span>
+      <span class="rp-employer-tag">Urban List</span>
+    </div>
+
+  </div><!-- /rp-body -->
+
+  <div class="rp-footer">
+    <button class="btn-rp-primary">Approve &amp; process</button>
+    <button class="btn-rp-ghost">Flag for review</button>
+  </div>
+</aside>
+
+</body>
+</html>

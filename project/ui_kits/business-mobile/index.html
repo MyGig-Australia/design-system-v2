@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<!-- @dsCard group="UI Kit — Business Mobile" name="UI kit — Business mobile app" subtitle="Post shifts, manage workers, track on the go" viewport="1480x880" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MyGig Business — mobile app</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  :root {
+    --brand-500: #6C60FF; --brand-50: #F5F4FE; --brand-100: #E8E6F9; --brand-200: #DBD8FA;
+    --brand-300: #B8B1F7; --brand-700: #4B3FD9; --brand-900: #2D2580;
+    --ink-0: #FAF8F4; --ink-50: #F2EFE8; --ink-100: #E5E1D7; --ink-200: #CFC9BA;
+    --ink-300: #A8A294; --ink-400: #6F6A60; --ink-500: #3D3A33; --ink-700: #1F1D19; --ink-900: #0E0D0B;
+    --r-xs: 4px; --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 28px; --r-pill: 999px;
+    --sh-stamp: 4px 4px 0 #0E0D0B; --sh-stamp-brand: 4px 4px 0 #6C60FF;
+    --sh-1: 0 1px 2px rgba(14,13,11,.06); --sh-2: 0 2px 6px rgba(14,13,11,.08); --sh-3: 0 8px 24px rgba(14,13,11,.10);
+    --font-display: 'Sora', system-ui, sans-serif; --font-body: 'Manrope', system-ui, sans-serif; --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--ink-50); margin: 0; color: var(--ink-700);
+    padding: 48px 24px; min-height: 100vh;
+    font-family: var(--font-body);
+  }
+
+  .stage { max-width: 1600px; margin: 0 auto; }
+  .stage-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 32px; }
+  .stage-head h1 { font-family: var(--font-display); font-weight: 800; font-size: 32px; color: var(--ink-900); margin: 0; }
+  .stage-head .sub { font-size: 14px; color: var(--ink-400); }
+
+  .phones {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    justify-content: center;
+    align-items: start;
+  }
+
+  /* ── Phone frame ── */
+  .phone {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+    aspect-ratio: 375 / 812;
+    background: var(--ink-900);
+    border-radius: 44px;
+    padding: 11px;
+    box-shadow: 0 30px 80px rgba(14,13,11,0.22), 0 6px 20px rgba(14,13,11,0.12);
+    position: relative;
+  }
+  .phone-screen {
+    width: 100%; height: 100%;
+    background: var(--ink-0);
+    border-radius: 34px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .notch {
+    position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
+    width: 88px; height: 24px; background: var(--ink-900); border-radius: 12px; z-index: 10;
+  }
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 13px 20px 0;
+    font-family: var(--font-body); font-weight: 700; font-size: 11px; color: var(--ink-900);
+    flex-shrink: 0;
+  }
+  .status-bar.light { color: white; }
+  .status-bar .right { display: flex; gap: 3px; align-items: center; font-size: 10px; }
+
+  .phone-label {
+    text-align: center; margin-top: 14px;
+    font-size: 11px; font-weight: 700;
+    color: var(--ink-400); letter-spacing: 0.08em; text-transform: uppercase;
+    font-family: var(--font-body);
+  }
+
+  i { font-style: normal; }
+
+  /* ── Shared components ── */
+  .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 9px; border-radius: var(--r-pill);
+    font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+  }
+  .pill-brand  { background: var(--brand-100); color: var(--brand-700); }
+  .pill-warn   { background: #FEF3C7; color: #92400E; }
+  .pill-amber  { background: #FEF3C7; color: #92400E; }
+  .pill-green  { background: #D1FAE5; color: #065F46; }
+  .pill-ink    { background: var(--ink-100); color: var(--ink-700); }
+
+  .sec-head {
+    padding: 12px 16px 6px;
+    display: flex; align-items: baseline; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .sec-head h3 { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--ink-900); margin: 0; }
+  .sec-head .more { font-size: 10px; font-weight: 600; color: var(--ink-400); }
+
+  /* ── Bottom tab bar ── */
+  .tab-bar {
+    margin-top: auto;
+    display: flex; padding: 6px 0 20px;
+    background: white; border-top: 1px solid var(--ink-100);
+    flex-shrink: 0;
+  }
+  .tab-bar a {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+    font-size: 9px; font-weight: 600; color: var(--ink-300); text-decoration: none;
+    font-family: var(--font-body);
+  }
+  .tab-bar a.active { color: var(--brand-700); }
+  .ico-wrap {
+    width: 26px; height: 26px; border-radius: 7px;
+    background: transparent; border: 1.5px solid transparent;
+    display: flex; align-items: center; justify-content: center;
+    font-style: normal; font-size: 13px; color: var(--ink-400);
+  }
+  .tab-bar a.active .ico-wrap {
+    background: var(--brand-500); border-color: var(--ink-900);
+    color: white; font-size: 12px;
+    box-shadow: 2px 2px 0 var(--ink-900);
+  }
+
+  /* ══════════════════════════════════════
+     SCREEN 1 — DASHBOARD
+  ══════════════════════════════════════ */
+  .s1-header {
+    background: var(--ink-900);
+    padding: 10px 16px 14px;
+    flex-shrink: 0;
+  }
+  .s1-logo {
+    font-family: var(--font-display); font-weight: 800; font-size: 18px;
+    color: var(--brand-300); letter-spacing: -0.02em;
+  }
+  .s1-greeting {
+    font-family: var(--font-display); font-weight: 700; font-size: 16px;
+    color: white; margin-top: 10px; line-height: 1.2;
+  }
+  .s1-sub {
+    font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 3px;
+  }
+  .s1-stats-row {
+    font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.55);
+    margin-top: 10px; padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    display: flex; gap: 6px; align-items: center;
+    flex-wrap: wrap;
+  }
+  .s1-stats-row span { color: rgba(255,255,255,0.9); }
+  .s1-dot { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.3); display: inline-block; }
+
+  .s1-shift-card {
+    margin: 0 12px 8px;
+    background: white; border: 1px solid var(--ink-100);
+    border-radius: var(--r-md); padding: 11px 12px;
+    box-shadow: var(--sh-1); flex-shrink: 0;
+  }
+  .s1-shift-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .s1-shift-name { font-family: var(--font-display); font-weight: 700; font-size: 12px; color: var(--ink-900); line-height: 1.3; }
+  .s1-shift-time { font-size: 10px; color: var(--ink-400); margin-top: 3px; font-family: var(--font-mono); }
+  .s1-shift-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+  .s1-workers { font-size: 10px; color: var(--ink-400); }
+
+  /* ══════════════════════════════════════
+     SCREEN 2 — POST A SHIFT
+  ══════════════════════════════════════ */
+  .s2-topbar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px 10px; border-bottom: 1px solid var(--ink-50); flex-shrink: 0;
+  }
+  .s2-back {
+    width: 28px; height: 28px; border-radius: var(--r-sm);
+    border: 1.5px solid var(--ink-100); display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--ink-700); background: white; flex-shrink: 0;
+  }
+  .s2-title { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--ink-900); }
+
+  .s2-form { padding: 10px 14px; display: flex; flex-direction: column; gap: 9px; flex: 1; overflow: hidden; }
+  .s2-field-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 3px; font-family: var(--font-body); }
+  .s2-input {
+    width: 100%; padding: 9px 11px; border-radius: var(--r-sm);
+    border: 1.5px solid var(--ink-100); background: white;
+    font-size: 11px; font-family: var(--font-body); color: var(--ink-900);
+    font-weight: 500; display: flex; align-items: center; justify-content: space-between;
+  }
+  .s2-input .caret { color: var(--ink-300); font-size: 9px; }
+  .s2-stepper {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .s2-stepper-btn {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 1.5px solid var(--ink-200); background: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--ink-700); font-weight: 700; flex-shrink: 0;
+  }
+  .s2-stepper-val { font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--ink-900); }
+
+  .s2-amy {
+    margin: 0 14px;
+    background: var(--brand-500); border-radius: var(--r-md);
+    padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 7px;
+    border: 2px solid var(--ink-900);
+    box-shadow: 3px 3px 0 var(--ink-900);
+    flex-shrink: 0;
+  }
+  .s2-amy-text { font-size: 10px; color: rgba(255,255,255,0.92); line-height: 1.5; font-weight: 500; }
+  .s2-amy-btn {
+    align-self: flex-start;
+    padding: 5px 12px; border-radius: var(--r-pill);
+    background: white; color: var(--brand-700);
+    font-size: 10px; font-weight: 700; border: none;
+    font-family: var(--font-body);
+  }
+
+  .s2-cta-wrap { padding: 10px 14px 20px; flex-shrink: 0; }
+  .s2-cta {
+    width: 100%; padding: 13px;
+    background: var(--brand-500); color: white;
+    font-family: var(--font-display); font-weight: 800; font-size: 13px;
+    border: 2.5px solid var(--ink-900); border-radius: var(--r-md);
+    box-shadow: 4px 4px 0 var(--ink-900); cursor: pointer;
+  }
+
+  /* ══════════════════════════════════════
+     SCREEN 3 — WORKER POOL
+  ══════════════════════════════════════ */
+  .s3-header {
+    padding: 12px 16px 10px; border-bottom: 1px solid var(--ink-50); flex-shrink: 0;
+  }
+  .s3-header-row { display: flex; align-items: center; justify-content: space-between; }
+  .s3-header h2 { font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--ink-900); margin: 0; }
+  .s3-search {
+    margin-top: 10px; width: 100%; padding: 8px 12px;
+    border: 1.5px solid var(--ink-100); border-radius: var(--r-pill);
+    background: white; font-size: 11px; color: var(--ink-500);
+    font-family: var(--font-body); display: flex; align-items: center; gap: 6px;
+  }
+  .s3-search .search-icon { color: var(--ink-300); }
+  .s3-chips {
+    padding: 8px 16px; display: flex; gap: 6px; flex-wrap: nowrap; overflow: hidden; flex-shrink: 0;
+  }
+  .s3-chip {
+    padding: 4px 11px; border-radius: var(--r-pill);
+    font-size: 10px; font-weight: 700; border: 1.5px solid var(--ink-100);
+    background: white; color: var(--ink-500); white-space: nowrap;
+    font-family: var(--font-body);
+  }
+  .s3-chip.active { background: var(--ink-900); color: white; border-color: var(--ink-900); }
+
+  .s3-workers { flex: 1; overflow: hidden; }
+  .s3-worker {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 16px; border-bottom: 1px solid var(--ink-50);
+  }
+  .s3-av {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--ink-900); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 700; font-size: 11px;
+    flex-shrink: 0; border: 1.5px solid var(--ink-700);
+  }
+  .s3-worker-body { flex: 1; min-width: 0; }
+  .s3-worker-name { font-size: 12px; font-weight: 700; color: var(--ink-900); font-family: var(--font-display); }
+  .s3-worker-meta { font-size: 10px; color: var(--ink-400); margin-top: 2px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .s3-skill-tag {
+    display: inline-block; padding: 1px 6px; border-radius: var(--r-xs);
+    background: var(--ink-50); color: var(--ink-500); font-size: 9px; font-weight: 600;
+    font-family: var(--font-body);
+  }
+  .s3-invite-btn {
+    padding: 5px 10px; border-radius: var(--r-pill);
+    border: 1.5px solid var(--ink-200); background: white;
+    font-size: 10px; font-weight: 700; color: var(--ink-700);
+    font-family: var(--font-body); flex-shrink: 0;
+  }
+
+  /* ══════════════════════════════════════
+     SCREEN 4 — NOTIFICATIONS
+  ══════════════════════════════════════ */
+  .s4-header {
+    padding: 12px 16px 12px; border-bottom: 1px solid var(--ink-50); flex-shrink: 0;
+  }
+  .s4-header h2 { font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--ink-900); margin: 0; }
+
+  .s4-notifs { flex: 1; overflow: hidden; }
+  .s4-notif {
+    display: flex; gap: 10px;
+    padding: 9px 14px; border-bottom: 1px solid var(--ink-50);
+  }
+  .s4-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; flex-shrink: 0; margin-top: 1px;
+  }
+  .s4-icon.green  { background: #D1FAE5; }
+  .s4-icon.brand  { background: var(--brand-100); }
+  .s4-icon.amber  { background: #FEF3C7; }
+  .s4-icon.info   { background: var(--ink-50); }
+  .s4-notif-body { flex: 1; min-width: 0; }
+  .s4-notif-text { font-size: 11px; color: var(--ink-700); line-height: 1.45; font-weight: 500; }
+  .s4-notif-text strong { color: var(--ink-900); font-weight: 700; }
+  .s4-notif-time { font-size: 9px; color: var(--ink-300); margin-top: 3px; font-family: var(--font-mono); }
+  .s4-chip {
+    display: inline-flex; margin-top: 5px;
+    padding: 3px 9px; border-radius: var(--r-pill);
+    font-size: 10px; font-weight: 700; border: 1.5px solid var(--ink-900);
+    background: var(--ink-900); color: white; font-family: var(--font-body);
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="stage-head">
+    <div>
+      <h1 style="font-family:var(--font-display)">Business mobile app</h1>
+      <div class="sub">Dashboard · Post shift · Worker pool · Activity</div>
+    </div>
+    <div class="sub" style="color:var(--ink-400);">Phone frame ≈ iPhone 14 Pro, 375×812 logical</div>
+  </div>
+
+  <div class="phones">
+
+    <!-- ══════════════════════════════════
+         PHONE 1 — HOME / DASHBOARD
+    ══════════════════════════════════ -->
+    <div>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="notch"></div>
+
+          <!-- Dark header -->
+          <div class="s1-header">
+            <div class="status-bar light" style="padding:0 0 0;">
+              <span>9:41</span>
+              <span class="right">●●▮</span>
+            </div>
+            <div style="margin-top:12px;">
+              <div class="s1-logo">Mg</div>
+              <div class="s1-greeting">Good morning, Sarah ☀️</div>
+              <div class="s1-sub">You have 3 active shifts today</div>
+              <div class="s1-stats-row">
+                <span>6 workers confirmed</span>
+                <span class="s1-dot"></span>
+                <span>2 pending</span>
+                <span class="s1-dot"></span>
+                <span>1 open slot</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Today's shifts -->
+          <div class="sec-head">
+            <h3>Today's shifts</h3>
+            <span class="more">All shifts →</span>
+          </div>
+
+          <div class="s1-shift-card">
+            <div class="s1-shift-top">
+              <div>
+                <div class="s1-shift-name">Warehouse – Picking</div>
+                <div class="s1-shift-time">6:00am – 2:00pm</div>
+              </div>
+              <span class="pill pill-green">Confirmed</span>
+            </div>
+            <div class="s1-shift-footer">
+              <div class="s1-workers">4/5 workers · Bay 3</div>
+            </div>
+          </div>
+
+          <div class="s1-shift-card">
+            <div class="s1-shift-top">
+              <div>
+                <div class="s1-shift-name">Front of House — Café</div>
+                <div class="s1-shift-time">7:00am – 3:00pm</div>
+              </div>
+              <span class="pill pill-warn">Pending</span>
+            </div>
+            <div class="s1-shift-footer">
+              <div class="s1-workers">1/2 workers</div>
+            </div>
+          </div>
+
+          <div class="s1-shift-card">
+            <div class="s1-shift-top">
+              <div>
+                <div class="s1-shift-name">Event Staff – Setup</div>
+                <div class="s1-shift-time">9:00am – 5:00pm</div>
+              </div>
+              <span class="pill pill-brand">Confirmed</span>
+            </div>
+            <div class="s1-shift-footer">
+              <div class="s1-workers">3/3 workers · MCG North</div>
+            </div>
+          </div>
+
+          <!-- Bottom nav -->
+          <div class="tab-bar">
+            <a class="active"><div class="ico-wrap">⌂</div>Home</a>
+            <a><div class="ico-wrap">⊞</div>Shifts</a>
+            <a><div class="ico-wrap">👥</div>Workers</a>
+            <a><div class="ico-wrap">💳</div>Wallet</a>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">01 — Dashboard</div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         PHONE 2 — POST A SHIFT
+    ══════════════════════════════════ -->
+    <div>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="notch"></div>
+          <div class="status-bar">
+            <span>9:41</span>
+            <span class="right">●●▮</span>
+          </div>
+
+          <!-- Top bar -->
+          <div class="s2-topbar">
+            <div class="s2-back">←</div>
+            <div class="s2-title">Post a shift</div>
+          </div>
+
+          <!-- Form fields -->
+          <div class="s2-form">
+
+            <div>
+              <div class="s2-field-label">Role</div>
+              <div class="s2-input">
+                Warehouse — Picking
+                <span class="caret">▾</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="s2-field-label">Date</div>
+              <div class="s2-input">
+                Tomorrow, Fri 27 Jun
+                <span class="caret">📅</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="s2-field-label">Time</div>
+              <div class="s2-input">
+                6:00am – 2:00pm
+                <span class="caret">⏱</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="s2-field-label">Workers needed</div>
+              <div class="s2-stepper">
+                <div class="s2-stepper-btn">−</div>
+                <div class="s2-stepper-val">3</div>
+                <div class="s2-stepper-btn">+</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="s2-field-label">Hourly rate</div>
+              <div class="s2-input" style="border-color:var(--ink-200); background:var(--ink-0);">
+                $31.19 /hr
+                <span style="font-size:9px; color:var(--brand-700); font-weight:700; background:var(--brand-50); padding:2px 7px; border-radius:var(--r-pill);">Award</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="s2-field-label">Note for worker</div>
+              <div class="s2-input" style="color:var(--ink-500);">
+                Ask for Ben at gate 3
+              </div>
+            </div>
+
+          </div><!-- /form -->
+
+          <!-- Amy strip -->
+          <div class="s2-amy">
+            <div class="s2-amy-text">✦ Amy suggests 4 workers from your pool match this shift</div>
+            <div>
+              <button class="s2-amy-btn">Let Amy invite</button>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div class="s2-cta-wrap">
+            <button class="s2-cta">Post shift</button>
+          </div>
+
+        </div>
+      </div>
+      <div class="phone-label">02 — Post a shift</div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         PHONE 3 — WORKER POOL
+    ══════════════════════════════════ -->
+    <div>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="notch"></div>
+          <div class="status-bar">
+            <span>9:41</span>
+            <span class="right">●●▮</span>
+          </div>
+
+          <div class="s3-header">
+            <div class="s3-header-row">
+              <h2>Your pool</h2>
+              <div style="font-size:10px; color:var(--brand-500); font-weight:700;">+ Add worker</div>
+            </div>
+            <div class="s3-search">
+              <span class="search-icon">🔍</span>
+              <span style="color:var(--ink-300);">Search workers…</span>
+            </div>
+          </div>
+
+          <div class="s3-chips">
+            <div class="s3-chip active">All</div>
+            <div class="s3-chip">Hospitality</div>
+            <div class="s3-chip">Warehouse</div>
+            <div class="s3-chip">Retail</div>
+          </div>
+
+          <div class="s3-workers">
+
+            <div class="s3-worker">
+              <div class="s3-av">JK</div>
+              <div class="s3-worker-body">
+                <div class="s3-worker-name">James K.</div>
+                <div class="s3-worker-meta">
+                  <span>★ 4.8</span>
+                  <span class="s3-skill-tag">Hospo</span>
+                  <span class="s3-skill-tag">RSA</span>
+                </div>
+              </div>
+              <button class="s3-invite-btn">Invite</button>
+            </div>
+
+            <div class="s3-worker">
+              <div class="s3-av" style="background:var(--brand-900);">SM</div>
+              <div class="s3-worker-body">
+                <div class="s3-worker-name">Sarah M.</div>
+                <div class="s3-worker-meta">
+                  <span>★ 4.9</span>
+                  <span class="s3-skill-tag">Retail</span>
+                  <span class="s3-skill-tag">Hospo</span>
+                </div>
+              </div>
+              <button class="s3-invite-btn">Invite</button>
+            </div>
+
+            <div class="s3-worker">
+              <div class="s3-av" style="background:#2D3748;">TB</div>
+              <div class="s3-worker-body">
+                <div class="s3-worker-name">Tom B.</div>
+                <div class="s3-worker-meta">
+                  <span>★ 4.7</span>
+                  <span class="s3-skill-tag">Warehouse</span>
+                  <span class="s3-skill-tag">Forklift</span>
+                </div>
+              </div>
+              <button class="s3-invite-btn">Invite</button>
+            </div>
+
+            <div class="s3-worker">
+              <div class="s3-av" style="background:#1A4731;">PS</div>
+              <div class="s3-worker-body">
+                <div class="s3-worker-name">Priya S.</div>
+                <div class="s3-worker-meta">
+                  <span>★ 4.8</span>
+                  <span class="s3-skill-tag">Events</span>
+                  <span class="s3-skill-tag">Hospo</span>
+                </div>
+              </div>
+              <button class="s3-invite-btn">Invite</button>
+            </div>
+
+            <div class="s3-worker">
+              <div class="s3-av" style="background:#1E3A5F;">MW</div>
+              <div class="s3-worker-body">
+                <div class="s3-worker-name">Marcus W.</div>
+                <div class="s3-worker-meta">
+                  <span>★ 4.6</span>
+                  <span class="s3-skill-tag">Warehouse</span>
+                  <span class="s3-skill-tag">WHS</span>
+                </div>
+              </div>
+              <button class="s3-invite-btn">Invite</button>
+            </div>
+
+          </div><!-- /workers list -->
+
+          <div class="tab-bar">
+            <a><div class="ico-wrap">⌂</div>Home</a>
+            <a><div class="ico-wrap">⊞</div>Shifts</a>
+            <a class="active"><div class="ico-wrap">👥</div>Workers</a>
+            <a><div class="ico-wrap">💳</div>Wallet</a>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">03 — Worker pool</div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         PHONE 4 — NOTIFICATIONS
+    ══════════════════════════════════ -->
+    <div>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="notch"></div>
+          <div class="status-bar">
+            <span>9:41</span>
+            <span class="right">●●▮</span>
+          </div>
+
+          <div class="s4-header">
+            <h2>Activity</h2>
+          </div>
+
+          <div class="s4-notifs">
+
+            <div class="s4-notif">
+              <div class="s4-icon green">✓</div>
+              <div class="s4-notif-body">
+                <div class="s4-notif-text"><strong>Tom B. confirmed</strong> — Warehouse Fri 27 Jun</div>
+                <div class="s4-notif-time">2 min ago</div>
+              </div>
+            </div>
+
+            <div class="s4-notif" style="background:var(--brand-50);">
+              <div class="s4-icon brand">✦</div>
+              <div class="s4-notif-body">
+                <div class="s4-notif-text"><strong>Amy:</strong> 1 open slot Thu 26 Jun — 3 pool matches found</div>
+                <div class="s4-notif-time">18 min ago</div>
+                <div class="s4-chip">Review</div>
+              </div>
+            </div>
+
+            <div class="s4-notif">
+              <div class="s4-icon amber">⚠</div>
+              <div class="s4-notif-body">
+                <div class="s4-notif-text"><strong>Sarah M. late check-in</strong> — Retail today 7:03am</div>
+                <div class="s4-notif-time">1 hr ago</div>
+              </div>
+            </div>
+
+            <div class="s4-notif">
+              <div class="s4-icon green">✓</div>
+              <div class="s4-notif-body">
+                <div class="s4-notif-text"><strong>Payment processed</strong> — $1,247.40 · 6 workers</div>
+                <div class="s4-notif-time">Yesterday</div>
+              </div>
+            </div>
+
+            <div class="s4-notif">
+              <div class="s4-icon info">🔔</div>
+              <div class="s4-notif-body">
+                <div class="s4-notif-text"><strong>Compliance:</strong> Tom B. RSA renewed</div>
+                <div class="s4-notif-time">2 days ago</div>
+              </div>
+            </div>
+
+            <div class="s4-notif" style="background:var(--brand-50);">
+              <div class="s4-icon brand">✦</div>
+              <div class="s4-notif-body">
+                <div class="s4-notif-text"><strong>Amy:</strong> Post next week's rostered shifts?</div>
+                <div class="s4-notif-time">2 days ago</div>
+                <div class="s4-chip">Post all</div>
+              </div>
+            </div>
+
+          </div><!-- /notifs -->
+
+          <div class="tab-bar">
+            <a><div class="ico-wrap">⌂</div>Home</a>
+            <a><div class="ico-wrap">⊞</div>Shifts</a>
+            <a><div class="ico-wrap">👥</div>Workers</a>
+            <a><div class="ico-wrap">💳</div>Wallet</a>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">04 — Activity</div>
+    </div>
+
+  </div><!-- /phones -->
+</div><!-- /stage -->
+
+</body>
+</html>
