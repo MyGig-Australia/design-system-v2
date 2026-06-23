@@ -232,33 +232,61 @@
   .motion-name { font-family: var(--font-body); font-size: 11px; font-weight: 700; color: var(--brand-700); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; margin-bottom: 6px; }
   .motion-desc { font-family: var(--font-body); font-size: 13px; color: var(--ink-400); }
 
-  /* Mobile nav bar */
+  /* Mobile top-fold nav */
   .mobile-bar { display: none; }
-  .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 98; background: rgba(14,13,11,.55); backdrop-filter: blur(2px); }
-  .sidebar-overlay.open { display: block; }
 
   @media (max-width: 768px) {
-    .sidebar { transform: translateX(-100%); transition: transform 200ms cubic-bezier(.22,1,.36,1); z-index: 100; width: 280px; }
-    .sidebar.open { transform: translateX(0); }
+    /* Body stacks vertically on mobile */
+    body { flex-direction: column; }
+
+    /* Sidebar becomes a fold-down nav below the mobile bar */
+    .sidebar {
+      position: relative; top: auto; left: auto; bottom: auto;
+      width: 100%; max-height: 0; overflow: hidden;
+      transition: max-height 320ms cubic-bezier(.22,1,.36,1);
+      z-index: 90; flex-direction: column;
+    }
+    .sidebar.open { max-height: 85vh; overflow-y: auto; }
+    /* Hide the desktop brand block inside sidebar — logo lives in mobile-bar */
+    .sidebar-brand { display: none; }
+    /* Compact nav items in fold */
+    .sidebar-nav { padding: 8px 10px 16px; }
+    .nav-group-label { padding: 8px 10px 3px; }
+    .nav-link { padding: 9px 12px; font-size: 14px; }
+
+    /* Mobile bar — sticky at very top */
     .mobile-bar {
       display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 50;
-      background: var(--ink-900); padding: 0 16px; height: 56px;
+      position: sticky; top: 0; z-index: 100;
+      background: var(--ink-900); padding: 0 16px; height: 52px;
       border-bottom: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
     }
-    .mobile-bar img { height: 22px; display: block; }
+    .mobile-bar img { height: 20px; display: block; }
     .hamburger {
       width: 36px; height: 36px; background: transparent; border: none;
       cursor: pointer; display: flex; flex-direction: column;
       align-items: center; justify-content: center; gap: 5px; padding: 0;
     }
-    .hamburger span { display: block; width: 20px; height: 2px; background: white; border-radius: 1px; }
-    .main { margin-left: 0; }
-    .ds-hero { padding: 28px 16px 24px; }
-    .ds-hero-title { font-size: 32px; }
+    .hamburger span {
+      display: block; width: 22px; height: 2px; background: white; border-radius: 1px;
+      transition: transform 200ms, opacity 120ms;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Main content — full device width */
+    .main { margin-left: 0; width: 100%; min-width: 0; }
+    .ds-hero { padding: 24px 16px 20px; }
+    .ds-hero-title { font-size: 30px; }
     .ds-hero-meta { flex-direction: column; gap: 4px; }
-    .content { padding: 28px 16px 80px; }
+    .content { padding: 24px 16px 80px; max-width: 100%; }
+
+    /* Component overrides */
     .kit-grid { grid-template-columns: 1fr; }
+    .kit-grid .kit-card:nth-child(4),
+    .kit-grid .kit-card:nth-child(5) { grid-column: auto; }
     .icon-grid { grid-template-columns: repeat(3, 1fr); }
     .img-hero-row { grid-template-columns: repeat(3, 1fr); }
     .motion-grid { grid-template-columns: 1fr; }
@@ -266,21 +294,22 @@
     .voice-col:first-child { border-right: none; border-bottom: 1px solid var(--ink-100); }
     .shadow-row { flex-wrap: wrap; }
     .radii-row { flex-wrap: wrap; }
-    .card { padding: 20px 14px; }
+    .card { padding: 18px 14px; border-radius: var(--r-md); }
     .shift-card { max-width: 100%; }
     .shift-footer { flex-wrap: wrap; }
     .states-table { font-size: 12px; display: block; overflow-x: auto; }
-    .ds-title { font-size: 24px; }
-    .ds-section { margin-bottom: 56px; }
-    .swatch { min-height: 100px; }
-    .spacing-grid { display: flex; overflow-x: auto; padding-bottom: 8px; }
+    .ds-title { font-size: 22px; }
+    .ds-section { margin-bottom: 48px; scroll-margin-top: 60px; }
+    .swatch { min-height: 90px; }
+    .spacing-grid { display: flex; overflow-x: auto; padding-bottom: 8px; gap: 8px; }
     .amy-showcase { flex-direction: column; }
+    .swatch-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .worker-chip { flex-wrap: wrap; }
   }
 </style>
 </head>
 <body>
 
-<div class="sidebar-overlay" id="sidebar-overlay"></div>
 <div class="mobile-bar">
   <img src="project/assets/logo-wordmark-white.png" alt="MyGig">
   <button class="hamburger" id="hamburger" aria-label="Open navigation">
@@ -1144,22 +1173,26 @@
   }, { rootMargin: '-20% 0px -70% 0px' });
   sections.forEach(s => obs.observe(s));
 
-  // Mobile sidebar
+  // Mobile fold nav
   const hamburger = document.getElementById('hamburger');
   const sidebar = document.querySelector('.sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
   function closeSidebar() {
     sidebar.classList.remove('open');
-    overlay.classList.remove('open');
+    hamburger.classList.remove('open');
   }
   function toggleSidebar() {
     sidebar.classList.toggle('open');
-    overlay.classList.toggle('open');
+    hamburger.classList.toggle('open');
   }
   hamburger?.addEventListener('click', toggleSidebar);
-  overlay?.addEventListener('click', closeSidebar);
+  // Close when a hash link is tapped
   document.querySelectorAll('.nav-link[href^="#"]').forEach(l => {
     l.addEventListener('click', () => { if (window.innerWidth <= 768) closeSidebar(); });
+  });
+  // Close on outside tap
+  document.addEventListener('click', e => {
+    if (window.innerWidth > 768) return;
+    if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) closeSidebar();
   });
 </script>
 </body>
