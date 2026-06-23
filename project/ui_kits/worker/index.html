@@ -1,87 +1,189 @@
 <!DOCTYPE html>
+<!-- @dsCard group="UI Kit — Worker" name="UI kit — Worker mobile app" subtitle="4 mobile screens — home, shift detail, wallet, profile" viewport="1480x880" -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MyGig Worker App — UI Kit</title>
+<title>MyGig Worker — mobile app</title>
 <link rel="stylesheet" href="../../colors_and_type.css">
 <style>
   * { box-sizing: border-box; }
-  body { background: var(--ink-50); margin: 0; color: var(--ink-700); padding: 48px 24px; min-height: 100vh; font-family: var(--font-body); }
+  body { background: var(--ink-50); margin: 0; color: var(--ink-700); padding: 48px 24px; min-height: 100vh; }
 
-  .stage { max-width: 1400px; margin: 0 auto; }
-  .stage-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 16px; }
-  .stage-title { font-family: var(--font-display); font-weight: 800; font-size: 28px; color: var(--ink-900); }
-  .stage-sub { font-size: 14px; color: var(--ink-400); margin-top: 4px; }
+  .stage { max-width: 1480px; margin: 0 auto; }
+  .stage-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 32px; }
+  .stage-head h1 { font-family: var(--font-display); font-weight: 800; font-size: 32px; color: var(--ink-900); margin: 0; }
+  .stage-head .sub { font-size: 14px; color: var(--ink-400); }
 
-  .screens-row { display: grid; grid-template-columns: repeat(4, 320px); gap: 32px; justify-content: center; }
+  .phones {
+    display: grid; grid-template-columns: repeat(4, 320px);
+    gap: 32px; justify-content: center;
+  }
 
   /* Phone frame */
-  .phone { width: 320px; background: var(--ink-900); border-radius: 44px; padding: 12px; box-shadow: 0 30px 80px rgba(14,13,11,0.18), 0 6px 20px rgba(14,13,11,0.1); position: relative; }
-  .phone-screen { width: 100%; height: 656px; background: var(--ink-0); border-radius: 32px; overflow: hidden; position: relative; display: flex; flex-direction: column; }
-  .notch { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 92px; height: 26px; background: var(--ink-900); border-radius: 14px; z-index: 10; }
-  .status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 22px 0; font-family: var(--font-body); font-weight: 700; font-size: 12px; color: var(--ink-900); }
-  .scroll-content { flex: 1; overflow-y: auto; scrollbar-width: none; }
-  .scroll-content::-webkit-scrollbar { display: none; }
-  .phone-label { text-align: center; margin-top: 16px; font-size: 11px; font-weight: 700; color: var(--ink-400); letter-spacing: 0.10em; text-transform: uppercase; }
+  .phone {
+    width: 320px; height: 680px;
+    background: var(--ink-900);
+    border-radius: 44px;
+    padding: 12px;
+    box-shadow: 0 30px 80px rgba(14,13,11,0.18), 0 6px 20px rgba(14,13,11,0.1);
+    position: relative;
+  }
+  .phone-screen {
+    width: 100%; height: 100%; background: var(--ink-0);
+    border-radius: 32px; overflow: hidden; position: relative;
+    display: flex; flex-direction: column;
+  }
+  /* Dynamic island */
+  .notch {
+    position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 92px; height: 26px; background: var(--ink-900); border-radius: 14px;
+    z-index: 10;
+  }
+  /* Status bar */
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 22px 0; font-family: var(--font-body); font-weight: 700; font-size: 13px; color: var(--ink-900);
+  }
+  .status-bar .right { display: flex; gap: 4px; align-items: center; font-size: 11px; }
 
-  /* Tab bar */
-  .tab-bar { height: 80px; background: white; border-top: 1px solid var(--ink-100); display: flex; align-items: flex-start; padding: 10px 0 0; flex-shrink: 0; }
-  .tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
-  .tab-icon { font-size: 20px; }
-  .tab-label { font-size: 10px; font-weight: 700; color: var(--ink-400); }
-  .tab.active .tab-label { color: var(--ink-900); }
-  .tab.active .tab-icon { filter: none; }
+  .phone-label {
+    text-align: center; margin-top: 16px; font-size: 12px; font-weight: 700;
+    color: var(--ink-500); letter-spacing: 0.08em; text-transform: uppercase;
+  }
 
-  /* Screen helpers */
-  .screen-header { padding: 52px 20px 16px; background: var(--ink-900); }
-  .screen-header-light { padding: 52px 20px 16px; background: white; border-bottom: 1px solid var(--ink-100); }
-  .scr-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
-  .scr-title { font-family: var(--font-display); font-weight: 800; font-size: 24px; color: white; }
-  .scr-sub { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+  /* App content */
+  .app-bar {
+    padding: 18px 20px 12px; display: flex; align-items: center; gap: 12px;
+  }
+  .app-bar .av { width: 36px; height: 36px; border-radius: 50%; background: #FFD6A8; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:13px; color:var(--ink-900); border:1.5px solid var(--ink-900); overflow:hidden; flex-shrink:0; }
+  .app-bar .av img { width:100%; height:100%; object-fit:cover; display:block; }
+  .app-bar .hi { font-size: 13px; color: var(--ink-400); }
+  .app-bar .name { font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--ink-900); line-height: 1.1; }
+  .app-bar .bell { margin-left:auto; width: 36px; height: 36px; border-radius: var(--r-sm); background: var(--surface-0); border:1px solid var(--ink-100); display:flex; align-items:center; justify-content:center; position:relative; }
+  .app-bar .bell::after { content:''; position:absolute; top:6px; right:6px; width:8px; height:8px; background:var(--brand-500); border:1.5px solid white; border-radius:50%; }
 
-  /* Pill */
-  .pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: var(--r-pill); font-size: 11px; font-weight: 700; white-space: nowrap; }
-  .pill-dot { width: 6px; height: 6px; border-radius: 50%; }
+  /* Earnings hero (home) */
+  .earn-hero {
+    margin: 8px 16px 16px; padding: 18px 20px; background: var(--ink-900); border-radius: var(--r-lg);
+    color: white; position: relative; overflow: hidden;
+  }
+  .earn-hero .label { font-size: 10px; font-weight:700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+  .earn-hero .amount { font-family: var(--font-display); font-weight: 800; font-size: 36px; color: var(--brand-300); line-height: 1; margin-top: 6px; }
+  .earn-hero .sub { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 6px; display: flex; justify-content: space-between; }
 
-  /* Shift card in app */
-  .shift-card { margin: 12px 16px; background: white; border: 1px solid var(--ink-100); border-radius: var(--r-lg); padding: 16px; box-shadow: var(--sh-1); }
-  .shift-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
-  .shift-earn { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: var(--ink-900); line-height: 1; }
-  .shift-earn-label { font-size: 11px; color: var(--ink-400); }
-  .shift-title { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--ink-900); margin: 6px 0 2px; }
-  .shift-loc { font-size: 12px; color: var(--ink-400); }
-  .shift-time { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--ink-700); margin: 10px 0 12px; }
-  .shift-cta { display: block; width: 100%; padding: 12px; background: var(--hivis-500); color: var(--ink-900); font-family: var(--font-body); font-weight: 800; font-size: 14px; text-align: center; border: 3px solid var(--ink-900); border-radius: var(--r-md); box-shadow: var(--sh-stamp); cursor: pointer; }
+  .earn-stamp {
+    position: absolute; right: -10px; top: 14px;
+    background: var(--brand-500); color: white;
+    border: 2px solid var(--ink-900); border-radius: var(--r-sm);
+    padding: 4px 8px; transform: rotate(8deg);
+    font-family: var(--font-display); font-weight: 800; font-size: 10px;
+    box-shadow: 2px 2px 0 var(--ink-900);
+  }
 
-  /* Wallet rows */
-  .wallet-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--ink-50); }
-  .wallet-row:last-child { border-bottom: none; }
-  .wallet-label { font-size: 14px; color: var(--ink-700); font-weight: 500; }
-  .wallet-sub { font-size: 12px; color: var(--ink-400); margin-top: 2px; }
-  .wallet-amount { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--ink-900); }
+  /* Section heads */
+  .sec-head { padding: 4px 20px 8px; display: flex; align-items: baseline; justify-content: space-between; }
+  .sec-head h3 { font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--ink-900); margin: 0; }
+  .sec-head .more { font-size: 12px; font-weight: 600; color: var(--ink-500); }
 
-  /* Avatar */
-  .av { width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--ink-900); background: var(--tag-hospo); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--ink-900); }
+  /* Shift card */
+  .shift {
+    margin: 0 16px 12px; background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md); padding: 14px;
+    display: flex; flex-direction: column; gap: 8px; box-shadow: var(--sh-1);
+  }
+  .shift .row { display: flex; justify-content: space-between; align-items: flex-start; }
+  .shift .tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: var(--r-pill); font-size: 10px; font-weight: 700; color: var(--ink-900); }
+  .shift .tag .dot { width: 5px; height: 5px; background: var(--ink-900); border-radius: 50%; }
+  .shift .title { font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--ink-900); line-height: 1.2; margin-top: 6px; }
+  .shift .meta { font-size: 11px; color: var(--ink-400); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .shift .pay { text-align: right; }
+  .shift .pay .amt { font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--ink-900); line-height: 1; }
+  .shift .pay .rate { font-size: 10px; color: var(--ink-400); margin-top: 2px; }
+  .shift .actions { display: flex; gap: 8px; margin-top: 4px; }
+  .shift-btn { flex: 1; padding: 9px 0; border-radius: var(--r-sm); font-family: var(--font-body); font-weight: 700; font-size: 12px; border: none; cursor: pointer; }
+  .shift-btn-primary { background: var(--brand-500); color: white; border: 2px solid var(--ink-900); box-shadow: 2px 2px 0 var(--ink-900); }
+  .shift-btn-ghost { background: transparent; color: var(--ink-700); border: 1.5px solid var(--ink-100); }
 
-  /* Rating stars */
-  .stars { color: #F5A623; font-size: 14px; letter-spacing: 1px; }
+  /* Bottom tab bar */
+  .tab-bar {
+    margin-top: auto;
+    display: flex; padding: 8px 0 28px; background: white; border-top: 1px solid var(--ink-100);
+  }
+  .tab-bar a { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; font-weight: 600; color: var(--ink-300); }
+  .tab-bar a.active { color: var(--ink-900); }
+  .tab-bar a.active .ico-wrap { background: var(--brand-500); border-color: var(--ink-900); }
+  .ico-wrap { width: 28px; height: 28px; border-radius: 8px; background: transparent; border:1.5px solid transparent; display:flex;align-items:center;justify-content:center; font-style:normal; font-size:14px; color: var(--ink-700); }
 
-  /* Section header in phone */
-  .phone-section { padding: 14px 20px 8px; }
-  .phone-section-title { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--ink-900); }
+  /* Shift detail screen */
+  .det-hero { background: var(--ink-900); color: white; padding: 20px 20px 22px; }
+  .det-back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 13px; margin-bottom: 12px; }
+  .det-hero .tag { background: var(--brand-500); color: white; padding: 4px 10px; border-radius: var(--r-pill); font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; gap: 5px; }
+  .det-hero .tag .dot { width: 5px; height: 5px; background: var(--ink-900); border-radius:50%; }
+  .det-hero h2 { font-family: var(--font-display); font-weight: 800; font-size: 24px; color: white; margin: 10px 0 4px; line-height: 1.15; }
+  .det-hero .where { font-size: 13px; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 4px; }
+  .det-pay-row { display: flex; align-items: baseline; gap: 14px; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.12); }
+  .det-pay-row .amt { font-family: var(--font-display); font-weight: 800; font-size: 36px; color: var(--brand-300); line-height: 1; }
+  .det-pay-row .small { font-size: 12px; color: rgba(255,255,255,0.65); }
 
-  /* Cert badge */
-  .cert { display: flex; align-items: center; gap: 10px; padding: 10px 20px; border-bottom: 1px solid var(--ink-50); }
-  .cert-icon { width: 32px; height: 32px; border-radius: var(--r-sm); background: var(--success-50); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
-  .cert-name { font-size: 13px; font-weight: 600; color: var(--ink-900); }
-  .cert-exp { font-size: 11px; color: var(--ink-400); margin-top: 2px; }
+  .det-section { padding: 16px 20px; border-bottom: 1px solid var(--ink-50); }
+  .det-section h4 { font-size: 11px; font-weight:700; letter-spacing: 0.12em; text-transform:uppercase; color: var(--ink-400); margin: 0 0 10px; }
+  .det-row { display: flex; gap: 12px; padding: 8px 0; align-items: flex-start; }
+  .det-row .ico { width:24px; height:24px; flex-shrink:0; background: var(--ink-0); border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-style:normal; font-size: 13px; }
+  .det-row .lbl { font-size: 11px; color: var(--ink-400); }
+  .det-row .val { font-size: 13px; color: var(--ink-900); font-weight: 600; }
 
-  /* Achievement */
-  .achieve { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--ink-50); }
-  .achieve-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--hivis-100); border: 2px solid var(--ink-900); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-  .achieve-name { font-size: 13px; font-weight: 700; color: var(--ink-900); }
-  .achieve-sub { font-size: 11px; color: var(--ink-400); margin-top: 2px; }
+  .det-actions { padding: 16px 20px 20px; display: flex; gap: 10px; margin-top: auto; background: white; border-top:1px solid var(--ink-100); }
+  .det-actions button { flex:1; padding: 14px; border-radius: var(--r-md); font-family: var(--font-body); font-weight: 800; font-size: 14px; border: none; cursor: pointer; }
+  .det-secure { background: var(--brand-500); color: white; border: 2.5px solid var(--ink-900); box-shadow: 3px 3px 0 var(--ink-900); }
+
+  /* Wallet */
+  .wallet-hero { padding: 18px 20px 4px; }
+  .wallet-hero .label { font-size: 11px; font-weight:700; letter-spacing: 0.12em; text-transform:uppercase; color: var(--ink-400); }
+  .wallet-hero .amount { font-family: var(--font-display); font-weight: 800; font-size: 48px; color: var(--ink-900); line-height: 1; margin-top: 4px; }
+  .wallet-hero .sub { font-size: 12px; color: var(--ink-400); margin-top: 6px; }
+  .wallet-actions { padding: 14px 20px; display: flex; gap: 8px; }
+  .wallet-actions button { flex: 1; padding: 10px; border-radius: var(--r-sm); background: var(--ink-900); color: white; border: none; font-family: var(--font-body); font-weight: 700; font-size: 12px; }
+  .wallet-actions button.outline { background: white; color: var(--ink-900); border: 1.5px solid var(--ink-100); }
+
+  .pay-list { padding: 8px 0 0; }
+  .pay-item { display: flex; padding: 12px 20px; gap: 12px; border-bottom: 1px solid var(--ink-50); align-items: center; }
+  .pay-item .av { width: 36px; height: 36px; border-radius: var(--r-sm); background: var(--ink-0); display:flex; align-items:center; justify-content:center; font-style:normal; }
+  .pay-item .body { flex: 1; min-width:0; }
+  .pay-item .body .t { font-size: 13px; font-weight: 700; color: var(--ink-900); }
+  .pay-item .body .d { font-size: 11px; color: var(--ink-400); margin-top: 2px; }
+  .pay-item .amt { font-family: var(--font-mono); font-weight: 700; font-size: 14px; color: var(--ink-900); }
+  .pay-item .amt.pending { color: var(--warn-700); }
+  .pay-item .amt .small { font-size: 10px; color: var(--ink-400); display:block; text-align:right; }
+
+  /* Profile screen */
+  .prof-hero { background: var(--ink-900); color: white; padding: 22px 20px 22px; text-align: center; position: relative; }
+  .prof-hero .big-av {
+    width: 76px; height: 76px; border-radius: 50%; background: #FFD6A8;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--font-display); font-weight: 800; font-size: 28px; color: var(--ink-900);
+    border: 2.5px solid var(--brand-500); margin: 0 auto 12px; overflow:hidden;
+  }
+  .prof-hero .big-av img { width:100%; height:100%; object-fit:cover; display:block; }
+  .prof-hero h2 { font-family: var(--font-display); font-weight: 800; font-size: 22px; margin: 0; }
+  .prof-hero .badges { display: flex; justify-content: center; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .prof-hero .badge { display:inline-flex; align-items:center; gap:4px; padding: 3px 8px; border-radius: var(--r-pill); font-size: 10px; font-weight: 800; background: var(--brand-500); color: white; }
+  .prof-hero .badge.ghost { background: transparent; color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.2); }
+
+  .prof-stats { display: grid; grid-template-columns: repeat(3,1fr); border-bottom: 1px solid var(--ink-100); }
+  .prof-stat { padding: 14px; text-align:center; border-right: 1px solid var(--ink-50); }
+  .prof-stat:last-child { border-right:none; }
+  .prof-stat .num { font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--ink-900); line-height: 1; }
+  .prof-stat .label { font-size: 10px; color: var(--ink-400); margin-top: 4px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+
+  .skill-list { padding: 14px 20px; }
+  .skill-list h4 { font-size: 11px; font-weight:700; letter-spacing: 0.12em; text-transform:uppercase; color: var(--ink-400); margin: 0 0 10px; }
+  .skill-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; }
+  .skill-row .ico { width: 28px; height: 28px; border-radius: var(--r-sm); background: var(--ink-0); display:flex; align-items:center; justify-content:center; font-style: normal; }
+  .skill-row .body { flex: 1; }
+  .skill-row .body .t { font-size: 13px; font-weight: 600; color: var(--ink-900); }
+  .skill-row .body .d { font-size: 11px; color: var(--ink-400); }
+  .skill-row .verified { font-size: 10px; color: var(--success-700); background: var(--success-50); padding: 2px 8px; border-radius: var(--r-pill); font-weight: 700; }
+
+  i { font-style: normal; }
 </style>
 </head>
 <body>
@@ -89,270 +191,314 @@
 <div class="stage">
   <div class="stage-head">
     <div>
-      <div class="stage-title">Worker App — UI Kit</div>
-      <div class="stage-sub">4 key screens · Mobile-first · 320 × 656px viewport</div>
+      <h1>Worker mobile app</h1>
+      <div class="sub">Home feed · shift detail · wallet · profile</div>
     </div>
-    <a href="../../../index.html" style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--hivis-900);text-decoration:none;">← Back to style guide</a>
+    <div class="sub" style="color:var(--ink-400);">Phone frame ≈ iPhone 14, 320×680</div>
   </div>
 
-  <div class="screens-row">
+  <div class="phones">
 
-    <!-- SCREEN 1: Shift Feed -->
+    <!-- ============ HOME / FEED ============ -->
     <div>
       <div class="phone">
-        <div class="notch"></div>
         <div class="phone-screen">
-          <!-- Header -->
-          <div class="screen-header">
-            <div class="scr-eyebrow">Tuesday 26 May</div>
-            <div class="scr-title">Find shifts ⚡</div>
-            <div class="scr-sub">3 new shifts near Surry Hills</div>
+          <div class="notch"></div>
+          <div class="status-bar">
+            <span>9:41</span>
+            <span class="right">● ● ▮</span>
           </div>
 
-          <!-- Filter pills -->
-          <div style="display:flex;gap:6px;padding:12px 16px;overflow-x:auto;scrollbar-width:none;flex-shrink:0;">
-            <span class="pill" style="background:var(--ink-900);color:white;">All</span>
-            <span class="pill" style="background:var(--tag-hospo);">Hospitality</span>
-            <span class="pill" style="background:var(--tag-events);">Events</span>
-            <span class="pill" style="background:var(--tag-warehouse);">Warehousing</span>
-          </div>
-
-          <!-- Shift cards -->
-          <div class="scroll-content">
-            <div class="shift-card">
-              <div class="shift-card-top">
-                <span class="pill" style="background:var(--tag-hospo);">Hospitality · Barista</span>
-                <div style="text-align:right;">
-                  <div class="shift-earn">$234</div>
-                  <div class="shift-earn-label">est. earn</div>
-                </div>
-              </div>
-              <div class="shift-title">Single O Surry Hills</div>
-              <div class="shift-loc">📍 Reservoir St, Surry Hills</div>
-              <div class="shift-time">Wed 27 May · 6:30am – 2:00pm</div>
-              <button class="shift-cta">Secure shift</button>
+          <div class="app-bar">
+            <div class="av"><img src="../../assets/worker-sarah-m.jpg" alt="Sarah M."></div>
+            <div>
+              <div class="hi">G'day,</div>
+              <div class="name">Sarah</div>
             </div>
-
-            <div class="shift-card" style="opacity:0.85;">
-              <div class="shift-card-top">
-                <span class="pill" style="background:var(--tag-events);">Events · Crew</span>
-                <div style="text-align:right;">
-                  <div class="shift-earn">$312</div>
-                  <div class="shift-earn-label">est. earn</div>
-                </div>
-              </div>
-              <div class="shift-title">ICC Sydney</div>
-              <div class="shift-loc">📍 Darling Harbour, Sydney</div>
-              <div class="shift-time">Sat 30 May · 10:00am – 8:00pm</div>
-              <button class="shift-cta">Secure shift</button>
-            </div>
-
-            <div style="height:16px;"></div>
+            <button class="bell"><i>🔔</i></button>
           </div>
 
-          <!-- Tab bar -->
+          <div class="earn-hero">
+            <div class="earn-stamp">💪 STREAK 5</div>
+            <div class="label">This week</div>
+            <div class="amount">$847.20</div>
+            <div class="sub"><span>3 shifts · 26h</span><span style="color:var(--brand-300);">↑ 12% vs last wk</span></div>
+          </div>
+
+          <div class="sec-head">
+            <h3>Open shifts near you</h3>
+            <span class="more">See all →</span>
+          </div>
+
+          <div class="shift">
+            <div class="row">
+              <div>
+                <span class="tag" style="background:#FFD6A8;"><span class="dot"></span>Hospitality</span>
+                <div class="title">Barista · Single O</div>
+                <div class="meta"><span>📍 2.4 km</span><span>★ host 4.8</span></div>
+              </div>
+              <div class="pay">
+                <div class="amt">$234</div>
+                <div class="rate">$31.19/hr</div>
+              </div>
+            </div>
+            <div class="meta" style="font-weight:600; color:var(--ink-700); font-family:var(--font-mono); font-size:11px;">Tue 26 May · 6:30am–2:00pm</div>
+            <div class="actions">
+              <button class="shift-btn shift-btn-ghost">Details</button>
+              <button class="shift-btn shift-btn-primary">Secure</button>
+            </div>
+          </div>
+
+          <div class="shift">
+            <div class="row">
+              <div>
+                <span class="tag" style="background:#B8E2FF;"><span class="dot"></span>Warehousing</span>
+                <div class="title">Pick &amp; pack · Toll Yennora</div>
+                <div class="meta"><span>📍 8.1 km</span><span>★ host 4.6</span></div>
+              </div>
+              <div class="pay">
+                <div class="amt">$276</div>
+                <div class="rate">$34.50/hr</div>
+              </div>
+            </div>
+            <div class="meta" style="font-weight:600; color:var(--ink-700); font-family:var(--font-mono); font-size:11px;">Wed 27 May · 5:00am–1:00pm</div>
+          </div>
+
           <div class="tab-bar">
-            <div class="tab active"><div class="tab-icon">📋</div><div class="tab-label">Shifts</div></div>
-            <div class="tab"><div class="tab-icon">📅</div><div class="tab-label">Schedule</div></div>
-            <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Wallet</div></div>
-            <div class="tab"><div class="tab-icon">👤</div><div class="tab-label">Profile</div></div>
+            <a class="active"><div class="ico-wrap">⌂</div>Home</a>
+            <a><div class="ico-wrap">⊞</div>Shifts</a>
+            <a><div class="ico-wrap">$</div>Wallet</a>
+            <a><div class="ico-wrap">◉</div>Profile</a>
           </div>
         </div>
       </div>
-      <div class="phone-label">Shift feed</div>
+      <div class="phone-label">01 — Home</div>
     </div>
 
-    <!-- SCREEN 2: Active Shift -->
+    <!-- ============ SHIFT DETAIL ============ -->
     <div>
       <div class="phone">
-        <div class="notch"></div>
         <div class="phone-screen">
-          <div style="background:var(--ink-900);padding:52px 20px 24px;flex-shrink:0;">
-            <div class="scr-eyebrow">Shift in progress</div>
-            <div class="scr-title">Single O Hospo</div>
-            <div class="scr-sub" style="margin-top:8px;">Barista · Reservoir St, Surry Hills</div>
-            <!-- Clock in badge -->
-            <div style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:8px 14px;background:var(--success-500);border-radius:var(--r-pill);">
-              <span style="width:8px;height:8px;background:white;border-radius:50%;display:inline-block;box-shadow:0 0 0 3px rgba(255,255,255,0.3);"></span>
-              <span style="font-size:12px;font-weight:700;color:white;">Clocked in · 6:32am</span>
+          <div class="notch"></div>
+
+          <div class="det-hero" style="padding-top:12px;">
+          <div class="status-bar" style="color:white; padding:0 22px 16px;">
+            <span>9:41</span>
+            <span class="right">● ● ▮</span>
+          </div>
+            <a class="det-back">← Back</a>
+            <span class="tag"><span class="dot"></span>Hospitality · Barista</span>
+            <h2>Single O Surry Hills</h2>
+            <div class="where">📍 Reservoir St, Surry Hills NSW</div>
+            <div class="det-pay-row">
+              <div>
+                <div class="amt">$234.00</div>
+                <div class="small">7.5 hours estimated</div>
+              </div>
+              <div style="margin-left:auto; text-align:right;">
+                <div style="font-family:var(--font-display); font-weight:700; font-size:16px;">$31.19<span style="font-size:11px; color:rgba(255,255,255,0.6);">/hr</span></div>
+                <div class="small">Hospitality Award L2</div>
+              </div>
             </div>
           </div>
 
-          <div class="scroll-content">
-            <!-- Timer -->
-            <div style="text-align:center;padding:28px 20px 20px;">
-              <div style="font-family:var(--font-mono);font-size:44px;font-weight:700;color:var(--ink-900);letter-spacing:0.05em;">03:42:18</div>
-              <div style="font-size:13px;color:var(--ink-400);margin-top:6px;">of 7.5h shift · ends 2:00pm</div>
+          <div class="det-section">
+            <h4>When &amp; where</h4>
+            <div class="det-row">
+              <div class="ico">📅</div>
+              <div>
+                <div class="lbl">Shift time</div>
+                <div class="val">Tue 26 May · 6:30am – 2:00pm</div>
+              </div>
             </div>
-
-            <!-- Earnings live -->
-            <div style="margin:0 20px 20px;background:var(--hivis-100);border:2px solid var(--ink-900);border-radius:var(--r-md);padding:16px;text-align:center;">
-              <div style="font-size:11px;font-weight:700;letter-spacing:0.10em;text-transform:uppercase;color:var(--ink-700);margin-bottom:4px;">Earned so far</div>
-              <div style="font-family:var(--font-display);font-size:36px;font-weight:800;color:var(--ink-900);line-height:1;">$116.04</div>
-              <div style="font-size:12px;color:var(--ink-700);margin-top:4px;">$31.19/hr · paid next day</div>
-            </div>
-
-            <!-- Shift details -->
-            <div class="phone-section"><div class="phone-section-title">Shift details</div></div>
-            <div style="margin:0 20px;background:white;border:1px solid var(--ink-100);border-radius:var(--r-md);overflow:hidden;">
-              <div class="wallet-row"><div><div class="wallet-label">Location</div><div class="wallet-sub">Reservoir St, Surry Hills</div></div><div style="font-size:18px;">📍</div></div>
-              <div class="wallet-row"><div><div class="wallet-label">Finish time</div></div><div class="wallet-amount">2:00pm</div></div>
-              <div class="wallet-row"><div><div class="wallet-label">Contact</div><div class="wallet-sub">Ask for Sam at reception</div></div><div style="font-size:18px;">💬</div></div>
-            </div>
-
-            <!-- Clock out -->
-            <div style="padding:20px;">
-              <button style="display:block;width:100%;padding:14px;background:var(--danger-500);color:white;font-family:var(--font-body);font-weight:800;font-size:15px;border:none;border-radius:var(--r-md);cursor:pointer;">Clock out</button>
+            <div class="det-row">
+              <div class="ico">📍</div>
+              <div>
+                <div class="lbl">Address</div>
+                <div class="val">60–64 Reservoir St, Surry Hills NSW 2010</div>
+              </div>
             </div>
           </div>
 
-          <div class="tab-bar">
-            <div class="tab active"><div class="tab-icon">📋</div><div class="tab-label">Shifts</div></div>
-            <div class="tab"><div class="tab-icon">📅</div><div class="tab-label">Schedule</div></div>
-            <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Wallet</div></div>
-            <div class="tab"><div class="tab-icon">👤</div><div class="tab-label">Profile</div></div>
+          <div class="det-section">
+            <h4>What you'll do</h4>
+            <div style="font-size:13px; color:var(--ink-500); line-height:1.55;">
+              Espresso bar service during morning rush. La Marzocco GB5, 2 grinders.
+              Black t-shirt, closed-toe shoes. Ask for Lily at counter.
+            </div>
+          </div>
+
+          <div class="det-actions">
+            <button class="shift-btn-ghost" style="background:white; color:var(--ink-700); border:1.5px solid var(--ink-100); padding:14px; border-radius:var(--r-md); font-family:var(--font-body); font-weight:700; font-size:13px;">Save</button>
+            <button class="det-secure">Secure shift</button>
           </div>
         </div>
       </div>
-      <div class="phone-label">Active shift</div>
+      <div class="phone-label">02 — Shift detail</div>
     </div>
 
-    <!-- SCREEN 3: Wallet -->
+    <!-- ============ WALLET ============ -->
     <div>
       <div class="phone">
-        <div class="notch"></div>
         <div class="phone-screen">
-          <div class="screen-header">
-            <div class="scr-eyebrow">May 2026</div>
-            <div class="scr-title">Your wallet 💰</div>
+          <div class="notch"></div>
+          <div class="status-bar">
+            <span>9:41</span>
+            <span class="right">● ● ▮</span>
           </div>
 
-          <!-- Balance card -->
-          <div style="margin:16px;background:var(--hivis-500);border:3px solid var(--ink-900);border-radius:var(--r-lg);padding:20px;box-shadow:var(--sh-stamp);">
-            <div style="font-size:11px;font-weight:700;letter-spacing:0.10em;text-transform:uppercase;color:var(--ink-700);margin-bottom:8px;">Total this month</div>
-            <div style="font-family:var(--font-display);font-size:40px;font-weight:800;color:var(--ink-900);line-height:1;">$1,847.31</div>
-            <div style="font-size:12px;color:var(--ink-700);margin-top:8px;">12 shifts · 89.5 hours</div>
+          <div class="app-bar">
+            <div>
+              <div class="name" style="font-size:20px;">Wallet</div>
+            </div>
+            <button class="bell" style="margin-left:auto;"><i>⚙</i></button>
           </div>
 
-          <div class="scroll-content">
-            <div class="phone-section"><div class="phone-section-title">Recent payments</div></div>
-            <div style="margin:0 16px;background:white;border:1px solid var(--ink-100);border-radius:var(--r-md);overflow:hidden;">
-              <div class="wallet-row">
-                <div><div class="wallet-label">Single O Hospo</div><div class="wallet-sub" style="font-family:var(--font-mono);font-size:11px;">Tue 26 May · 7.5h</div></div>
-                <div class="wallet-amount" style="color:var(--success-700);">+$233.93</div>
+          <div class="wallet-hero">
+            <div class="label">Available to withdraw</div>
+            <div class="amount">$1,287.40</div>
+            <div class="sub">Updated 2 hours ago · paid via PayID</div>
+          </div>
+
+          <div class="wallet-actions">
+            <button>Withdraw</button>
+            <button class="outline">Tax &amp; super</button>
+          </div>
+
+          <div class="sec-head" style="padding-top:8px;">
+            <h3>Recent</h3>
+            <span class="more">All →</span>
+          </div>
+
+          <div class="pay-list">
+            <div class="pay-item">
+              <div class="av" style="background:var(--success-50);">↓</div>
+              <div class="body">
+                <div class="t">Single O Surry Hills</div>
+                <div class="d">Fri 22 May · 7.5h · paid</div>
               </div>
-              <div class="wallet-row">
-                <div><div class="wallet-label">ICC Sydney — Events</div><div class="wallet-sub" style="font-family:var(--font-mono);font-size:11px;">Sat 23 May · 10h</div></div>
-                <div class="wallet-amount" style="color:var(--success-700);">+$345.00</div>
-              </div>
-              <div class="wallet-row">
-                <div><div class="wallet-label">Costco Marsden Park</div><div class="wallet-sub" style="font-family:var(--font-mono);font-size:11px;">Wed 20 May · 8h</div></div>
-                <div class="wallet-amount" style="color:var(--success-700);">+$264.48</div>
-              </div>
-              <div class="wallet-row">
-                <div><div class="wallet-label">Rockpool Bar &amp; Grill</div><div class="wallet-sub" style="font-family:var(--font-mono);font-size:11px;">Mon 18 May · 6h</div></div>
-                <div class="wallet-amount" style="color:var(--success-700);">+$187.14</div>
-              </div>
+              <div class="amt">+$234.00<span class="small">PAID</span></div>
             </div>
-            <div style="margin:12px 16px;padding:12px 16px;background:var(--info-50);border-radius:var(--r-md);font-size:12px;color:var(--info-700);font-weight:600;">
-              💡 You're on track to earn $2,100+ this month — 3 more shifts available near you.
+            <div class="pay-item">
+              <div class="av" style="background:var(--warn-50);">⏱</div>
+              <div class="body">
+                <div class="t">SCG Event Steward</div>
+                <div class="d">Sat 23 May · 6h · processing</div>
+              </div>
+              <div class="amt pending">+$216.00<span class="small">TUE</span></div>
             </div>
-            <div style="height:16px;"></div>
+            <div class="pay-item">
+              <div class="av" style="background:var(--success-50);">↓</div>
+              <div class="body">
+                <div class="t">Toll Yennora DC</div>
+                <div class="d">Wed 20 May · 8h · paid</div>
+              </div>
+              <div class="amt">+$276.00<span class="small">PAID</span></div>
+            </div>
+            <div class="pay-item">
+              <div class="av" style="background:var(--ink-50);">↑</div>
+              <div class="body">
+                <div class="t">Withdraw to PayID</div>
+                <div class="d">Tue 19 May · sarah@payid.com.au</div>
+              </div>
+              <div class="amt">–$450.00<span class="small">PAID</span></div>
+            </div>
           </div>
 
           <div class="tab-bar">
-            <div class="tab"><div class="tab-icon">📋</div><div class="tab-label">Shifts</div></div>
-            <div class="tab"><div class="tab-icon">📅</div><div class="tab-label">Schedule</div></div>
-            <div class="tab active"><div class="tab-icon">💰</div><div class="tab-label">Wallet</div></div>
-            <div class="tab"><div class="tab-icon">👤</div><div class="tab-label">Profile</div></div>
+            <a><div class="ico-wrap">⌂</div>Home</a>
+            <a><div class="ico-wrap">⊞</div>Shifts</a>
+            <a class="active"><div class="ico-wrap">$</div>Wallet</a>
+            <a><div class="ico-wrap">◉</div>Profile</a>
           </div>
         </div>
       </div>
-      <div class="phone-label">Wallet</div>
+      <div class="phone-label">03 — Wallet</div>
     </div>
 
-    <!-- SCREEN 4: Profile -->
+    <!-- ============ PROFILE ============ -->
     <div>
       <div class="phone">
-        <div class="notch"></div>
         <div class="phone-screen">
-          <!-- Header -->
-          <div style="background:var(--ink-900);padding:52px 20px 20px;text-align:center;flex-shrink:0;">
-            <div class="av" style="margin:0 auto 10px;width:72px;height:72px;font-size:22px;">SM</div>
-            <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:white;">Sarah Mitchell</div>
-            <div style="display:flex;justify-content:center;align-items:center;gap:6px;margin-top:6px;">
-              <span style="display:inline-flex;align-items:center;padding:3px 9px;background:var(--hivis-500);border-radius:var(--r-pill);font-size:10px;font-weight:800;color:var(--ink-900);">★ TOP WORKER</span>
+          <div class="notch"></div>
+
+          <div class="prof-hero" style="padding-top:12px;">
+          <div class="status-bar" style="color:white; padding:0 22px 16px;">
+            <span>9:41</span>
+            <span class="right">● ● ▮</span>
+          </div>
+            <div class="big-av"><img src="../../assets/worker-sarah-m.jpg" alt="Sarah M."></div>
+            <h2>Sarah M.</h2>
+            <div style="color:rgba(255,255,255,0.65); font-size:12px; margin-top:2px;">Hospitality · Barista · Sydney</div>
+            <div class="badges">
+              <span class="badge">★ TOP WORKER</span>
+              <span class="badge ghost">RSA verified</span>
+              <span class="badge ghost">Food safety</span>
             </div>
-            <div class="stars" style="margin-top:8px;">★★★★★</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;">4.9 · 127 shifts · 98% on-time</div>
           </div>
 
-          <div class="scroll-content">
-            <!-- Stats row -->
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--ink-100);border-bottom:1px solid var(--ink-100);flex-shrink:0;">
-              <div style="background:white;padding:14px 8px;text-align:center;">
-                <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--ink-900);">127</div>
-                <div style="font-size:10px;color:var(--ink-400);margin-top:2px;">shifts</div>
-              </div>
-              <div style="background:white;padding:14px 8px;text-align:center;">
-                <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--ink-900);">4.9</div>
-                <div style="font-size:10px;color:var(--ink-400);margin-top:2px;">rating</div>
-              </div>
-              <div style="background:white;padding:14px 8px;text-align:center;">
-                <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--ink-900);">98%</div>
-                <div style="font-size:10px;color:var(--ink-400);margin-top:2px;">on-time</div>
-              </div>
+          <div class="prof-stats">
+            <div class="prof-stat">
+              <div class="num">127</div>
+              <div class="label">Shifts</div>
             </div>
-
-            <!-- Certs -->
-            <div class="phone-section"><div class="phone-section-title">Certifications</div></div>
-            <div style="margin:0 16px;background:white;border:1px solid var(--ink-100);border-radius:var(--r-md);overflow:hidden;">
-              <div class="cert">
-                <div class="cert-icon">✅</div>
-                <div><div class="cert-name">RSA — Responsible Service of Alcohol</div><div class="cert-exp">Expires Dec 2026</div></div>
-              </div>
-              <div class="cert">
-                <div class="cert-icon">✅</div>
-                <div><div class="cert-name">Food Safety Supervisor</div><div class="cert-exp">Expires Mar 2027</div></div>
-              </div>
-              <div class="cert" style="border-bottom:none;">
-                <div class="cert-icon" style="background:var(--warn-50);">⚠️</div>
-                <div><div class="cert-name">First Aid Certificate</div><div class="cert-exp" style="color:var(--warn-700);">Expires in 28 days</div></div>
-              </div>
+            <div class="prof-stat">
+              <div class="num">4.9</div>
+              <div class="label">Rating</div>
             </div>
+            <div class="prof-stat">
+              <div class="num">98%</div>
+              <div class="label">On-time</div>
+            </div>
+          </div>
 
-            <!-- Achievements -->
-            <div class="phone-section"><div class="phone-section-title">Achievements 🏆</div></div>
-            <div style="margin:0 16px 16px;background:white;border:1px solid var(--ink-100);border-radius:var(--r-md);overflow:hidden;">
-              <div class="achieve">
-                <div class="achieve-icon">⚡</div>
-                <div><div class="achieve-name">100 Shifts Club</div><div class="achieve-sub">Completed 127 shifts on MyGig</div></div>
+          <div class="skill-list">
+            <h4>Verified skills · 8 of 30</h4>
+            <div class="skill-row">
+              <div class="ico">☕</div>
+              <div class="body">
+                <div class="t">Espresso machine — La Marzocco</div>
+                <div class="d">Quiz passed · referenced</div>
               </div>
-              <div class="achieve" style="border-bottom:none;">
-                <div class="achieve-icon">🌟</div>
-                <div><div class="achieve-name">Perfect Month — Apr 2026</div><div class="achieve-sub">Zero no-shows, 5.0 avg rating</div></div>
+              <span class="verified">✓ Verified</span>
+            </div>
+            <div class="skill-row">
+              <div class="ico">🥤</div>
+              <div class="body">
+                <div class="t">RSA — NSW</div>
+                <div class="d">Expires Mar 2027</div>
+              </div>
+              <span class="verified">✓ Verified</span>
+            </div>
+            <div class="skill-row">
+              <div class="ico">🍽</div>
+              <div class="body">
+                <div class="t">Food handling</div>
+                <div class="d">Cert + reference</div>
+              </div>
+              <span class="verified">✓ Verified</span>
+            </div>
+            <div class="skill-row">
+              <div class="ico">+</div>
+              <div class="body">
+                <div class="t" style="color:var(--ink-500);">Add a new skill</div>
+                <div class="d">Increases shift match rate</div>
               </div>
             </div>
           </div>
 
           <div class="tab-bar">
-            <div class="tab"><div class="tab-icon">📋</div><div class="tab-label">Shifts</div></div>
-            <div class="tab"><div class="tab-icon">📅</div><div class="tab-label">Schedule</div></div>
-            <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Wallet</div></div>
-            <div class="tab active"><div class="tab-icon">👤</div><div class="tab-label">Profile</div></div>
+            <a><div class="ico-wrap">⌂</div>Home</a>
+            <a><div class="ico-wrap">⊞</div>Shifts</a>
+            <a><div class="ico-wrap">$</div>Wallet</a>
+            <a class="active"><div class="ico-wrap">◉</div>Profile</a>
           </div>
         </div>
       </div>
-      <div class="phone-label">Profile</div>
+      <div class="phone-label">04 — Profile</div>
     </div>
 
   </div>
-</div>
-
-<!-- Kit banner -->
-<div style="position:fixed;bottom:20px;right:20px;background:var(--ink-900);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r-md);padding:10px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--sh-4);z-index:200;">
-  <span style="font-family:var(--font-body);font-size:12px;color:rgba(255,255,255,0.7);">MyGig · Worker App Kit</span>
-  <a href="../../../index.html" style="font-family:var(--font-body);font-size:12px;font-weight:700;color:var(--hivis-500);text-decoration:none;">← Style guide</a>
 </div>
 
 </body>

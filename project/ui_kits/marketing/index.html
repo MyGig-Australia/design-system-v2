@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<!-- @dsCard group="UI Kit — Marketing" name="UI kit — Marketing site" subtitle="Hero, how it works, features, stats, CTA" viewport="1440x1100" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MyGig — Marketing site</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css">
+<style>
+  * { box-sizing: border-box; }
+  body { background: var(--ink-0); color: var(--ink-700); margin: 0; }
+  a { color: inherit; text-decoration: none; }
+
+  /* Layout */
+  .container { max-width: 1320px; margin: 0 auto; padding: 0 48px; }
+
+  /* Nav */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(250, 248, 244, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--ink-100);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .nav-logo { height: 30px; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-link { font-weight: 600; font-size: 15px; color: var(--ink-700); }
+  .nav-link:hover { color: var(--ink-900); }
+  .nav-link.active { color: var(--ink-900); }
+  .nav-cta { display: flex; align-items: center; gap: 12px; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border-radius: var(--r-md);
+    font-family: var(--font-body); font-weight: 700; font-size: 15px;
+    cursor: pointer; transition: transform var(--dur-fast) var(--ease-out-quint), box-shadow var(--dur-fast) var(--ease-out-quint);
+    border: none; line-height: 1; text-decoration: none;
+  }
+  .btn-primary {
+    background: var(--brand-500); color: white;
+    border: 3px solid var(--ink-900); box-shadow: var(--sh-stamp);
+  }
+  .btn-primary:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--ink-900); }
+  .btn-primary:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink-900); }
+  .btn-secondary { background: var(--ink-900); color: white; border: 1.5px solid var(--ink-900); }
+  .btn-secondary:hover { background: var(--ink-700); }
+  .btn-ghost { background: transparent; color: var(--ink-900); border: 1.5px solid var(--ink-100); }
+  .btn-ghost:hover { background: var(--ink-50); border-color: var(--ink-200); }
+
+  /* Hero */
+  .hero { padding: 80px 0 56px; position: relative; overflow: hidden; }
+  .audience-toggle {
+    display: inline-flex; padding: 4px; background: white;
+    border: 1.5px solid var(--ink-900); border-radius: var(--r-pill);
+    margin-bottom: 32px;
+  }
+  .audience-toggle button {
+    padding: 8px 22px; border-radius: var(--r-pill);
+    background: transparent; border: none; cursor: pointer;
+    font-family: var(--font-body); font-weight: 700; font-size: 13px;
+    color: var(--ink-500);
+    transition: all var(--dur-base) var(--ease-out-quint);
+  }
+  .audience-toggle button.active { background: var(--ink-900); color: white; }
+
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; }
+  .hero h1 {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(48px, 6vw, 80px); line-height: 0.98;
+    letter-spacing: -0.025em; color: var(--ink-900);
+    margin: 0 0 24px;
+  }
+  .hero h1 .script { font-family: var(--font-script); font-weight: 400; display: inline-block; transform: rotate(-3deg); color: var(--ink-900); font-size: 0.9em; }
+  .hero h1 .underline { position: relative; isolation: isolate; display: inline-block; }
+  .hero h1 .underline > span { position: relative; z-index: 1; }
+  .hero h1 .underline::after {
+    content: ''; position: absolute; left: -2px; right: -2px; bottom: 6px; height: 18px;
+    background: var(--brand-200); z-index: 0;
+  }
+  .hero p.lede {
+    font-size: 19px; line-height: 1.5; color: var(--ink-500);
+    max-width: 540px; margin: 0 0 32px;
+  }
+  .hero-cta-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .hero-meta { display: flex; gap: 24px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--ink-100); }
+  .hero-meta .stat { display: flex; flex-direction: column; gap: 4px; }
+  .hero-meta .stat-num { font-family: var(--font-display); font-weight: 800; font-size: 32px; color: var(--ink-900); line-height: 1; }
+  .hero-meta .stat-label { font-size: 13px; color: var(--ink-400); }
+
+  /* Hero visual — stacked photo-cards */
+  .hero-visual { position: relative; height: 540px; }
+  .photo-card {
+    position: absolute; background: var(--ink-100);
+    border: 1.5px solid var(--ink-900); border-radius: var(--r-lg);
+    box-shadow: var(--sh-3);
+    overflow: hidden;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 18px;
+  }
+  .photo-card.pc1 { left: 0; top: 20px; width: 290px; height: 360px;
+    background: linear-gradient(135deg, #FFD6A8 0%, #FFC080 100%); }
+  .photo-card.pc2 { right: 0; top: 60px; width: 270px; height: 320px;
+    background: linear-gradient(135deg, #B8E2FF 0%, #8FCEFF 100%);
+    transform: rotate(3deg); }
+  .photo-card.pc3 { left: 90px; bottom: 0; width: 320px; height: 200px;
+    background: var(--ink-900); transform: rotate(-2deg); }
+  .photo-card .pc-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; background: white;
+    border: 1.5px solid var(--ink-900); border-radius: var(--r-pill);
+    font-size: 11px; font-weight: 700; width: fit-content;
+  }
+  .photo-card .pc-bottom {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    color: var(--ink-900);
+  }
+  .photo-card.pc3 .pc-bottom { color: white; }
+  .photo-card .pc-name { font-family: var(--font-display); font-weight: 700; font-size: 17px; line-height: 1.1; }
+  .photo-card .pc-meta { font-size: 12px; opacity: 0.7; margin-top: 2px; }
+  .photo-card .pc-pay { font-family: var(--font-display); font-weight: 800; font-size: 24px; line-height: 1; }
+  .photo-placeholder { 
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    color: var(--ink-900); opacity: 0.4; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+  }
+  .photo-card.pc3 .photo-placeholder { color: var(--brand-500); opacity: 0.6; }
+
+  /* Trust strip */
+  .trust-strip {
+    border-top: 1px solid var(--ink-100); border-bottom: 1px solid var(--ink-100);
+    background: var(--ink-0); padding: 24px 0;
+  }
+  .trust-inner { display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+  .trust-label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-400); }
+  .trust-logos { display: flex; gap: 40px; align-items: center; opacity: 0.55; }
+  .trust-logo {
+    font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--ink-700);
+    letter-spacing: -0.01em;
+  }
+
+  /* How it works */
+  section { padding: 96px 0; }
+  .section-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand-900); margin-bottom: 16px; }
+  .section-title { font-family: var(--font-display); font-weight: 800; font-size: 56px; line-height: 1.0; letter-spacing: -0.02em; color: var(--ink-900); margin: 0 0 16px; max-width: 720px; }
+  .section-sub { font-size: 18px; color: var(--ink-500); max-width: 600px; margin: 0 0 48px; line-height: 1.5; }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .step {
+    background: white; border: 1px solid var(--ink-100); border-radius: var(--r-lg);
+    padding: 32px 28px; position: relative; display: flex; flex-direction: column; gap: 16px;
+  }
+  .step-num {
+    font-family: var(--font-display); font-weight: 800; font-size: 14px;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--ink-900); color: var(--brand-500);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step h3 { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--ink-900); margin: 0; line-height: 1.2; }
+  .step p { font-size: 15px; color: var(--ink-500); margin: 0; line-height: 1.5; }
+
+  /* Value props grid */
+  .features {
+    background: var(--ink-900); color: white; padding: 96px 0;
+    position: relative; overflow: hidden;
+  }
+  .features .section-title { color: white; }
+  .features .section-sub { color: rgba(255,255,255,0.65); }
+  .features .section-eyebrow { color: var(--brand-500); }
+  .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 16px; }
+  .feature {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--r-lg); padding: 28px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .feature i { font-size: 28px; color: var(--brand-500); }
+  .feature h4 { font-family: var(--font-display); font-weight: 700; font-size: 20px; margin: 0; line-height: 1.2; }
+  .feature p { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.7); margin: 0; }
+
+  /* Stat block */
+  .stats { padding: 96px 0; background: var(--brand-100); border-top: 3px solid var(--ink-900); border-bottom: 3px solid var(--ink-900); }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+  .stat-big { display: flex; flex-direction: column; gap: 6px; }
+  .stat-big .num { font-family: var(--font-display); font-weight: 800; font-size: 80px; line-height: 0.9; letter-spacing: -0.03em; color: var(--ink-900); }
+  .stat-big .label { font-size: 14px; font-weight: 600; color: var(--ink-900); max-width: 220px; line-height: 1.35; }
+
+  /* Footer */
+  .footer { background: var(--ink-900); color: rgba(255,255,255,0.55); padding: 64px 0 32px; }
+  .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; }
+  .footer h5 { font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: white; margin: 0 0 16px; }
+  .footer a { display: block; font-size: 14px; line-height: 2; color: rgba(255,255,255,0.55); }
+  .footer a:hover { color: var(--brand-500); }
+  .footer-bottom { margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-size: 12px; }
+
+  /* Stamp callout floating element */
+  .floating-stamp {
+    position: absolute; right: -20px; top: 40px;
+    background: var(--brand-500); border: 3px solid var(--ink-900);
+    box-shadow: 5px 5px 0 var(--ink-900);
+    padding: 14px 20px; border-radius: var(--r-md);
+    transform: rotate(6deg); z-index: 2;
+  }
+  .floating-stamp { display: flex; flex-direction: column; gap: 6px; line-height: 1; }
+  .floating-stamp .label { font-family: var(--font-display); font-weight: 800; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: white; line-height: 1; }
+  .floating-stamp .value { font-family: var(--font-display); font-weight: 800; font-size: 22px; color: white; line-height: 1; }
+
+  /* Warm hero — full-width image with dark overlay */
+  .warm-hero { position: relative; overflow: hidden; height: 520px; }
+  .warm-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .warm-hero .overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, rgba(14,13,11,0.88) 40%, rgba(14,13,11,0.2) 100%);
+    display: flex; align-items: center;
+  }
+  .warm-hero .overlay .inner { max-width: 1320px; margin: 0 auto; padding: 0 48px; max-width: 600px; }
+  .warm-hero .eb { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand-300); margin-bottom: 16px; }
+  .warm-hero h3 { font-family: var(--font-display); font-weight: 800; font-size: 44px; color: white; line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 18px; }
+  .warm-hero p { font-size: 17px; color: rgba(255,255,255,0.72); line-height: 1.55; margin: 0 0 32px; max-width: 480px; }
+
+  /* Split block — 2-column image + text */
+  .split-block { padding: 96px 0; }
+  .split-block .inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .split-block .pic { border-radius: var(--r-lg); overflow: hidden; aspect-ratio: 4/3; }
+  .split-block .pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .split-block h3 { font-family: var(--font-display); font-weight: 800; font-size: 44px; color: var(--ink-900); line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 16px; }
+  .split-block .lede { font-size: 17px; color: var(--ink-500); line-height: 1.55; margin: 0 0 24px; }
+  .split-block ul { list-style: none; padding: 0; margin: 0 0 32px; display: flex; flex-direction: column; gap: 10px; }
+  .split-block ul li { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; color: var(--ink-700); line-height: 1.4; }
+  .split-block ul li::before { content: '✓'; color: var(--brand-500); font-weight: 800; font-family: var(--font-display); flex-shrink: 0; margin-top: 1px; }
+  .split-block .section-eyebrow { color: var(--brand-900); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" style="display:flex; align-items:center;">
+      <img src="../../assets/logo-wordmark-black.png" alt="MyGig" class="nav-logo">
+    </a>
+    <div class="nav-links">
+      <a href="#" class="nav-link active">For Businesses</a>
+      <a href="#" class="nav-link">For Workers</a>
+      <a href="#" class="nav-link">How it works</a>
+      <a href="#" class="nav-link">Compliance</a>
+      <a href="#" class="nav-link">Help</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#" class="btn btn-ghost" style="padding: 10px 16px; font-size: 14px;">Sign in</a>
+      <a href="#" class="btn btn-primary" style="padding: 10px 18px; font-size: 14px;">Post a shift</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="audience-toggle">
+      <button class="active">I run a business</button>
+      <button>I'm a worker</button>
+    </div>
+
+    <div class="hero-grid">
+      <div>
+        <h1>
+          Find <span class="underline"><span>qualified</span></span> workers,<br>
+          ready when <span class="script">you are.</span>
+        </h1>
+        <p class="lede">
+          MyGig is Australia's AI-powered Workforce-as-a-Service platform. Post a shift, get matched with vetted workers, and let us handle payroll, compliance, and the rest. We're the Employer of Record — you just get the help you need.
+        </p>
+        <div class="hero-cta-row">
+          <a href="#" class="btn btn-primary">Post your first shift</a>
+          <a href="#" class="btn btn-ghost">Book a demo →</a>
+        </div>
+        <div class="hero-meta">
+          <div class="stat"><div class="stat-num">90%+</div><div class="stat-label">fill rate</div></div>
+          <div class="stat"><div class="stat-num">2%</div><div class="stat-label">no-show rate</div></div>
+          <div class="stat"><div class="stat-num">30+</div><div class="stat-label">data points<br>per worker</div></div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="floating-stamp">
+          <div class="label">FILL RATE</div>
+          <div class="value">90%+</div>
+        </div>
+
+        <div class="photo-card pc1">
+          <div class="pc-tag"><span style="width:6px;height:6px;background:var(--ink-900);border-radius:50%;"></span>Hospitality</div>
+          <div class="photo-placeholder">[ worker on shift ]</div>
+          <div class="pc-bottom">
+            <div>
+              <div class="pc-name">Sarah M.</div>
+              <div class="pc-meta">★ 4.9 · 127 shifts</div>
+            </div>
+            <div class="pc-pay">$31.19<span style="font-size:12px;opacity:0.7;">/hr</span></div>
+          </div>
+        </div>
+
+        <div class="photo-card pc2">
+          <div class="pc-tag"><span style="width:6px;height:6px;background:var(--ink-900);border-radius:50%;"></span>Warehousing</div>
+          <div class="photo-placeholder">[ worker on shift ]</div>
+          <div class="pc-bottom">
+            <div>
+              <div class="pc-name">James K.</div>
+              <div class="pc-meta">★ 4.8 · 89 shifts</div>
+            </div>
+            <div class="pc-pay">$34.50<span style="font-size:12px;opacity:0.7;">/hr</span></div>
+          </div>
+        </div>
+
+        <div class="photo-card pc3">
+          <div class="pc-tag" style="background:var(--brand-500); border-color:var(--ink-900);">
+            <span style="width:6px;height:6px;background:var(--ink-900);border-radius:50%;"></span>Construction
+          </div>
+          <div class="photo-placeholder">[ worker on shift ]</div>
+          <div class="pc-bottom">
+            <div>
+              <div class="pc-name">Ravi P.</div>
+              <div class="pc-meta" style="color:rgba(255,255,255,0.7);">★ 5.0 · 64 shifts</div>
+            </div>
+            <div class="pc-pay" style="color:var(--brand-500);">$42.00<span style="font-size:12px;opacity:0.8;">/hr</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="container trust-inner">
+    <div class="trust-label">Trusted across Australia</div>
+    <div class="trust-logos">
+      <div class="trust-logo">Coles Group</div>
+      <div class="trust-logo">Cargill</div>
+      <div class="trust-logo">Mirvac</div>
+      <div class="trust-logo">SCG</div>
+      <div class="trust-logo">Sydney FC</div>
+      <div class="trust-logo">Toll</div>
+    </div>
+  </div>
+</div>
+
+<!-- WARM HERO STORY -->
+<section class="warm-hero" style="padding:0;">
+  <img src="../../assets/imagery/worker-story-hivis.webp" alt="">
+  <div class="overlay">
+    <div class="inner">
+      <div class="eb">Our story</div>
+      <h3>Built by people who've worked the floor.</h3>
+      <p>MyGig was founded by operators who've spent decades hiring casuals across hospo, events, retail, and warehousing. The platform fixes the parts that always broke.</p>
+      <a href="#" class="btn btn-primary" style="padding: 10px 18px; font-size: 14px;">Read the story →</a>
+    </div>
+  </div>
+</section>
+
+<!-- 2-UP SPLIT -->
+<section class="split-block">
+  <div class="container inner">
+    <div class="pic">
+      <img src="../../assets/imagery/worker-retail-bananas.avif" alt="">
+    </div>
+    <div>
+      <div class="section-eyebrow">For business</div>
+      <h3>Struggling to find<br>reliable workers?</h3>
+      <p class="lede">It's getting harder to find hourly workers that are a fit for your business through traditional staffing agencies. MyGig Business's platform makes it easy to find, hire, and pay the qualified and reliable workers you need.</p>
+      <ul>
+        <li>89% of businesses want their workers back</li>
+        <li>Workers are incentivised to be reliable</li>
+        <li>See profiles and experiences of workers when they book your shift</li>
+      </ul>
+      <a href="#" class="btn btn-secondary">Learn more →</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="container">
+    <div class="section-eyebrow">How it works</div>
+    <h2 class="section-title">Post a shift in 60 seconds.<br>Have workers secured in minutes.</h2>
+    <p class="section-sub">No interviews. No agency middlemen. No paperwork shuffle. Just shifts filled by vetted workers, with all the compliance handled in the background.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Post your shift</h3>
+        <p>Position, start/finish time, location. Compliant pay rates are calculated automatically from the Modern Award. Add instructions — attire, who to ask for, gate codes.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Workers secure it</h3>
+        <p>Your shift goes to workers who match your requirements, location, and availability. Watch profiles roll in — no interviews needed. Review skills, ratings, and past work.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>We handle the rest</h3>
+        <p>Time tracking, award interpretation, payroll, super, workers comp. We're the Employer of Record. You get a single invoice — we pay everyone correctly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES (dark) -->
+<section class="features">
+  <div class="container">
+    <div class="section-eyebrow">Why MyGig</div>
+    <h2 class="section-title">Built for the way work<br>actually happens.</h2>
+    <p class="section-sub">From retail and hospitality to mining and construction — every feature is aligned with Australian awards and how real worksites run.</p>
+
+    <div class="feature-grid">
+      <div class="feature">
+        <i class="i-shield-check"></i>
+        <h4>Fully compliant EOR</h4>
+        <p>We employ the workers on your behalf. Payroll, super, workers comp, and Fair Work obligations — handled. Authorised in NSW, WA, TAS and NT.</p>
+      </div>
+      <div class="feature">
+        <i class="i-users"></i>
+        <h4>30+ data points per worker</h4>
+        <p>Background checks, skill quizzes, professional references, certifications. You see all of it before you confirm.</p>
+      </div>
+      <div class="feature">
+        <i class="i-map-pin"></i>
+        <h4>Live location tracking</h4>
+        <p>See who's on their way. Geofence your site for clock-ins. No more "they said they were coming".</p>
+      </div>
+      <div class="feature">
+        <i class="i-star"></i>
+        <h4>Your favourites, first</h4>
+        <p>Add workers you trust to your Pool — they get first dibs on future shifts. Block anyone who isn't a fit so they don't return.</p>
+      </div>
+      <div class="feature">
+        <i class="i-calculator"></i>
+        <h4>NextGen Award engine</h4>
+        <p>Our proprietary engine applies casual loading, penalty rates, overtime, and allowances automatically. No guesswork. No backpay surprises.</p>
+      </div>
+      <div class="feature">
+        <i class="i-bot"></i>
+        <h4>Amy, the AI assistant</h4>
+        <p>24/7 in-app support for workers and businesses. Most questions resolved in seconds — humans available when they're not.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="container stats-grid">
+    <div class="stat-big">
+      <div class="num">90%+</div>
+      <div class="label">Fill rate. Industry average is 65%.</div>
+    </div>
+    <div class="stat-big">
+      <div class="num">2%</div>
+      <div class="label">No-show rate. Top workers, incentivised to show up.</div>
+    </div>
+    <div class="stat-big">
+      <div class="num">60s</div>
+      <div class="label">Average time to post a shift.</div>
+    </div>
+    <div class="stat-big">
+      <div class="num">1 day</div>
+      <div class="label">Workers paid the day after their shift.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding: 96px 0; text-align: center;">
+  <div class="container">
+    <h2 class="section-title" style="margin: 0 auto 16px; text-align: center;">Try MyGig for your<br>next open shift.</h2>
+    <p class="section-sub" style="margin: 0 auto 32px; text-align: center;">Sign up free. Pay only when workers show up. Cancel any time.</p>
+    <div style="display: flex; justify-content: center; gap: 14px;">
+      <a href="#" class="btn btn-primary">Post your first shift</a>
+      <a href="#" class="btn btn-ghost">Talk to sales</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <img src="../../assets/logo-wordmark-white.png" alt="MyGig" style="height:28px; margin-bottom:14px;">
+        <p style="font-size:13px; line-height:1.6; color:rgba(255,255,255,0.55); max-width:280px;">
+          Workforce Technologies Pty Ltd · ABN 35 673 219 737<br>
+          Level 2, 11–17 York Street, Sydney NSW 2000
+        </p>
+      </div>
+      <div>
+        <h5>For business</h5>
+        <a href="#">How it works</a>
+        <a href="#">Pricing</a>
+        <a href="#">Compliance</a>
+        <a href="#">Case studies</a>
+      </div>
+      <div>
+        <h5>For workers</h5>
+        <a href="#">Find shifts</a>
+        <a href="#">Get the app</a>
+        <a href="#">MyGig Training</a>
+        <a href="#">Safety Centre</a>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <a href="#">About</a>
+        <a href="#">Help centre</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Workforce Technologies Pty Ltd. All rights reserved.</span>
+      <span>Authorised EOR in NSW · WA · TAS · NT</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* Inline lucide-ish glyphs since we're not loading the JS */
+  i { font-style: normal; }
+  .i-shield-check::before { content: '🛡'; }
+  .i-users::before { content: '👥'; }
+  .i-map-pin::before { content: '📍'; }
+  .i-star::before { content: '★'; }
+  .i-calculator::before { content: '🧮'; }
+  .i-bot::before { content: '🤖'; }
+</style>
+
+</body>
+</html>

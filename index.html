@@ -1,178 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyGig Design System</title>
-  <link rel="stylesheet" href="project/colors_and_type.css">
-  <style>
-    /* Inline token fallbacks — ensure correct values if external CSS is cached/delayed */
-    :root {
-      --hivis-500: #DCFF1E; --hivis-50: #FAFFDB; --hivis-100: #F1FFA8;
-      --hivis-300: #E5FF5C; --hivis-700: #B8D900; --hivis-900: #6E8200;
-      --ink-0: #FAF8F4; --ink-50: #F2EFE8; --ink-100: #E5E1D7;
-      --ink-300: #A8A294; --ink-400: #6F6A60; --ink-500: #3D3A33;
-      --ink-700: #1F1D19; --ink-900: #0E0D0B;
-      --surface-0: #FFFFFF;
-      --success-50: #E8F6EE; --success-500: #1F8A4C;
-      --warn-50: #FFF3DC; --warn-500: #E89B14;
-      --danger-50: #FCE7E4; --danger-500: #D03826; --danger-700: #8F2518;
-      --info-50: #E4ECF7; --info-500: #2563C8;
-      --font-display: 'Sora', system-ui, sans-serif;
-      --font-body: 'Manrope', system-ui, sans-serif;
-      --font-script: 'Permanent Marker', cursive;
-      --font-mono: 'JetBrains Mono', 'Courier New', monospace;
-      --r-xs: 4px; --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 28px; --r-pill: 999px;
-      --sh-stamp: 4px 4px 0 #0E0D0B; --sh-stamp-hivis: 4px 4px 0 #DCFF1E;
-      --sh-1: 0 1px 3px rgba(14,13,11,.08),0 1px 2px rgba(14,13,11,.04);
-      --sh-2: 0 4px 12px rgba(14,13,11,.08),0 2px 4px rgba(14,13,11,.04);
-      --dur-fast: 120ms; --dur-base: 200ms; --ease-out-quint: cubic-bezier(.22,1,.36,1);
-    }
-  </style>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { display: flex; min-height: 100vh; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyGig Design System — v1</title>
+<link rel="stylesheet" href="project/colors_and_type.css">
+<style>
+  /* ── Inline token fallbacks (ensures correct values if external CSS delayed) ── */
+  :root {
+    --brand-500: #6C60FF; --brand-50: #F5F4FE; --brand-100: #E8E6F9;
+    --brand-200: #DBD8FA; --brand-300: #B8B1F7; --brand-700: #4B3FD9; --brand-900: #2D2580;
+    --ink-0: #FAF8F4; --ink-50: #F2EFE8; --ink-100: #E5E1D7;
+    --ink-200: #CFC9BA; --ink-300: #A8A294; --ink-400: #6F6A60;
+    --ink-500: #3D3A33; --ink-700: #1F1D19; --ink-900: #0E0D0B;
+    --surface-0: #FFFFFF;
+    --success-50: #E8F6EE; --success-500: #1F8A4C; --success-700: #135E33;
+    --warn-50: #FFF3DC; --warn-500: #E89B14;
+    --danger-50: #FCE7E4; --danger-500: #D03826; --danger-700: #821F12;
+    --info-50: #E4ECF7; --info-500: #2563C8;
+    --font-display: 'Sora', system-ui, sans-serif;
+    --font-body: 'Manrope', system-ui, sans-serif;
+    --font-script: 'Permanent Marker', cursive;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+    --r-xs: 4px; --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 28px; --r-pill: 999px;
+    --sh-stamp: 4px 4px 0 #0E0D0B; --sh-stamp-brand: 4px 4px 0 #6C60FF;
+    --sh-1: 0 1px 2px rgba(14,13,11,.06),0 1px 1px rgba(14,13,11,.04);
+    --sh-2: 0 2px 6px rgba(14,13,11,.08),0 1px 2px rgba(14,13,11,.05);
+    --sh-3: 0 8px 24px rgba(14,13,11,.10),0 2px 6px rgba(14,13,11,.06);
+    --dur-fast: 120ms; --dur-base: 200ms; --ease-out-quint: cubic-bezier(.22,1,.36,1);
+    --bw-stamp: 3px;
+  }
 
-    /* ── Sidebar ─────────────────────────────────── */
-    .sidebar {
-      position: fixed; top: 0; left: 0; bottom: 0; width: 236px;
-      background: var(--ink-900); overflow-y: auto; display: flex;
-      flex-direction: column; z-index: 50;
-      scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.15) transparent;
-    }
-    .sidebar-brand { padding: 24px 20px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .sidebar-logo img { display: block; height: 26px; width: auto; }
-    .sidebar-version { margin-top: 5px; font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 0.04em; }
-    .sidebar-nav { flex: 1; padding: 12px 10px 24px; }
-    .nav-group { margin-bottom: 4px; }
-    .nav-group-label { font-family: var(--font-body); font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 10px 10px 4px; display: block; }
-    .nav-link { display: flex; align-items: center; gap: 8px; padding: 7px 10px; color: rgba(255,255,255,0.65); text-decoration: none; border-radius: var(--r-sm); font-family: var(--font-body); font-size: 13px; font-weight: 500; transition: background 120ms ease, color 120ms ease; }
-    .nav-link:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
-    .nav-link.active { background: var(--hivis-500); color: var(--ink-900); font-weight: 700; }
-    .nav-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.4; flex-shrink: 0; }
-    .sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
-    .sidebar-footer a { font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { display: flex; min-height: 100vh; background: var(--ink-0); }
 
-    /* ── Main ────────────────────────────────────── */
-    .main { margin-left: 236px; flex: 1; min-width: 0; background: var(--ink-0); }
-    .content { max-width: 1040px; padding: 64px 56px 120px; }
+  /* ── Sidebar ─────────────────────────────────── */
+  .sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0; width: 240px;
+    background: var(--ink-900); overflow-y: auto; display: flex;
+    flex-direction: column; z-index: 50;
+    scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.12) transparent;
+  }
+  .sidebar-brand { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .sidebar-logo img { display: block; height: 26px; width: auto; }
+  .sidebar-version { margin-top: 6px; font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.28); letter-spacing: 0.06em; }
+  .sidebar-nav { flex: 1; padding: 12px 10px 24px; }
+  .nav-group { margin-bottom: 6px; }
+  .nav-group-label { font-family: var(--font-body); font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 10px 10px 4px; display: block; }
+  .nav-link { display: flex; align-items: center; gap: 8px; padding: 7px 10px; color: rgba(255,255,255,0.6); text-decoration: none; border-radius: var(--r-sm); font-family: var(--font-body); font-size: 13px; font-weight: 500; transition: background var(--dur-fast), color var(--dur-fast); }
+  .nav-link:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+  .nav-link.active { background: var(--brand-500); color: white; font-weight: 700; }
+  .nav-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.4; flex-shrink: 0; }
+  .sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.3); }
 
-    /* ── Hero ────────────────────────────────────── */
-    .ds-hero { background: var(--ink-900); padding: 56px 56px 48px; }
-    .ds-hero-eyebrow { font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
-    .ds-hero-title { font-family: var(--font-display); font-size: 48px; font-weight: 800; color: white; line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 14px; }
-    .ds-hero-title span { color: var(--hivis-500); }
-    .ds-hero-desc { font-family: var(--font-body); font-size: 15px; color: rgba(255,255,255,0.6); max-width: 600px; line-height: 1.6; margin-bottom: 32px; }
-    .ds-hero-meta { display: flex; gap: 24px; flex-wrap: wrap; }
-    .ds-hero-meta span { font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.4); }
+  /* ── Main ────────────────────────────────────── */
+  .main { margin-left: 240px; flex: 1; min-width: 0; }
+  .content { max-width: 1060px; padding: 64px 56px 120px; }
 
-    /* ── Sections ────────────────────────────────── */
-    .ds-section { margin-bottom: 88px; scroll-margin-top: 40px; }
-    .ds-eyebrow { font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 6px; }
-    .ds-title { font-family: var(--font-display); font-size: 30px; font-weight: 700; color: var(--ink-900); line-height: 1.1; margin-bottom: 8px; letter-spacing: -0.01em; }
-    .ds-desc { font-family: var(--font-body); font-size: 15px; color: var(--ink-400); line-height: 1.55; max-width: 680px; margin-bottom: 32px; }
-    .ds-divider { height: 1px; background: var(--ink-100); margin-bottom: 32px; }
+  /* ── Hero ────────────────────────────────────── */
+  .ds-hero { background: var(--ink-900); padding: 56px 56px 48px; }
+  .ds-hero-eyebrow { font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brand-300); margin-bottom: 12px; }
+  .ds-hero-title { font-family: var(--font-display); font-size: 52px; font-weight: 800; color: white; line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 14px; }
+  .ds-hero-title span { color: var(--brand-300); }
+  .ds-hero-desc { font-family: var(--font-body); font-size: 15px; color: rgba(255,255,255,0.6); max-width: 600px; line-height: 1.6; margin-bottom: 28px; }
+  .ds-hero-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+  .ds-hero-meta span { font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.35); }
 
-    /* ── Card ────────────────────────────────────── */
-    .card { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-lg); padding: 28px; margin-bottom: 16px; }
-    .card-label { font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 20px; }
-    .card-note { font-family: var(--font-body); font-size: 13px; color: var(--ink-400); margin-top: 16px; line-height: 1.5; }
+  /* ── Sections ────────────────────────────────── */
+  .ds-section { margin-bottom: 80px; scroll-margin-top: 40px; }
+  .ds-eyebrow { font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 6px; }
+  .ds-title { font-family: var(--font-display); font-size: 30px; font-weight: 700; color: var(--ink-900); line-height: 1.1; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .ds-desc { font-family: var(--font-body); font-size: 15px; color: var(--ink-400); line-height: 1.55; max-width: 680px; margin-bottom: 28px; }
+  .ds-divider { height: 1px; background: var(--ink-100); margin: 0 0 32px; }
 
-    /* ── Swatches ────────────────────────────────── */
-    .swatch-grid { display: grid; gap: 8px; }
-    .swatch { display: flex; flex-direction: column; gap: 6px; }
-    .swatch-block { height: 72px; border-radius: var(--r-sm); border: 1px solid rgba(14,13,11,0.06); display: flex; align-items: flex-end; padding: 8px; }
-    .swatch-hex { font-family: var(--font-mono); font-size: 10px; }
-    .swatch-name { font-family: var(--font-body); font-size: 11px; font-weight: 600; color: var(--ink-700); }
-    .swatch-role { font-family: var(--font-mono); font-size: 10px; color: var(--ink-400); }
+  /* ── Cards ───────────────────────────────────── */
+  .card { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-lg); padding: 28px; margin-bottom: 16px; }
+  .card-label { font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 20px; }
+  .card-note { font-family: var(--font-body); font-size: 13px; color: var(--ink-400); margin-top: 16px; line-height: 1.5; }
+  .card-note code { background: var(--ink-50); padding: 1px 5px; border-radius: 4px; font-family: var(--font-mono); font-size: 11px; }
 
-    /* ── Type ────────────────────────────────────── */
-    .type-row { display: flex; align-items: baseline; gap: 20px; padding: 14px 0; border-bottom: 1px solid var(--ink-50); }
-    .type-row:last-child { border-bottom: none; }
-    .type-meta { flex-shrink: 0; width: 180px; }
-    .type-meta-name { font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--ink-700); }
-    .type-meta-detail { font-family: var(--font-mono); font-size: 11px; color: var(--ink-400); margin-top: 2px; }
+  /* ── Colour swatches ─────────────────────────── */
+  .swatch-grid { display: grid; gap: 10px; }
+  .swatch { border-radius: 12px; padding: 18px; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(0,0,0,0.05); }
+  .swatch-name { font-family: var(--font-display); font-weight: 700; font-size: 14px; line-height: 1; }
+  .swatch-hex { font-family: var(--font-mono); font-size: 12px; margin-top: 4px; }
+  .swatch-role { font-size: 11px; opacity: 0.7; margin-top: 3px; }
 
-    /* ── Spacing ─────────────────────────────────── */
-    .spacing-row { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
-    .spacing-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-    .spacing-block { background: var(--ink-900); }
-    .spacing-val { font-family: var(--font-mono); font-size: 10px; color: var(--ink-400); text-align: center; }
+  /* ── Type ramp ───────────────────────────────── */
+  .type-spec { padding: 24px 0; border-bottom: 1px solid var(--ink-100); display: flex; flex-direction: column; gap: 8px; }
+  .type-spec:last-child { border-bottom: none; }
+  .type-meta { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-400); display: flex; gap: 16px; align-items: baseline; }
+  .type-meta .mono { color: var(--ink-700); }
+  .type-meta .note { color: var(--brand-700); font-weight: 500; margin-left: auto; letter-spacing: 0; text-transform: none; font-size: 12px; }
 
-    /* ── DO/DON'T ────────────────────────────────── */
-    .do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .do-col { background: var(--success-50); border: 1px solid #b3dfc3; border-radius: var(--r-md); padding: 18px 20px; }
-    .dont-col { background: var(--danger-50); border: 1px solid #f5c5be; border-radius: var(--r-md); padding: 18px 20px; }
-    .do-dont-header { font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; margin-bottom: 14px; }
-    .do-col .do-dont-header { color: var(--success-700); }
-    .dont-col .do-dont-header { color: var(--danger-700); }
-    .do-dont-item { font-family: var(--font-body); font-size: 13px; color: var(--ink-700); padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.06); line-height: 1.45; }
-    .do-dont-item:last-child { border-bottom: none; }
+  /* ── Spacing ─────────────────────────────────── */
+  .spacing-grid { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+  .spacing-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .spacing-bar { background: var(--ink-900); border-radius: 2px; width: 32px; }
+  .spacing-label { font-family: var(--font-mono); font-size: 10px; color: var(--ink-400); text-align: center; }
 
-    /* ── Table ───────────────────────────────────── */
-    .ds-table { width: 100%; border-collapse: collapse; font-family: var(--font-body); font-size: 14px; }
-    .ds-table th { font-size: 10px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-400); text-align: left; padding: 10px 14px; background: var(--ink-50); border-bottom: 2px solid var(--ink-100); }
-    .ds-table td { color: var(--ink-700); padding: 12px 14px; border-bottom: 1px solid var(--ink-50); vertical-align: top; line-height: 1.5; }
-    .ds-table tr:last-child td { border-bottom: none; }
-    .ds-table td:first-child { font-weight: 600; color: var(--ink-900); }
+  /* ── Radii ───────────────────────────────────── */
+  .radii-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
+  .radius-item { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .radius-block { width: 72px; height: 72px; background: var(--ink-900); }
+  .radius-label { font-family: var(--font-mono); font-size: 10px; color: var(--ink-400); text-align: center; }
 
-    /* ── Buttons ─────────────────────────────────── */
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: var(--r-md); font-family: var(--font-body); font-weight: 700; font-size: 14px; cursor: pointer; border: none; line-height: 1; transition: all var(--dur-base) var(--ease-out-quint); }
-    .btn-stamp { background: var(--hivis-500); color: var(--ink-900); border: 3px solid var(--ink-900); box-shadow: var(--sh-stamp); }
-    .btn-stamp:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink-900); }
-    .btn-stamp:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--ink-900); }
-    .btn-ink { background: var(--ink-900); color: white; }
-    .btn-ink:hover { background: var(--ink-700); }
-    .btn-ghost { background: transparent; color: var(--ink-900); border: 1.5px solid var(--ink-100); }
-    .btn-ghost:hover { background: var(--ink-50); }
-    .btn-danger { background: transparent; color: var(--danger-500); border: 1.5px solid var(--danger-500); }
-    .btn-sm { padding: 8px 14px; font-size: 12px; }
-    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  /* ── Shadow cards ────────────────────────────── */
+  .shadow-row { display: flex; gap: 20px; flex-wrap: wrap; }
+  .shadow-card { background: white; border-radius: var(--r-md); padding: 20px 28px; text-align: center; font-family: var(--font-mono); font-size: 12px; color: var(--ink-500); min-width: 120px; }
 
-    /* ── Inputs ──────────────────────────────────── */
-    .input-field { display: flex; flex-direction: column; gap: 6px; }
-    .input-label { font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--ink-700); }
-    .input { padding: 11px 14px; border: 1.5px solid var(--ink-100); border-radius: var(--r-md); font-family: var(--font-body); font-size: 15px; background: white; color: var(--ink-900); outline: none; width: 100%; }
-    .input--focused { border-color: var(--hivis-500); border-width: 2px; box-shadow: 0 0 0 4px rgba(220,255,30,0.22); }
-    .input--error { border-color: var(--danger-500); }
+  /* ── Buttons ─────────────────────────────────── */
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: var(--r-md); font-family: var(--font-body); font-size: 15px; font-weight: 700; cursor: pointer; transition: transform var(--dur-fast) var(--ease-out-quint), box-shadow var(--dur-fast) var(--ease-out-quint); border: none; line-height: 1; }
+  .btn-primary { background: var(--brand-500); color: white; border: 3px solid var(--ink-900); box-shadow: var(--sh-stamp); }
+  .btn-primary:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink-900); }
+  .btn-primary:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink-900); }
+  .btn-primary:focus-visible { outline: 2px solid var(--brand-500); outline-offset: 3px; }
+  .btn-primary:disabled { opacity: 0.45; pointer-events: none; }
+  .btn-secondary { background: var(--ink-900); color: white; border: 1.5px solid var(--ink-900); }
+  .btn-secondary:hover { background: var(--ink-700); }
+  .btn-ghost { background: transparent; color: var(--ink-900); border: 1.5px solid var(--ink-100); }
+  .btn-ghost:hover { background: var(--ink-50); border-color: var(--ink-200); }
+  .btn-danger { background: var(--danger-500); color: white; border: 1.5px solid var(--danger-700); }
+  .btn-sm { padding: 8px 16px; font-size: 13px; }
 
-    /* ── Pill ────────────────────────────────────── */
-    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: var(--r-pill); font-family: var(--font-body); font-size: 12px; font-weight: 600; white-space: nowrap; }
-    .pill-dot { width: 7px; height: 7px; border-radius: 50%; }
+  /* ── Inputs ──────────────────────────────────── */
+  .input-field { width: 100%; height: 44px; padding: 0 14px; border-radius: var(--r-md); border: 1.5px solid var(--ink-100); font-family: var(--font-body); font-size: 15px; color: var(--ink-900); background: white; outline: none; }
+  .input-label { font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--ink-700); margin-bottom: 6px; display: block; }
+  .input-group { margin-bottom: 20px; max-width: 320px; }
+  .input-focused { border-color: var(--brand-500); border-width: 2px; box-shadow: 0 0 0 3px rgba(108,96,255,0.15); }
+  .input-error { border-color: var(--danger-500); border-width: 2px; }
+  .input-disabled { opacity: 0.45; background: var(--ink-50); }
+  .input-error-msg { font-family: var(--font-body); font-size: 12px; color: var(--danger-500); margin-top: 5px; font-weight: 500; }
 
-    /* ── Avatar ──────────────────────────────────── */
-    .av { display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--ink-900); border-radius: 50%; font-family: var(--font-display); font-weight: 700; color: var(--ink-900); flex-shrink: 0; overflow: hidden; }
+  /* ── Pills ───────────────────────────────────── */
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: var(--r-pill); font-family: var(--font-body); font-size: 13px; font-weight: 700; }
+  .pill-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .pill-success { background: var(--success-50); color: var(--success-700); }
+  .pill-brand { background: var(--brand-100); color: var(--ink-900); }
+  .pill-warn { background: var(--warn-50); color: #8A5A00; }
+  .pill-danger { background: var(--danger-50); color: var(--danger-700); }
+  .pill-dark { background: var(--ink-900); color: white; }
 
-    /* ── Numbers grid ────────────────────────────── */
-    .numbers-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
-    .number-card { background: var(--ink-900); border-radius: var(--r-md); padding: 20px 18px; }
-    .number-val { font-family: var(--font-display); font-size: 32px; font-weight: 800; color: var(--hivis-500); line-height: 1; letter-spacing: -0.02em; }
-    .number-label { font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 6px; }
+  /* ── Worker chip ─────────────────────────────── */
+  .worker-chip { display: inline-flex; align-items: center; gap: 12px; background: white; border-radius: var(--r-md); box-shadow: var(--sh-2); padding: 12px 16px; border: 1px solid var(--ink-100); }
+  .worker-avatar { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--ink-900); background: var(--tag-hospo); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--ink-900); overflow: hidden; flex-shrink: 0; }
+  .worker-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .worker-name { font-family: var(--font-body); font-weight: 700; font-size: 14px; color: var(--ink-900); }
+  .worker-sub { font-family: var(--font-body); font-size: 12px; color: var(--ink-400); margin-top: 2px; }
 
-    /* ── Kit cards ───────────────────────────────── */
-    .kit-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-    .kit-link { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-lg); padding: 24px 22px; text-decoration: none; display: flex; flex-direction: column; gap: 10px; transition: all 200ms var(--ease-out-quint); }
-    .kit-link:hover { box-shadow: var(--sh-3); transform: translateY(-2px); border-color: var(--ink-200); }
-    .kit-icon { width: 44px; height: 44px; border-radius: var(--r-md); display: flex; align-items: center; justify-content: center; font-size: 20px; }
-    .kit-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--ink-900); }
-    .kit-desc { font-family: var(--font-body); font-size: 13px; color: var(--ink-400); line-height: 1.45; }
-    .kit-arrow { font-family: var(--font-body); font-size: 12px; color: var(--hivis-900); font-weight: 600; }
+  /* ── Shift card ──────────────────────────────── */
+  .shift-card { background: white; border: 1.5px solid var(--ink-100); border-radius: var(--r-lg); box-shadow: var(--sh-2); padding: 24px; max-width: 400px; }
+  .shift-industry { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--r-pill); font-family: var(--font-body); font-size: 11px; font-weight: 700; color: var(--ink-900); margin-bottom: 12px; }
+  .shift-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--ink-900); margin-bottom: 4px; line-height: 1.2; }
+  .shift-location { font-family: var(--font-body); font-size: 13px; color: var(--ink-400); margin-bottom: 16px; }
+  .shift-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--ink-100); gap: 12px; }
+  .shift-time { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--ink-700); }
+  .shift-cta { background: var(--brand-500); color: white; border: 2.5px solid var(--ink-900); border-radius: var(--r-md); padding: 10px 18px; font-family: var(--font-body); font-weight: 800; font-size: 14px; box-shadow: 3px 3px 0 var(--ink-900); cursor: pointer; }
 
-    code { font-family: var(--font-mono); font-size: 12px; background: var(--ink-50); padding: 2px 6px; border-radius: var(--r-xs); color: var(--ink-700); }
+  /* ── Stamp motif ─────────────────────────────── */
+  .stamp { display: inline-flex; align-items: center; gap: 12px; background: var(--brand-500); color: white; border: var(--bw-stamp) solid var(--ink-900); box-shadow: var(--sh-stamp); padding: 16px 28px; border-radius: var(--r-md); font-family: var(--font-display); font-weight: 800; font-size: 20px; line-height: 1; }
+  .stamp-tilt { transform: rotate(-3deg); }
+  .stamp-tilt2 { transform: rotate(2deg); }
+  .stamp-dark { background: var(--ink-900); box-shadow: var(--sh-stamp-brand); border-color: var(--ink-900); }
 
-    /* ── State labels ────────────────────────────── */
-    .state-row { display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap; }
-    .state-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    .state-label { font-family: var(--font-body); font-size: 11px; color: var(--ink-400); }
-  </style>
+  /* ── Toggles ─────────────────────────────────── */
+  .toggle-track { width: 48px; height: 28px; border-radius: var(--r-pill); display: flex; align-items: center; padding: 3px; cursor: pointer; }
+  .toggle-on { background: var(--brand-500); }
+  .toggle-off { background: var(--ink-200); }
+  .toggle-thumb { width: 22px; height: 22px; background: white; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+  .toggle-on .toggle-thumb { transform: translateX(20px); }
+
+  .check-box { width: 20px; height: 20px; border-radius: var(--r-xs); border: 1.5px solid; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .check-on { background: var(--brand-500); border-color: var(--ink-900); border-width: 2.5px; color: white; font-size: 12px; font-weight: 900; }
+  .check-off { background: white; border-color: var(--ink-200); }
+
+  /* ── Amy AI ──────────────────────────────────── */
+  .amy-mark { width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 38% 38%, #8B80FF, #4B3FD9); display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-body); font-weight: 700; font-size: 9px; color: white; flex-shrink: 0; }
+  .amy-bubble { background: var(--brand-50); border: 1.5px solid var(--brand-200); border-radius: var(--r-lg) var(--r-lg) var(--r-lg) 0; padding: 16px 18px; max-width: 480px; }
+  .amy-label { font-family: var(--font-body); font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand-700); margin-bottom: 8px; }
+
+  /* ── Iconography ─────────────────────────────── */
+  .icon-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  .icon-card { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md); overflow: hidden; text-align: center; }
+  .icon-bg { background: var(--ink-900); padding: 18px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .icon-label { padding: 7px 4px; font-family: var(--font-body); font-size: 10px; font-weight: 600; color: var(--ink-500); }
+
+  /* ── States grid ─────────────────────────────── */
+  .states-table { width: 100%; border-collapse: collapse; font-family: var(--font-body); font-size: 14px; }
+  .states-table th { text-align: left; padding: 10px 14px; background: var(--ink-50); color: var(--ink-700); font-weight: 700; border-bottom: 1.5px solid var(--ink-100); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .states-table td { padding: 10px 14px; border-bottom: 1px solid var(--ink-100); color: var(--ink-500); vertical-align: top; }
+  .states-table td code { background: var(--ink-50); padding: 1px 5px; border-radius: 4px; font-family: var(--font-mono); font-size: 11px; color: var(--ink-700); }
+  .states-table tr:last-child td { border-bottom: none; }
+
+  /* ── Voice do/dont ───────────────────────────── */
+  .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--ink-100); border-radius: var(--r-md); overflow: hidden; }
+  .voice-col { padding: 20px; }
+  .voice-col:first-child { border-right: 1px solid var(--ink-100); }
+  .voice-header { font-family: var(--font-body); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .voice-header.do { color: var(--success-700); }
+  .voice-header.dont { color: var(--danger-700); }
+  .voice-item { padding: 9px 0; border-bottom: 1px solid var(--ink-50); font-size: 14px; color: var(--ink-700); line-height: 1.45; }
+  .voice-item:last-child { border-bottom: none; }
+  .voice-item.bad { text-decoration: line-through; color: var(--ink-300); }
+
+  /* ── Imagery ─────────────────────────────────── */
+  .img-hero-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 20px; }
+  .img-hero-cell { aspect-ratio: 9/18; border-radius: var(--r-md); overflow: hidden; background: var(--ink-100); position: relative; }
+  .img-hero-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-tag { position: absolute; bottom: 10px; left: 10px; display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; background: rgba(14,13,11,0.8); color: white; border-radius: var(--r-pill); font-size: 10px; font-weight: 700; }
+  .img-tag-dot { width: 5px; height: 5px; background: var(--brand-300); border-radius: 50%; }
+
+  /* ── Kit cards ───────────────────────────────── */
+  .kit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .kit-card { border: 1.5px solid var(--ink-100); border-radius: var(--r-lg); overflow: hidden; text-decoration: none; display: block; transition: box-shadow var(--dur-fast); }
+  .kit-card:hover { box-shadow: var(--sh-3); }
+  .kit-header { background: var(--ink-900); padding: 24px 20px; }
+  .kit-icon { font-size: 28px; margin-bottom: 10px; }
+  .kit-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: white; }
+  .kit-body { padding: 20px; background: white; }
+  .kit-desc { font-family: var(--font-body); font-size: 13px; color: var(--ink-500); margin-bottom: 14px; line-height: 1.5; }
+  .kit-arrow { font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--brand-700); }
+
+  /* ── Motion tokens ───────────────────────────── */
+  .motion-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .motion-card { background: white; border: 1.5px solid var(--ink-100); border-radius: var(--r-md); padding: 20px; }
+  .motion-ms { font-family: var(--font-mono); font-size: 26px; font-weight: 700; color: var(--ink-900); }
+  .motion-name { font-family: var(--font-body); font-size: 11px; font-weight: 700; color: var(--brand-700); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; margin-bottom: 6px; }
+  .motion-desc { font-family: var(--font-body); font-size: 13px; color: var(--ink-400); }
+</style>
 </head>
 <body>
 
-<!-- ══════ SIDEBAR ══════ -->
+<!-- ══ SIDEBAR ══════════════════════════════════════════════════════════ -->
 <aside class="sidebar">
   <div class="sidebar-brand">
     <div class="sidebar-logo"><img src="project/assets/logo-wordmark-white.png" alt="MyGig"></div>
-    <div class="sidebar-version">Design System · v1.0 · May 2026</div>
+    <div class="sidebar-version">Design System · v1 · 2026</div>
   </div>
   <nav class="sidebar-nav">
     <div class="nav-group">
@@ -182,7 +245,7 @@
     </div>
     <div class="nav-group">
       <span class="nav-group-label">Visual Tokens</span>
-      <a class="nav-link" href="#colors"><span class="nav-dot"></span>Colours</a>
+      <a class="nav-link" href="#colours"><span class="nav-dot"></span>Colours</a>
       <a class="nav-link" href="#typography"><span class="nav-dot"></span>Typography</a>
       <a class="nav-link" href="#spacing"><span class="nav-dot"></span>Spacing</a>
       <a class="nav-link" href="#shape"><span class="nav-dot"></span>Shape &amp; Elevation</a>
@@ -196,26 +259,23 @@
       <a class="nav-link" href="#shift-card"><span class="nav-dot"></span>Shift card</a>
       <a class="nav-link" href="#stamp"><span class="nav-dot"></span>Stamp motif</a>
       <a class="nav-link" href="#toggles"><span class="nav-dot"></span>Toggles &amp; forms</a>
+      <a class="nav-link" href="#amy"><span class="nav-dot"></span>Amy AI</a>
     </div>
     <div class="nav-group">
       <span class="nav-group-label">Guidelines</span>
       <a class="nav-link" href="#iconography"><span class="nav-dot"></span>Iconography</a>
-      <a class="nav-link" href="#states"><span class="nav-dot"></span>States &amp; motion</a>
+      <a class="nav-link" href="#motion"><span class="nav-dot"></span>States &amp; motion</a>
       <a class="nav-link" href="#imagery"><span class="nav-dot"></span>Imagery</a>
     </div>
     <div class="nav-group">
       <span class="nav-group-label">UI Kits</span>
-      <a class="nav-link" href="ui_kits/marketing/index.html"><span class="nav-dot"></span>Marketing site →</a>
-      <a class="nav-link" href="project/ui_kits/business/index.html"><span class="nav-dot"></span>Business platform →</a>
-      <a class="nav-link" href="project/ui_kits/worker/index.html"><span class="nav-dot"></span>Worker app →</a>
+      <a class="nav-link" href="#kits"><span class="nav-dot"></span>View all kits →</a>
     </div>
   </nav>
-  <div class="sidebar-footer">
-    <a href="project/colors_and_type.css">View design tokens →</a>
-  </div>
+  <div class="sidebar-footer">mygig.com.au · v1.0</div>
 </aside>
 
-<!-- ══════ MAIN ══════ -->
+<!-- ══ MAIN ═════════════════════════════════════════════════════════════ -->
 <main class="main">
 
   <!-- HERO -->
@@ -224,19 +284,20 @@
     <h1 class="ds-hero-title">Design System<br><span>Style Guide</span></h1>
     <p class="ds-hero-desc">Single source of truth for colours, type, components, voice, and layout rules — for the marketing site, business platform, and worker app.</p>
     <div class="ds-hero-meta">
-      <span>v1.0 · May 2026</span>
+      <span>v1.0 · 2026</span>
       <span>Sora / Manrope / Permanent Marker / JetBrains Mono</span>
       <span>Tokens → project/colors_and_type.css</span>
+      <span>Brand accent → #6C60FF</span>
     </div>
   </div>
 
   <div class="content">
 
-    <!-- ══ IDENTITY ══ -->
+    <!-- ══ IDENTITY ══════════════════════════════════════════════════════ -->
     <section class="ds-section" id="identity">
       <div class="ds-eyebrow">Brand</div>
       <h2 class="ds-title">Identity</h2>
-      <p class="ds-desc">The wordmark sets the system: a hand-painted "my" next to a bold geometric "Gig". Human grit meets confident systems.</p>
+      <p class="ds-desc">The wordmark sets the system: a hand-painted "my" sitting next to a bold geometric "Gig". Human grit meets confident systems.</p>
       <div class="ds-divider"></div>
 
       <div class="card">
@@ -244,7 +305,7 @@
         <div style="display:flex;align-items:center;justify-content:center;height:120px;background:#FAF8F4;border:1px solid #E5E1D7;border-radius:12px;">
           <img src="project/assets/logo-wordmark-black.png" alt="MyGig wordmark" style="height:40px;width:auto;">
         </div>
-        <p class="card-note">Use on light backgrounds. Clear space = cap-height of "G" on all sides. Never distort or recolour.</p>
+        <p class="card-note">Use on light backgrounds. Clear space = cap-height of "G" on all sides. Never distort, recolour, or drop-shadow.</p>
       </div>
 
       <div class="card">
@@ -252,619 +313,731 @@
         <div style="display:flex;align-items:center;justify-content:center;height:120px;background:#0E0D0B;border-radius:12px;">
           <img src="project/assets/logo-wordmark-white.png" alt="MyGig wordmark on dark" style="height:40px;width:auto;">
         </div>
-        <p class="card-note">White version on dark backgrounds. The "my" script element uses hi-vis lime on dark.</p>
-      </div>
-
-      <div class="card">
-        <div class="card-label">Tagline — hero &amp; campaign use only</div>
-        <div style="padding:28px 24px;background:var(--ink-900);border-radius:var(--r-md);display:flex;align-items:center;">
-          <div class="mg-script" style="font-size:56px;color:var(--hivis-500);transform:rotate(-2deg);display:inline-block;line-height:1.1;">Work your Way</div>
-        </div>
-        <p class="card-note"><strong>Always lowercase "your".</strong> Font: Permanent Marker. Hero shots and campaign layouts only — never in buttons, navigation, or product chrome.</p>
+        <p class="card-note">White version on dark backgrounds. Never place on busy photography without a solid ink block behind it.</p>
       </div>
 
       <div class="card">
         <div class="card-label">App icon / logo mark</div>
-        <div style="display:flex;align-items:center;gap:40px;padding:24px;">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
-            <img src="project/assets/logo-mark-black.png" alt="MyGig mark" style="height:64px;width:auto;border-radius:12px;">
-            <span style="font-family:var(--font-mono);font-size:10px;color:#6F6A60;">64 × 64</span>
+        <div style="display:flex;align-items:center;gap:36px;padding:16px 0;">
+          <div style="text-align:center;">
+            <img src="project/assets/logo-mark-black.png" alt="MyGig mark" style="height:64px;width:auto;border-radius:12px;display:block;margin-bottom:8px;">
+            <span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);">64px</span>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
-            <img src="project/assets/logo-mark-black.png" alt="MyGig mark" style="height:44px;width:auto;border-radius:8px;">
-            <span style="font-family:var(--font-mono);font-size:10px;color:#6F6A60;">44 × 44</span>
+          <div style="text-align:center;">
+            <img src="project/assets/logo-mark-black.png" alt="MyGig mark" style="height:44px;width:auto;border-radius:8px;display:block;margin-bottom:8px;">
+            <span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);">44px</span>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
-            <img src="project/assets/logo-mark-black.png" alt="MyGig mark" style="height:32px;width:auto;border-radius:6px;">
-            <span style="font-family:var(--font-mono);font-size:10px;color:#6F6A60;">32 × 32</span>
+          <div style="text-align:center;">
+            <img src="project/assets/logo-mark-black.png" alt="MyGig mark" style="height:32px;width:auto;border-radius:6px;display:block;margin-bottom:8px;">
+            <span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);">32px</span>
           </div>
         </div>
-        <p class="card-note">Square mark only. Used in app icons, favicons, tight-space contexts. Never stack mark + wordmark together.</p>
+        <p class="card-note">Square mark for app icons, favicons, tight-space contexts. Never stack mark + wordmark together.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Tagline — hero &amp; campaign use only</div>
+        <div style="padding:28px 24px;background:var(--ink-900);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;">
+          <span style="font-family:'Permanent Marker',cursive;font-size:52px;color:var(--brand-300);transform:rotate(-3deg);display:inline-block;line-height:1.1;">Work your Way</span>
+        </div>
+        <p class="card-note"><strong>Always lowercase "your".</strong> Permanent Marker typeface. Hero shots and campaign layouts only — never in buttons, navigation, or product chrome.</p>
       </div>
     </section>
 
-    <!-- ══ VOICE ══ -->
+    <!-- ══ VOICE & TONE ══════════════════════════════════════════════════ -->
     <section class="ds-section" id="voice">
       <div class="ds-eyebrow">Brand</div>
       <h2 class="ds-title">Voice &amp; Tone</h2>
-      <p class="ds-desc">Plain-spoken, confident, Aussie-flavoured. Competent operations manager who respects the worker on the floor. Not HR-speak; not Silicon Valley breezy.</p>
+      <p class="ds-desc">Plain-spoken, confident, Aussie-flavoured. Competent operations manager who genuinely respects the worker on the floor. Not corporate HR-speak. Not Silicon-Valley breezy.</p>
       <div class="ds-divider"></div>
 
-      <div class="card" style="padding:0;overflow:hidden;">
-        <table class="ds-table">
-          <thead><tr><th>Surface</th><th>Tone</th><th>Why</th></tr></thead>
+      <div class="card">
+        <div class="card-label">Tone by surface</div>
+        <table class="states-table">
+          <thead><tr><th>Surface</th><th>Tone</th><th>Example</th></tr></thead>
           <tbody>
-            <tr><td>Marketing — Business</td><td>Confident, evidence-led. Numbers, compliance, time saved.</td><td>Decision makers want proof.</td></tr>
-            <tr><td>Marketing — Worker</td><td>Empowering, freedom-first. "Work Your Way", flexibility, pay-on-time.</td><td>Workers want agency.</td></tr>
-            <tr><td>Business app</td><td>Operational, calm. Short labels, clear states, no jargon.</td><td>They're at work, not browsing.</td></tr>
-            <tr><td>Worker app</td><td>Friendly, motivating. Earnings highlighted, achievements celebrated.</td><td>Repeat engagement matters.</td></tr>
-            <tr><td>Knowledge base</td><td>Plain English regulatory. Reads like a Fair Work explainer.</td><td>Stakes are real.</td></tr>
+            <tr><td><strong>Marketing — Business</strong></td><td>Confident, evidence-led</td><td style="font-style:italic;">"90%+ fill rate. Industry average is 65%."</td></tr>
+            <tr><td><strong>Marketing — Worker</strong></td><td>Empowering, freedom-first</td><td style="font-style:italic;">"Work shifts that work for you."</td></tr>
+            <tr><td><strong>Business platform</strong></td><td>Operational, calm</td><td style="font-style:italic;">"3 of 5 positions confirmed for Saturday."</td></tr>
+            <tr><td><strong>Worker app</strong></td><td>Friendly, motivating</td><td style="font-style:italic;">"Great shift, Sarah! $156.80 earned."</td></tr>
+            <tr><td><strong>Notifications</strong></td><td>Brief, actionable</td><td style="font-style:italic;">"Shift starts in 2 hrs — tap to confirm."</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="card">
-        <div class="card-label">Writing — Do / Don't</div>
-        <div class="do-dont">
-          <div class="do-col">
-            <div class="do-dont-header">✓ Do</div>
-            <div class="do-dont-item">"Post a shift in under 60 seconds."</div>
-            <div class="do-dont-item">"No interviews needed."</div>
-            <div class="do-dont-item">"We're the Employer of Record — we take the legal weight."</div>
-            <div class="do-dont-item">"Top workers get first dibs on shifts."</div>
-            <div class="do-dont-item">"Get paid the day after your shift."</div>
-            <div class="do-dont-item">"Your hours are tracked automatically — no disputes."</div>
+        <div class="card-label">Do / Don't</div>
+        <div class="voice-grid">
+          <div class="voice-col">
+            <div class="voice-header do">✓ Do</div>
+            <div class="voice-item">"Post a shift in under 60 seconds."</div>
+            <div class="voice-item">"We're the Employer of Record — we take the legal weight, you get the workers."</div>
+            <div class="voice-item">"Get paid the day after your shift."</div>
+            <div class="voice-item">"Top workers get first dibs on shifts."</div>
+            <div class="voice-item">"$31.19/hr" — never "$31" or "AUD 31.19"</div>
           </div>
-          <div class="dont-col">
-            <div class="do-dont-header">✗ Don't</div>
-            <div class="do-dont-item">"Streamline your workforce procurement journey."</div>
-            <div class="do-dont-item">"Eliminate the candidate evaluation overhead."</div>
-            <div class="do-dont-item">"We provide an EOR layer."</div>
-            <div class="do-dont-item">"Premium-tier operatives receive prioritised allocation."</div>
-            <div class="do-dont-item">"Optimised payout cadences."</div>
-            <div class="do-dont-item">"Eliminate ambiguity in workforce time-keeping."</div>
+          <div class="voice-col">
+            <div class="voice-header dont">✕ Don't</div>
+            <div class="voice-item bad">"Streamline your workforce procurement journey."</div>
+            <div class="voice-item bad">"We provide an EOR layer."</div>
+            <div class="voice-item bad">"Optimised payout cadences."</div>
+            <div class="voice-item bad">"Premium-tier operatives receive prioritised allocation."</div>
+            <div class="voice-item bad">"Authorized" — use "Authorised" (Aussie spelling)</div>
           </div>
         </div>
+        <p class="card-note">Always sentence case for UI labels. Active voice, present tense. Concrete &gt; clever. Numbers are the brand's superpower.</p>
       </div>
 
       <div class="card">
-        <div class="card-label">Key numbers we lean on</div>
-        <div class="numbers-grid">
-          <div class="number-card"><div class="number-val">90%+</div><div class="number-label">Fill rate (industry avg: 65%)</div></div>
-          <div class="number-card"><div class="number-val">2%</div><div class="number-label">No-show rate</div></div>
-          <div class="number-card"><div class="number-val">30+</div><div class="number-label">Verified data points per worker</div></div>
-          <div class="number-card"><div class="number-val">$31.19</div><div class="number-label">National minimum wage /hr (AUD)</div></div>
+        <div class="card-label">Key numbers</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+          <div style="text-align:center;padding:20px 0;">
+            <div style="font-family:var(--font-display);font-size:40px;font-weight:800;color:var(--ink-900);line-height:1;">90%+</div>
+            <div style="font-size:12px;color:var(--ink-400);margin-top:6px;">fill rate</div>
+          </div>
+          <div style="text-align:center;padding:20px 0;">
+            <div style="font-family:var(--font-display);font-size:40px;font-weight:800;color:var(--ink-900);line-height:1;">2%</div>
+            <div style="font-size:12px;color:var(--ink-400);margin-top:6px;">no-show rate</div>
+          </div>
+          <div style="text-align:center;padding:20px 0;">
+            <div style="font-family:var(--font-display);font-size:40px;font-weight:800;color:var(--ink-900);line-height:1;">30+</div>
+            <div style="font-size:12px;color:var(--ink-400);margin-top:6px;">data points per worker</div>
+          </div>
+          <div style="text-align:center;padding:20px 0;">
+            <div style="font-family:var(--font-display);font-size:40px;font-weight:800;color:var(--ink-900);line-height:1;">1 day</div>
+            <div style="font-size:12px;color:var(--ink-400);margin-top:6px;">workers paid after shift</div>
+          </div>
         </div>
-        <p class="card-note">EOR currently authorised in <strong>NSW, WA, TAS, NT</strong>. QLD, VIC, SA, ACT pending — never claim these until live.</p>
+        <p class="card-note">Lead with these numbers. "90%+ fill rate. Industry average is 65%." — always show the comparison.</p>
       </div>
     </section>
 
-    <!-- ══ COLOURS ══ -->
-    <section class="ds-section" id="colors">
+    <!-- ══ COLOURS ══════════════════════════════════════════════════════ -->
+    <section class="ds-section" id="colours">
       <div class="ds-eyebrow">Visual Tokens</div>
       <h2 class="ds-title">Colours</h2>
-      <p class="ds-desc">Three commitments: <strong>INK</strong> (off-black neutrals), <strong>HI-VIS</strong> (electric lime — safety vest nod), <strong>PAPER</strong> (warm off-white). All tokens in <code>project/colors_and_type.css</code>.</p>
+      <p class="ds-desc">Three commitments: <strong>INK</strong> (off-black neutrals), <strong>BRAND</strong> (signature violet — pulled from mygig.com.au), <strong>PAPER</strong> (warm off-white). All tokens in <code style="font-family:var(--font-mono);font-size:13px;">project/colors_and_type.css</code>.</p>
       <div class="ds-divider"></div>
 
       <div class="card">
-        <div class="card-label">INK — neutrals / brand black</div>
-        <div class="swatch-grid" style="grid-template-columns:repeat(8,1fr);">
-          <div class="swatch"><div class="swatch-block" style="background:#FAF8F4;"><span class="swatch-hex" style="color:var(--ink-400);">#FAF8F4</span></div><div class="swatch-name">ink-0</div><div class="swatch-role">Paper / bg</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#F2EFE8;"><span class="swatch-hex" style="color:var(--ink-400);">#F2EFE8</span></div><div class="swatch-name">ink-50</div><div class="swatch-role">Hover</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#E5E1D7;"><span class="swatch-hex" style="color:var(--ink-400);">#E5E1D7</span></div><div class="swatch-name">ink-100</div><div class="swatch-role">Dividers</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#A8A294;"><span class="swatch-hex" style="color:white;">#A8A294</span></div><div class="swatch-name">ink-300</div><div class="swatch-role">Placeholder</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#6F6A60;"><span class="swatch-hex" style="color:white;">#6F6A60</span></div><div class="swatch-name">ink-400</div><div class="swatch-role">Secondary</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#3D3A33;"><span class="swatch-hex" style="color:white;">#3D3A33</span></div><div class="swatch-name">ink-500</div><div class="swatch-role">Body</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#1F1D19;"><span class="swatch-hex" style="color:white;">#1F1D19</span></div><div class="swatch-name">ink-700</div><div class="swatch-role">Near-black</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#0E0D0B;"><span class="swatch-hex" style="color:rgba(255,255,255,0.6);">#0E0D0B</span></div><div class="swatch-name">ink-900</div><div class="swatch-role">Brand ★</div></div>
+        <div class="card-label">INK — neutrals &amp; brand black</div>
+        <div class="swatch-grid" style="grid-template-columns:repeat(9,1fr);">
+          <div class="swatch" style="background:#FAF8F4;"><span class="swatch-name" style="color:#0E0D0B;">ink-0</span><span class="swatch-hex" style="color:#6F6A60;">#FAF8F4</span><span class="swatch-role" style="color:#6F6A60;">Paper bg</span></div>
+          <div class="swatch" style="background:#F2EFE8;"><span class="swatch-name" style="color:#0E0D0B;">ink-50</span><span class="swatch-hex" style="color:#6F6A60;">#F2EFE8</span><span class="swatch-role" style="color:#6F6A60;">Hover</span></div>
+          <div class="swatch" style="background:#E5E1D7;"><span class="swatch-name" style="color:#0E0D0B;">ink-100</span><span class="swatch-hex" style="color:#6F6A60;">#E5E1D7</span><span class="swatch-role" style="color:#6F6A60;">Dividers</span></div>
+          <div class="swatch" style="background:#CFC9BA;"><span class="swatch-name" style="color:#0E0D0B;">ink-200</span><span class="swatch-hex" style="color:#6F6A60;">#CFC9BA</span><span class="swatch-role" style="color:#6F6A60;">Disabled</span></div>
+          <div class="swatch" style="background:#A8A294;"><span class="swatch-name" style="color:#0E0D0B;">ink-300</span><span class="swatch-hex" style="color:#0E0D0B;">#A8A294</span><span class="swatch-role" style="color:#0E0D0B;">Placeholder</span></div>
+          <div class="swatch" style="background:#6F6A60;"><span class="swatch-name" style="color:white;">ink-400</span><span class="swatch-hex" style="color:white;">#6F6A60</span><span class="swatch-role" style="color:white;">Secondary</span></div>
+          <div class="swatch" style="background:#3D3A33;"><span class="swatch-name" style="color:white;">ink-500</span><span class="swatch-hex" style="color:white;">#3D3A33</span><span class="swatch-role" style="color:white;">Body text</span></div>
+          <div class="swatch" style="background:#1F1D19;"><span class="swatch-name" style="color:white;">ink-700</span><span class="swatch-hex" style="color:white;">#1F1D19</span><span class="swatch-role" style="color:white;">Near-black</span></div>
+          <div class="swatch" style="background:#0E0D0B;border:2px solid #E5E1D7;"><span class="swatch-name" style="color:white;">ink-900</span><span class="swatch-hex" style="color:white;">#0E0D0B</span><span class="swatch-role" style="color:rgba(255,255,255,0.6);">Wordmark ★</span></div>
         </div>
-        <p class="card-note">Never use pure <code>#000</code>. The brand black is <code>#0E0D0B</code>.</p>
+        <p class="card-note">Never use pure <code>#000</code>. The brand black is <code>#0E0D0B</code> — it has warmth.</p>
       </div>
 
       <div class="card">
-        <div class="card-label">HI-VIS — signature accent</div>
-        <!-- Large accent preview — #DCFF1E = electric lime (NOT purple) -->
-        <div style="background:#DCFF1E;border:3px solid #0E0D0B;border-radius:12px;padding:28px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
+        <div class="card-label">BRAND — signature violet</div>
+        <!-- Large brand preview -->
+        <div style="background:#6C60FF;border:3px solid #0E0D0B;border-radius:12px;padding:28px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
           <div>
-            <div style="font-family:'Sora',system-ui,sans-serif;font-size:13px;font-weight:700;color:#0E0D0B;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">hivis-500 — THE ACCENT</div>
-            <div style="font-family:'JetBrains Mono','Courier New',monospace;font-size:28px;font-weight:700;color:#0E0D0B;">#DCFF1E</div>
-            <div style="font-family:'Manrope',system-ui,sans-serif;font-size:13px;color:#1F1D19;margin-top:4px;">Electric lime · Safety-vest nod</div>
+            <div style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">brand-500 — THE ACCENT</div>
+            <div style="font-family:'JetBrains Mono','Courier New',monospace;font-size:32px;font-weight:700;color:white;">#6C60FF</div>
+            <div style="font-family:'Manrope',system-ui,sans-serif;font-size:13px;color:rgba(255,255,255,0.8);margin-top:6px;">MyGig's signature violet · pulled from mygig.com.au</div>
           </div>
-          <div style="font-size:48px;line-height:1;">🦺</div>
+          <div>
+            <div class="stamp stamp-tilt" style="font-size:16px;">POST A SHIFT</div>
+          </div>
         </div>
         <div class="swatch-grid" style="grid-template-columns:repeat(6,1fr);">
-          <div class="swatch"><div class="swatch-block" style="background:#FAFFDB;"><span class="swatch-hex" style="color:#6F6A60;">#FAFFDB</span></div><div class="swatch-name">hivis-50</div><div class="swatch-role">Tint</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#F1FFA8;"><span class="swatch-hex" style="color:#6F6A60;">#F1FFA8</span></div><div class="swatch-name">hivis-100</div><div class="swatch-role">Badge bg</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#E5FF5C;"><span class="swatch-hex" style="color:#1F1D19;">#E5FF5C</span></div><div class="swatch-name">hivis-300</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#DCFF1E;border:2px solid #0E0D0B;"><span class="swatch-hex" style="color:#1F1D19;font-weight:700;">#DCFF1E</span></div><div class="swatch-name">hivis-500</div><div class="swatch-role">★ Core</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#B8D900;"><span class="swatch-hex" style="color:#0E0D0B;">#B8D900</span></div><div class="swatch-name">hivis-700</div><div class="swatch-role">Pressed</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#6E8200;"><span class="swatch-hex" style="color:white;">#6E8200</span></div><div class="swatch-name">hivis-900</div><div class="swatch-role">Text on light</div></div>
+          <div class="swatch" style="background:#F5F4FE;"><span class="swatch-name" style="color:#0E0D0B;">brand-50</span><span class="swatch-hex" style="color:#6F6A60;">#F5F4FE</span><span class="swatch-role" style="color:#6F6A60;">Hover tint</span></div>
+          <div class="swatch" style="background:#E8E6F9;"><span class="swatch-name" style="color:#0E0D0B;">brand-100</span><span class="swatch-hex" style="color:#6F6A60;">#E8E6F9</span><span class="swatch-role" style="color:#6F6A60;">Badge bg</span></div>
+          <div class="swatch" style="background:#DBD8FA;"><span class="swatch-name" style="color:#0E0D0B;">brand-200</span><span class="swatch-hex" style="color:#6F6A60;">#DBD8FA</span><span class="swatch-role" style="color:#6F6A60;">Underline</span></div>
+          <div class="swatch" style="background:#B8B1F7;"><span class="swatch-name" style="color:#0E0D0B;">brand-300</span><span class="swatch-hex" style="color:#0E0D0B;">#B8B1F7</span><span class="swatch-role" style="color:#0E0D0B;">On dark</span></div>
+          <div class="swatch" style="background:#6C60FF;border:2px solid #0E0D0B;"><span class="swatch-name" style="color:white;">brand-500</span><span class="swatch-hex" style="color:white;font-weight:700;">#6C60FF</span><span class="swatch-role" style="color:rgba(255,255,255,0.8);">★ Core CTA</span></div>
+          <div class="swatch" style="background:#4B3FD9;"><span class="swatch-name" style="color:white;">brand-700</span><span class="swatch-hex" style="color:white;">#4B3FD9</span><span class="swatch-role" style="color:rgba(255,255,255,0.8);">Pressed</span></div>
         </div>
-        <p class="card-note">Electric lime — not yellow, not green. Use sparingly: one or two hits per screen. Never use purple as the brand accent.</p>
+        <p class="card-note">Used confidently — not sparingly — because it IS the brand colour. White text reads cleanly on brand-500 and above. Focus outlines use brand-500.</p>
       </div>
 
       <div class="card">
-        <div class="card-label">Semantic — status / utility</div>
+        <div class="card-label">Semantic — status &amp; utility</div>
         <div class="swatch-grid" style="grid-template-columns:repeat(8,1fr);">
-          <div class="swatch"><div class="swatch-block" style="background:#E8F6EE;"><span class="swatch-hex" style="color:var(--ink-400);font-size:9px;">#E8F6EE</span></div><div class="swatch-name">success-50</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#1F8A4C;"><span class="swatch-hex" style="color:white;font-size:9px;">#1F8A4C</span></div><div class="swatch-name">success-500</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#FFF3DC;"><span class="swatch-hex" style="color:var(--ink-400);font-size:9px;">#FFF3DC</span></div><div class="swatch-name">warn-50</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#E89B14;"><span class="swatch-hex" style="color:white;font-size:9px;">#E89B14</span></div><div class="swatch-name">warn-500</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#FCE7E4;"><span class="swatch-hex" style="color:var(--ink-400);font-size:9px;">#FCE7E4</span></div><div class="swatch-name">danger-50</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#D03826;"><span class="swatch-hex" style="color:white;font-size:9px;">#D03826</span></div><div class="swatch-name">danger-500</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#E4ECF7;"><span class="swatch-hex" style="color:var(--ink-400);font-size:9px;">#E4ECF7</span></div><div class="swatch-name">info-50</div></div>
-          <div class="swatch"><div class="swatch-block" style="background:#2563C8;"><span class="swatch-hex" style="color:white;font-size:9px;">#2563C8</span></div><div class="swatch-name">info-500</div></div>
+          <div class="swatch" style="background:#E8F6EE;"><span class="swatch-name" style="color:#135E33;font-size:12px;">success-50</span><span class="swatch-hex" style="color:#135E33;">#E8F6EE</span></div>
+          <div class="swatch" style="background:#1F8A4C;"><span class="swatch-name" style="color:white;font-size:12px;">success-500</span><span class="swatch-hex" style="color:white;">#1F8A4C</span></div>
+          <div class="swatch" style="background:#FFF3DC;"><span class="swatch-name" style="color:#8A5A00;font-size:12px;">warn-50</span><span class="swatch-hex" style="color:#8A5A00;">#FFF3DC</span></div>
+          <div class="swatch" style="background:#E89B14;"><span class="swatch-name" style="color:white;font-size:12px;">warn-500</span><span class="swatch-hex" style="color:white;">#E89B14</span></div>
+          <div class="swatch" style="background:#FCE7E4;"><span class="swatch-name" style="color:#821F12;font-size:12px;">danger-50</span><span class="swatch-hex" style="color:#821F12;">#FCE7E4</span></div>
+          <div class="swatch" style="background:#D03826;"><span class="swatch-name" style="color:white;font-size:12px;">danger-500</span><span class="swatch-hex" style="color:white;">#D03826</span></div>
+          <div class="swatch" style="background:#E4ECF7;"><span class="swatch-name" style="color:#173E80;font-size:12px;">info-50</span><span class="swatch-hex" style="color:#173E80;">#E4ECF7</span></div>
+          <div class="swatch" style="background:#2563C8;"><span class="swatch-name" style="color:white;font-size:12px;">info-500</span><span class="swatch-hex" style="color:white;">#2563C8</span></div>
         </div>
+        <p class="card-note">Deliberately less saturated than brand violet so they don't fight for attention. The brand colour carries weight; semantics are utility.</p>
       </div>
 
       <div class="card">
         <div class="card-label">Industry tag tints — shift chips &amp; worker initials only</div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
-          <span class="pill" style="background:#FFD6A8;"><span class="pill-dot" style="background:var(--ink-900);"></span>Hospitality</span>
-          <span class="pill" style="background:#F2C9FF;"><span class="pill-dot" style="background:var(--ink-900);"></span>Events</span>
-          <span class="pill" style="background:#B8E2FF;"><span class="pill-dot" style="background:var(--ink-900);"></span>Warehousing</span>
-          <span class="pill" style="background:#FFDF6B;"><span class="pill-dot" style="background:var(--ink-900);"></span>Construction</span>
-          <span class="pill" style="background:#F6B8C8;"><span class="pill-dot" style="background:var(--ink-900);"></span>Retail</span>
-          <span class="pill" style="background:#C3D3A6;"><span class="pill-dot" style="background:var(--ink-900);"></span>Mining</span>
-          <span class="pill" style="background:#C9E8C2;"><span class="pill-dot" style="background:var(--ink-900);"></span>Agriculture</span>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <span class="pill" style="background:#FFD6A8;color:#0E0D0B;"><span class="pill-dot" style="background:#0E0D0B;"></span>Hospitality</span>
+          <span class="pill" style="background:#F2C9FF;color:#0E0D0B;"><span class="pill-dot" style="background:#0E0D0B;"></span>Events</span>
+          <span class="pill" style="background:#B8E2FF;color:#0E0D0B;"><span class="pill-dot" style="background:#0E0D0B;"></span>Warehousing</span>
+          <span class="pill" style="background:#FFDF6B;color:#0E0D0B;"><span class="pill-dot" style="background:#0E0D0B;"></span>Construction</span>
+          <span class="pill" style="background:#F6B8C8;color:#0E0D0B;"><span class="pill-dot" style="background:#0E0D0B;"></span>Retail</span>
+          <span class="pill" style="background:#C3D3A6;color:#0E0D0B;"><span class="pill-dot" style="background:#0E0D0B;"></span>Mining</span>
+          <span class="pill" style="background:#C9E8C2;color:#0E0D0B;"><span class="pill-dot" style="background:#0E0D0B;"></span>Agriculture</span>
         </div>
-        <p class="card-note">Pastels keep hi-vis as the only saturated colour in the system. Never use as page chrome or backgrounds.</p>
+        <p class="card-note">Pastels keep brand violet as the only saturated brand colour on screen. Never use tag tints as page chrome or section backgrounds.</p>
       </div>
     </section>
 
-    <!-- ══ TYPOGRAPHY ══ -->
+    <!-- ══ TYPOGRAPHY ════════════════════════════════════════════════════ -->
     <section class="ds-section" id="typography">
       <div class="ds-eyebrow">Visual Tokens</div>
       <h2 class="ds-title">Typography</h2>
-      <p class="ds-desc">Three voices: Sora (display), Manrope (body/UI), Permanent Marker (script hero — use sparingly). Plus JetBrains Mono for data.</p>
+      <p class="ds-desc">Three voices mirror the wordmark composition. All four families are free, open-source (Google Fonts / SIL OFL), loaded from <code style="font-family:var(--font-mono);font-size:13px;">fonts.googleapis.com</code>.</p>
       <div class="ds-divider"></div>
 
       <div class="card">
-        <div class="card-label">Display — Sora 700/800</div>
-        <div class="type-row"><div class="type-meta"><div class="type-meta-name">display-xl</div><div class="type-meta-detail">88px / 0.95lh</div></div><div class="mg-display-xl" style="color:var(--ink-900);">90%</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-meta-name">display-l</div><div class="type-meta-detail">64px / 1.00lh</div></div><div class="mg-display-l" style="color:var(--ink-900);">Work your Way.</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-meta-name">display</div><div class="type-meta-detail">44px / 1.05lh</div></div><div class="mg-display" style="color:var(--ink-900);">Post a shift</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-meta-name">h1</div><div class="type-meta-detail">36px / 1.10lh</div></div><div class="mg-h1" style="color:var(--ink-900);">Post a shift in 60 seconds.</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-meta-name">h2</div><div class="type-meta-detail">28px / 1.15lh</div></div><div class="mg-h2" style="color:var(--ink-900);">90%+ fill rate.</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-meta-name">h3</div><div class="type-meta-detail">22px / 1.25lh</div></div><div class="mg-h3" style="color:var(--ink-900);">Skill verification</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-meta-name">h4</div><div class="type-meta-detail">18px Manrope 700</div></div><div class="mg-h4" style="color:var(--ink-900);">Workers on the way</div></div>
-      </div>
-
-      <div class="card">
-        <div class="card-label">Body — Manrope</div>
-        <div class="type-row"><div class="type-meta"><div class="type-meta-name">body</div><div class="type-meta-detail">16px / 1.50lh</div></div><div class="mg-body" style="color:var(--ink-500);max-width:520px;">Every worker completes a detailed onboarding process verifying 30+ data points including skills, certifications, and work history.</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-meta-name">body-sm</div><div class="type-meta-detail">14px / 1.45lh</div></div><div class="mg-body-sm" style="color:var(--ink-400);">Labels, dense UI, supporting copy. Authorised in NSW, WA, TAS, and NT.</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-meta-name">caption</div><div class="type-meta-detail">12px / 1.40lh</div></div><div class="mg-caption" style="color:var(--ink-400);">Timestamps, footnotes, secondary metadata.</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-meta-name">eyebrow</div><div class="type-meta-detail">12px / UC / +0.12em</div></div><div class="mg-eyebrow" style="color:var(--ink-400);">Shift ID · Section label</div></div>
-      </div>
-
-      <div class="card">
-        <div class="card-label">Script — Permanent Marker · Hero use only</div>
-        <div style="background:var(--ink-900);padding:28px 24px;border-radius:var(--r-md);">
-          <div class="mg-script" style="font-size:52px;color:var(--hivis-500);transform:rotate(-2deg);display:inline-block;">Work your Way</div>
+        <div class="card-label">Display — Sora 700 / 800</div>
+        <div class="type-spec">
+          <div class="type-meta">DISPLAY XL <span class="mono">88px · 800 · −0.025em</span> <span class="note">Hero headlines</span></div>
+          <div style="font-family:'Sora',system-ui,sans-serif;font-weight:800;font-size:52px;line-height:0.95;letter-spacing:-0.025em;color:var(--ink-900);">Post a shift in<br>60 seconds.</div>
         </div>
-        <p class="card-note"><strong>Never in UI, navigation, or buttons.</strong> Hero hero callouts, campaign moments, pull-quotes only.</p>
+        <div class="type-spec">
+          <div class="type-meta">H1 <span class="mono">36px · 700 · −0.015em</span></div>
+          <div style="font-family:'Sora',system-ui,sans-serif;font-weight:700;font-size:36px;letter-spacing:-0.015em;color:var(--ink-900);">Shifts filled. Workers paid.</div>
+        </div>
+        <div class="type-spec">
+          <div class="type-meta">H2 <span class="mono">28px · 700 · −0.01em</span></div>
+          <div style="font-family:'Sora',system-ui,sans-serif;font-weight:700;font-size:28px;letter-spacing:-0.01em;color:var(--ink-900);">90%+ fill rate, industry average 65%.</div>
+        </div>
+        <div class="type-spec">
+          <div class="type-meta">H3 <span class="mono">22px · 600</span></div>
+          <div style="font-family:'Sora',system-ui,sans-serif;font-weight:600;font-size:22px;color:var(--ink-900);">We handle payroll, super, and compliance.</div>
+        </div>
+        <p class="card-note">The "Gig" voice. Heavy, geometric, slightly humanist — a strong companion to the wordmark's "Gig". Use for all headlines, big numbers, hero copy.</p>
       </div>
 
       <div class="card">
-        <div class="card-label">Mono — JetBrains Mono · Timestamps, IDs, payslips</div>
-        <div style="padding:16px 18px;background:var(--surface-0);border:1px solid var(--ink-100);border-radius:var(--r-md);">
-          <div class="mg-eyebrow" style="color:var(--ink-400);margin-bottom:8px;">Shift ID</div>
-          <div class="mg-mono" style="color:var(--ink-900);font-weight:600;font-size:16px;margin-bottom:4px;">MG-2026-04823 · 6:30am–2:00pm</div>
-          <div class="mg-mono" style="color:var(--ink-500);">$31.19/hr · 7.5h gross · $233.93</div>
+        <div class="card-label">Body — Manrope 400 / 500 / 600 / 700</div>
+        <div class="type-spec">
+          <div class="type-meta">BODY <span class="mono">16px · 400 · 1.5 line-height</span></div>
+          <div style="font-family:'Manrope',system-ui,sans-serif;font-weight:400;font-size:16px;line-height:1.5;color:var(--ink-500);max-width:600px;">Every worker is verified across 30+ data points, including skills, certifications, and work history. You see all of it before you confirm the shift.</div>
         </div>
+        <div class="type-spec">
+          <div class="type-meta">BODY SM <span class="mono">14px · 500</span></div>
+          <div style="font-family:'Manrope',system-ui,sans-serif;font-weight:500;font-size:14px;line-height:1.45;color:var(--ink-500);">Hospitality Award L2 · Casual loading 25% · Penalty rates apply after 6pm and on weekends.</div>
+        </div>
+        <div class="type-spec">
+          <div class="type-meta">CAPTION <span class="mono">12px · 500</span> &nbsp; / &nbsp; EYEBROW <span class="mono">12px · 700 · uppercase · 0.12em</span></div>
+          <div style="display:flex;gap:40px;align-items:baseline;">
+            <div style="font-family:'Manrope',system-ui,sans-serif;font-weight:500;font-size:12px;color:var(--ink-400);">Reservoir St, Surry Hills NSW 2010</div>
+            <div style="font-family:'Manrope',system-ui,sans-serif;font-weight:700;font-size:12px;color:var(--brand-700);letter-spacing:0.12em;text-transform:uppercase;">Why MyGig</div>
+          </div>
+        </div>
+        <p class="card-note">The utility voice. Open and legible at small sizes. Use for paragraphs, UI labels, forms, data. Sentence case for all UI labels.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Script — Permanent Marker · hero use only</div>
+        <div style="padding:20px 0;">
+          <div style="font-family:'Permanent Marker',cursive;font-size:56px;color:var(--ink-900);transform:rotate(-3deg);display:inline-block;line-height:1.1;">Work your Way</div>
+        </div>
+        <p class="card-note">The brushed "my" nod. Used SPARINGLY — pull-quotes, hero callouts, the tagline. Never in buttons, navigation, or product chrome.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Mono — JetBrains Mono · timestamps, IDs, payslips</div>
+        <div style="font-family:'JetBrains Mono','Courier New',monospace;font-size:20px;font-weight:600;color:var(--ink-700);padding:12px 0;">MG-2026-04823 · 6:30am–2:00pm · $31.19/hr</div>
+        <div style="font-family:'JetBrains Mono','Courier New',monospace;font-size:14px;font-weight:500;color:var(--ink-400);">Shift code · Hospitality Award L2 · Penalty rate: 125%</div>
+        <p class="card-note">Anything monospaced — shift IDs, timestamps, payslip line items. Never for prose or marketing copy.</p>
       </div>
     </section>
 
-    <!-- ══ SPACING ══ -->
+    <!-- ══ SPACING ═══════════════════════════════════════════════════════ -->
     <section class="ds-section" id="spacing">
       <div class="ds-eyebrow">Visual Tokens</div>
       <h2 class="ds-title">Spacing</h2>
-      <p class="ds-desc">Everything snaps to a 4px scale. <code>--sp-1</code> (4px) through <code>--sp-24</code> (96px). Card padding defaults to <code>--sp-6</code> (24px), section gaps to <code>--sp-16</code> (64px).</p>
+      <p class="ds-desc">Everything snaps to a 4px grid. Tokens <code style="font-family:var(--font-mono);">--sp-1</code> (4px) through <code style="font-family:var(--font-mono);">--sp-24</code> (96px). Standard card padding is <code style="font-family:var(--font-mono);">--sp-6</code> (24px).</p>
       <div class="ds-divider"></div>
 
       <div class="card">
-        <div class="card-label">4pt spacing grid</div>
-        <div class="spacing-row">
-          <div class="spacing-item"><div class="spacing-block" style="width:4px;height:4px;"></div><span class="spacing-val">--sp-1<br>4px</span></div>
-          <div class="spacing-item"><div class="spacing-block" style="width:8px;height:8px;"></div><span class="spacing-val">--sp-2<br>8px</span></div>
-          <div class="spacing-item"><div class="spacing-block" style="width:12px;height:12px;"></div><span class="spacing-val">--sp-3<br>12px</span></div>
-          <div class="spacing-item"><div class="spacing-block" style="width:16px;height:16px;"></div><span class="spacing-val">--sp-4<br>16px</span></div>
-          <div class="spacing-item"><div class="spacing-block" style="width:20px;height:20px;"></div><span class="spacing-val">--sp-5<br>20px</span></div>
-          <div class="spacing-item"><div class="spacing-block" style="width:24px;height:24px;"></div><span class="spacing-val">--sp-6<br>24px</span></div>
-          <div class="spacing-item"><div class="spacing-block" style="width:32px;height:32px;"></div><span class="spacing-val">--sp-8<br>32px</span></div>
-          <div class="spacing-item"><div class="spacing-block" style="width:40px;height:40px;"></div><span class="spacing-val">--sp-10<br>40px</span></div>
-          <div class="spacing-item"><div class="spacing-block" style="width:48px;height:48px;"></div><span class="spacing-val">--sp-12<br>48px</span></div>
-          <div class="spacing-item"><div class="spacing-block" style="width:64px;height:64px;"></div><span class="spacing-val">--sp-16<br>64px</span></div>
+        <div class="card-label">4pt grid</div>
+        <div class="spacing-grid">
+          <div class="spacing-item"><div class="spacing-bar" style="height:4px;"></div><div class="spacing-label">4px<br>--sp-1</div></div>
+          <div class="spacing-item"><div class="spacing-bar" style="height:8px;"></div><div class="spacing-label">8px<br>--sp-2</div></div>
+          <div class="spacing-item"><div class="spacing-bar" style="height:12px;"></div><div class="spacing-label">12px<br>--sp-3</div></div>
+          <div class="spacing-item"><div class="spacing-bar" style="height:16px;"></div><div class="spacing-label">16px<br>--sp-4</div></div>
+          <div class="spacing-item"><div class="spacing-bar" style="height:20px;"></div><div class="spacing-label">20px<br>--sp-5</div></div>
+          <div class="spacing-item"><div class="spacing-bar" style="height:24px;"></div><div class="spacing-label">24px<br>--sp-6</div></div>
+          <div class="spacing-item"><div class="spacing-bar" style="height:32px;"></div><div class="spacing-label">32px<br>--sp-8</div></div>
+          <div class="spacing-item"><div class="spacing-bar" style="height:40px;"></div><div class="spacing-label">40px<br>--sp-10</div></div>
+          <div class="spacing-item"><div class="spacing-bar" style="height:48px;"></div><div class="spacing-label">48px<br>--sp-12</div></div>
+          <div class="spacing-item"><div class="spacing-bar" style="height:64px;"></div><div class="spacing-label">64px<br>--sp-16</div></div>
+          <div class="spacing-item"><div class="spacing-bar" style="height:80px;"></div><div class="spacing-label">80px<br>--sp-20</div></div>
+          <div class="spacing-item"><div class="spacing-bar" style="height:96px;"></div><div class="spacing-label">96px<br>--sp-24</div></div>
         </div>
+        <p class="card-note" style="margin-top:24px;">Layout gutters: <strong>48px</strong> marketing · <strong>24px</strong> business platform · <strong>16px</strong> worker app. Max widths: 1320px marketing · 1140px business · mobile-first 390px worker.</p>
       </div>
     </section>
 
-    <!-- ══ SHAPE & ELEVATION ══ -->
+    <!-- ══ SHAPE & ELEVATION ═════════════════════════════════════════════ -->
     <section class="ds-section" id="shape">
       <div class="ds-eyebrow">Visual Tokens</div>
       <h2 class="ds-title">Shape &amp; Elevation</h2>
-      <p class="ds-desc">Friendly radii — never zero. Pills are a brand signature. Shadows use warm ink tones, never blue.</p>
+      <p class="ds-desc">Friendly radii — never zero. Pills used heavily for shift status and category tags. Shadows use warm ink tones, never blue.</p>
       <div class="ds-divider"></div>
 
       <div class="card">
         <div class="card-label">Radii</div>
-        <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end;">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><div style="width:72px;height:72px;background:var(--ink-900);border-radius:4px;"></div><div class="swatch-name">--r-xs</div><div class="swatch-role">4px</div></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><div style="width:72px;height:72px;background:var(--ink-900);border-radius:8px;"></div><div class="swatch-name">--r-sm</div><div class="swatch-role">8px</div></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><div style="width:72px;height:72px;background:var(--ink-900);border-radius:12px;"></div><div class="swatch-name">--r-md</div><div class="swatch-role">12px · default</div></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><div style="width:72px;height:72px;background:var(--ink-900);border-radius:18px;"></div><div class="swatch-name">--r-lg</div><div class="swatch-role">18px</div></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><div style="width:72px;height:72px;background:var(--ink-900);border-radius:28px;"></div><div class="swatch-name">--r-xl</div><div class="swatch-role">28px · sheets</div></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><div style="width:72px;height:72px;background:var(--ink-900);border-radius:999px;"></div><div class="swatch-name">--r-pill</div><div class="swatch-role">999px · tags</div></div>
+        <div class="radii-row">
+          <div class="radius-item"><div class="radius-block" style="border-radius:4px;"></div><div class="radius-label">--r-xs<br>4px</div></div>
+          <div class="radius-item"><div class="radius-block" style="border-radius:8px;"></div><div class="radius-label">--r-sm<br>8px</div></div>
+          <div class="radius-item"><div class="radius-block" style="border-radius:12px;"></div><div class="radius-label">--r-md<br>12px<br>default</div></div>
+          <div class="radius-item"><div class="radius-block" style="border-radius:18px;"></div><div class="radius-label">--r-lg<br>18px</div></div>
+          <div class="radius-item"><div class="radius-block" style="border-radius:28px;"></div><div class="radius-label">--r-xl<br>28px<br>sheets</div></div>
+          <div class="radius-item"><div class="radius-block" style="border-radius:999px;width:72px;"></div><div class="radius-label">--r-pill<br>999px<br>tags/pills</div></div>
         </div>
+        <p class="card-note" style="margin-top:20px;">Default for cards, inputs, buttons is <code>--r-md (12px)</code>. Pills are a brand signature — used heavily for shift status, category chips. Never zero radius.</p>
       </div>
 
       <div class="card">
-        <div class="card-label">Elevation + stamp motif</div>
-        <div style="display:flex;gap:24px;flex-wrap:wrap;padding:8px 4px 16px;">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;"><div style="width:88px;height:72px;background:white;border:1px solid var(--ink-100);border-radius:var(--r-sm);box-shadow:var(--sh-1);"></div><span class="swatch-name">--sh-1</span></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;"><div style="width:88px;height:72px;background:white;border:1px solid var(--ink-100);border-radius:var(--r-sm);box-shadow:var(--sh-2);"></div><span class="swatch-name">--sh-2</span></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;"><div style="width:88px;height:72px;background:white;border:1px solid var(--ink-100);border-radius:var(--r-sm);box-shadow:var(--sh-3);"></div><span class="swatch-name">--sh-3</span></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;"><div style="width:88px;height:72px;background:white;border:1px solid var(--ink-100);border-radius:var(--r-sm);box-shadow:var(--sh-4);"></div><span class="swatch-name">--sh-4</span></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-left:12px;"><div style="width:88px;height:72px;background:var(--hivis-500);border:3px solid var(--ink-900);border-radius:var(--r-sm);box-shadow:var(--sh-stamp);"></div><span class="swatch-name">--sh-stamp</span></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;"><div style="width:88px;height:72px;background:var(--ink-900);border:3px solid var(--ink-900);border-radius:var(--r-sm);box-shadow:4px 4px 0 var(--hivis-500);"></div><span class="swatch-name">--sh-stamp-hivis</span></div>
+        <div class="card-label">Elevation — shadows</div>
+        <div class="shadow-row">
+          <div class="shadow-card" style="box-shadow:0 1px 2px rgba(14,13,11,.06),0 1px 1px rgba(14,13,11,.04);">--sh-1<br><span style="font-size:10px;color:var(--ink-300);">Cards at rest</span></div>
+          <div class="shadow-card" style="box-shadow:0 2px 6px rgba(14,13,11,.08),0 1px 2px rgba(14,13,11,.05);">--sh-2<br><span style="font-size:10px;color:var(--ink-300);">Hover / active</span></div>
+          <div class="shadow-card" style="box-shadow:0 8px 24px rgba(14,13,11,.10),0 2px 6px rgba(14,13,11,.06);">--sh-3<br><span style="font-size:10px;color:var(--ink-300);">Dropdowns</span></div>
+          <div class="shadow-card" style="box-shadow:0 20px 48px rgba(14,13,11,.14),0 6px 14px rgba(14,13,11,.08);">--sh-4<br><span style="font-size:10px;color:var(--ink-300);">Modals</span></div>
         </div>
-        <p class="card-note">The hard offset shadow is a deliberate brand motif — feels like a job-site sign. Used for primary CTAs and hero badges. <strong>Once per screen, max.</strong></p>
+        <p class="card-note" style="margin-top:24px;">Inky and subtle. We don't tint shadows blue or purple. Shadows use <code>rgba(14, 13, 11, …)</code> — warm ink tone.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Stamp shadow — deliberate brand moment</div>
+        <div style="display:flex;gap:32px;align-items:center;flex-wrap:wrap;padding:8px 0;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+            <div style="width:80px;height:64px;background:var(--brand-500);border:3px solid var(--ink-900);border-radius:var(--r-md);box-shadow:4px 4px 0 var(--ink-900);"></div>
+            <span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);">--sh-stamp</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+            <div style="width:80px;height:64px;background:var(--ink-900);border:3px solid var(--ink-900);border-radius:var(--r-md);box-shadow:4px 4px 0 var(--brand-500);"></div>
+            <span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);">--sh-stamp-brand</span>
+          </div>
+          <div style="flex:1;max-width:400px;">
+            <p style="font-family:var(--font-body);font-size:14px;color:var(--ink-500);line-height:1.55;">Hard offset drop — feels like a job site sign / parking permit. Used on the primary CTA button, hero badges, compliance callouts. <strong>Once per screen, max.</strong></p>
+          </div>
+        </div>
+        <p class="card-note">Border widths: <code>--bw-hair: 1px</code> dividers · <code>--bw-rule: 1.5px</code> inputs · <code>--bw-heavy: 2px</code> selected · <code>--bw-stamp: 3px</code> stamp motif only.</p>
       </div>
     </section>
 
-    <!-- ══ BUTTONS ══ -->
+    <!-- ══ BUTTONS ═══════════════════════════════════════════════════════ -->
     <section class="ds-section" id="buttons">
       <div class="ds-eyebrow">Components</div>
       <h2 class="ds-title">Buttons</h2>
-      <p class="ds-desc">Primary uses the stamp motif: hi-vis fill + 3px ink border + 4px offset shadow. Press translates +2,+2px (shadow disappears, feels like pressing a stamp).</p>
+      <p class="ds-desc">Primary CTA uses the stamp motif — brand violet fill, 3px ink border, 4px hard offset shadow. Press translates 2px to "push the button down".</p>
       <div class="ds-divider"></div>
 
       <div class="card">
         <div class="card-label">All variants</div>
-        <div class="btn-row" style="margin-bottom:20px;">
-          <button class="btn btn-stamp">Post a shift</button>
-          <button class="btn btn-ink">Cancel</button>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:16px;">
+          <button class="btn btn-primary">Post a shift</button>
+          <button class="btn btn-secondary">Sign in</button>
           <button class="btn btn-ghost">Save draft</button>
           <button class="btn btn-danger">Remove worker</button>
         </div>
-        <div class="btn-row">
-          <button class="btn btn-stamp btn-sm">Accept shift</button>
-          <button class="btn btn-ink btn-sm">View profile</button>
-          <button class="btn btn-ghost btn-sm">Filter</button>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-primary btn-sm">Post a shift</button>
+          <button class="btn btn-secondary btn-sm">Sign in</button>
+          <button class="btn btn-ghost btn-sm">Save draft</button>
+          <button class="btn btn-primary" disabled>Disabled</button>
         </div>
+        <p class="card-note">Hover: lift −1px, shadow grows. Active/Press: translate +2px, shadow shrinks to 1px. Focus: 2px brand-500 outline, 2px offset. Disabled: opacity 0.45, no grey fill.</p>
       </div>
 
       <div class="card">
-        <div class="card-label">States</div>
-        <div class="state-row">
-          <div class="state-item"><button class="btn btn-stamp">Default</button><span class="state-label">Default</span></div>
-          <div class="state-item"><button class="btn btn-stamp" style="transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink-900);">Hover</button><span class="state-label">Hover (+lift)</span></div>
-          <div class="state-item"><button class="btn btn-stamp" style="transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink-900);">Press</button><span class="state-label">Pressed</span></div>
-          <div class="state-item"><button class="btn btn-stamp" style="outline:2px solid var(--hivis-500);outline-offset:3px;">Focus</button><span class="state-label">Focused</span></div>
-          <div class="state-item"><button class="btn btn-stamp" style="opacity:0.45;" disabled>Disabled</button><span class="state-label">Disabled (0.45)</span></div>
+        <div class="card-label">Focus state</div>
+        <div style="display:flex;gap:24px;align-items:center;padding:16px 0;">
+          <button class="btn btn-primary" style="outline:2px solid var(--brand-500);outline-offset:3px;">Post a shift</button>
+          <span style="font-family:var(--font-body);font-size:14px;color:var(--ink-400);">2px brand-500 outline at 3px offset. Never default blue.</span>
         </div>
       </div>
     </section>
 
-    <!-- ══ INPUTS ══ -->
+    <!-- ══ INPUTS ════════════════════════════════════════════════════════ -->
     <section class="ds-section" id="inputs">
       <div class="ds-eyebrow">Components</div>
       <h2 class="ds-title">Inputs</h2>
-      <p class="ds-desc">Focus ring is hi-vis at 4px offset — never blue. Disabled uses <code>opacity: 0.45</code> only.</p>
+      <p class="ds-desc">1.5px border at rest, 2px brand-violet border + 3px brand-tint glow on focus. Never use default blue focus rings.</p>
       <div class="ds-divider"></div>
 
       <div class="card">
-        <div class="card-label">Form inputs</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:680px;">
-          <div class="input-field"><label class="input-label">Position</label><input class="input" value="Barista" readonly></div>
-          <div class="input-field"><label class="input-label">Start time <span style="color:var(--hivis-900);font-size:10px;margin-left:4px;">FOCUSED</span></label><input class="input input--focused" value="6:30am" readonly></div>
-          <div class="input-field" style="grid-column:1/-1;"><label class="input-label" style="opacity:0.45;">Notes <span style="font-size:10px;">DISABLED</span></label><textarea class="input" style="resize:none;height:56px;opacity:0.45;" disabled>Black t-shirt, ask for Sam.</textarea></div>
-          <div class="input-field"><label class="input-label" style="color:var(--danger-500);">Pay rate ERROR</label><input class="input input--error" value="28.00" readonly><span style="font-family:var(--font-body);font-size:12px;color:var(--danger-500);margin-top:4px;">Below minimum $31.19/hr.</span></div>
-          <div class="input-field"><label class="input-label">Location</label><input class="input" placeholder="Suburb or postcode" readonly></div>
+        <div class="card-label">Input states</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <div class="input-group">
+            <label class="input-label">Position</label>
+            <input class="input-field" type="text" placeholder="e.g. Barista, Forklift operator">
+          </div>
+          <div class="input-group">
+            <label class="input-label">Start time <span style="color:var(--brand-700);font-size:11px;font-weight:700;margin-left:4px;letter-spacing:0.08em;text-transform:uppercase;">FOCUSED</span></label>
+            <input class="input-field input-focused" type="text" value="6:30am">
+          </div>
+          <div class="input-group">
+            <label class="input-label">Pay rate <span style="color:var(--danger-500);font-size:11px;font-weight:700;margin-left:4px;letter-spacing:0.08em;text-transform:uppercase;">ERROR</span></label>
+            <input class="input-field input-error" type="text" value="0.00">
+            <div class="input-error-msg">Pay rate must be at or above the award minimum ($31.19/hr)</div>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Location</label>
+            <input class="input-field input-disabled" type="text" value="Auto-detected from previous shift" disabled>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ══ STATUS PILLS ══ -->
+    <!-- ══ STATUS PILLS ══════════════════════════════════════════════════ -->
     <section class="ds-section" id="pills">
       <div class="ds-eyebrow">Components</div>
-      <h2 class="ds-title">Status pills</h2>
-      <p class="ds-desc">Pills are a brand signature — <code>border-radius: var(--r-pill)</code>. Used for shift state, cert status, worker tier.</p>
+      <h2 class="ds-title">Status Pills</h2>
+      <p class="ds-desc">Pills are a brand signature — <code style="font-family:var(--font-mono);">border-radius: var(--r-pill)</code>. Used for shift state, cert status, worker tier.</p>
       <div class="ds-divider"></div>
 
       <div class="card">
-        <div class="card-label">All states</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;">
-          <span class="pill" style="background:var(--success-50);color:var(--success-700);"><span class="pill-dot" style="background:var(--success-500);"></span>Confirmed</span>
-          <span class="pill" style="background:var(--hivis-100);color:var(--ink-900);font-weight:700;"><span class="pill-dot" style="background:var(--hivis-700);"></span>Open shift</span>
-          <span class="pill" style="background:var(--warn-50);color:var(--warn-700);"><span class="pill-dot" style="background:var(--warn-500);"></span>Cert expiring</span>
-          <span class="pill" style="background:var(--danger-50);color:var(--danger-700);"><span class="pill-dot" style="background:var(--danger-500);"></span>No-show</span>
-          <span class="pill" style="background:var(--info-50);color:var(--info-700);"><span class="pill-dot" style="background:var(--info-500);"></span>Pending review</span>
-          <span class="pill" style="background:var(--ink-900);color:white;">★ Top worker</span>
+        <div class="card-label">All variants</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+          <span class="pill pill-success"><span class="pill-dot" style="background:var(--success-500);"></span>Confirmed</span>
+          <span class="pill pill-brand"><span class="pill-dot" style="background:var(--brand-700);"></span>Open shift</span>
+          <span class="pill pill-warn"><span class="pill-dot" style="background:var(--warn-500);"></span>Cert expiring</span>
+          <span class="pill pill-danger"><span class="pill-dot" style="background:var(--danger-500);"></span>No-show</span>
+          <span class="pill pill-dark">★ Top worker</span>
         </div>
+        <p class="card-note">"Open shift" uses brand-100 background with brand-700 dot — the violet signals availability without alarm. "Top worker" uses ink-900 on dark for prestige.</p>
       </div>
     </section>
 
-    <!-- ══ WORKER CHIP ══ -->
+    <!-- ══ WORKER CHIP ════════════════════════════════════════════════════ -->
     <section class="ds-section" id="worker-chip">
       <div class="ds-eyebrow">Components</div>
-      <h2 class="ds-title">Worker chip &amp; Avatars</h2>
-      <p class="ds-desc">Photo when available; initials on a randomly assigned industry tint as fallback. Both share the circular crop and 1.5px ink border.</p>
+      <h2 class="ds-title">Worker Chip</h2>
+      <p class="ds-desc">Avatar (photo or initials) + name + secondary info. Used in shift confirmations, the business pool view, and Amy's suggestions.</p>
       <div class="ds-divider"></div>
 
       <div class="card">
-        <div class="card-label">Avatars</div>
-        <div style="display:flex;gap:10px;align-items:center;margin-bottom:24px;">
-          <div class="av" style="width:48px;height:48px;background:var(--tag-hospo);font-size:14px;">SM</div>
-          <div class="av" style="width:48px;height:48px;background:var(--tag-warehouse);font-size:14px;">JK</div>
-          <div class="av" style="width:48px;height:48px;background:var(--tag-agriculture);font-size:14px;">RP</div>
-          <div class="av" style="width:48px;height:48px;background:var(--tag-events);font-size:14px;">AC</div>
-          <div class="av" style="width:48px;height:48px;background:var(--tag-construction);font-size:14px;">TM</div>
-          <span style="font-family:var(--font-body);font-size:13px;color:var(--ink-400);margin-left:8px;">Industry tints as initials fallback</span>
-        </div>
-
-        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:white;border:1px solid var(--ink-100);border-radius:var(--r-md);max-width:400px;box-shadow:var(--sh-1);margin-bottom:10px;">
-          <div class="av" style="width:44px;height:44px;background:var(--tag-hospo);font-size:13px;">SM</div>
-          <div style="flex:1;min-width:0;">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span class="mg-h4" style="color:var(--ink-900);">Sarah M.</span>
-              <span style="display:inline-flex;align-items:center;padding:2px 7px;background:var(--ink-900);color:white;border-radius:var(--r-pill);font-size:10px;font-weight:700;">★ TOP</span>
+        <div class="card-label">Variants</div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;">
+          <div class="worker-chip">
+            <div class="worker-avatar"><img src="project/assets/worker-sarah-m.jpg" alt="Sarah M."></div>
+            <div>
+              <div class="worker-name">Sarah M.</div>
+              <div class="worker-sub">★ 4.9 · 127 shifts · Hospitality</div>
             </div>
-            <div class="mg-caption" style="color:var(--ink-400);">4.9 · 127 shifts · 98% on-time</div>
           </div>
-          <span class="mg-mono" style="font-size:13px;color:var(--ink-700);font-weight:600;">$31.19/hr</span>
-        </div>
-
-        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:white;border:1px solid var(--ink-100);border-radius:var(--r-md);max-width:400px;box-shadow:var(--sh-1);">
-          <div class="av" style="width:44px;height:44px;background:var(--tag-construction);font-size:13px;">JK</div>
-          <div style="flex:1;min-width:0;">
-            <span class="mg-h4" style="color:var(--ink-900);">James K.</span>
-            <div class="mg-caption" style="color:var(--ink-400);">4.8 · 89 shifts · 96% on-time</div>
+          <div class="worker-chip">
+            <div class="worker-avatar" style="background:#B8E2FF;">JK</div>
+            <div>
+              <div class="worker-name">James K.</div>
+              <div class="worker-sub">★ 4.8 · 89 shifts · Warehousing</div>
+            </div>
           </div>
-          <span class="mg-mono" style="font-size:13px;color:var(--ink-700);font-weight:600;">$34.50/hr</span>
+          <div class="worker-chip">
+            <div class="worker-avatar" style="background:#C3D3A6;">RP</div>
+            <div>
+              <div class="worker-name">Ravi P.</div>
+              <div class="worker-sub">★ 5.0 · 64 shifts · Construction</div>
+            </div>
+          </div>
         </div>
+        <p class="card-note">Use profile photo when available. Fallback is initials on an industry tag tint — randomly assigned but consistent per worker. 1.5px ink border on avatar circle.</p>
       </div>
     </section>
 
-    <!-- ══ SHIFT CARD ══ -->
+    <!-- ══ SHIFT CARD ═════════════════════════════════════════════════════ -->
     <section class="ds-section" id="shift-card">
       <div class="ds-eyebrow">Components</div>
-      <h2 class="ds-title">Shift card</h2>
-      <p class="ds-desc">Primary unit of the worker feed. Industry tag top-left, estimated earnings top-right, stamp CTA bottom-right.</p>
+      <h2 class="ds-title">Shift Card</h2>
+      <p class="ds-desc">The atomic unit of the product. Every worker-facing screen revolves around this. Industry tag, position, location, time, estimated earnings, and one brand-violet CTA.</p>
       <div class="ds-divider"></div>
 
       <div class="card">
-        <div class="card-label">Shift card — worker app feed</div>
-        <div style="background:white;border:1px solid var(--ink-100);border-radius:var(--r-lg);padding:18px;box-shadow:var(--sh-2);max-width:480px;">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
-            <div>
-              <span class="pill" style="background:var(--tag-hospo);"><span class="pill-dot" style="width:6px;height:6px;background:var(--ink-900);"></span>Hospitality · Barista</span>
-              <div class="mg-h3" style="color:var(--ink-900);margin-top:8px;">Single O Surry Hills</div>
-              <div class="mg-body-sm" style="color:var(--ink-400);">📍 Reservoir St, Surry Hills</div>
-            </div>
-            <div style="text-align:right;flex-shrink:0;">
-              <div class="mg-display" style="font-size:32px;color:var(--ink-900);line-height:1;">$234</div>
-              <div class="mg-caption" style="color:var(--ink-400);">est. earnings</div>
-            </div>
+        <div class="card-label">Standard shift card</div>
+        <div class="shift-card">
+          <div class="shift-industry" style="background:#FFD6A8;"><span style="width:6px;height:6px;background:#0E0D0B;border-radius:50%;"></span>Hospitality · Barista</div>
+          <div class="shift-title">Single O Surry Hills</div>
+          <div class="shift-location">📍 Reservoir St, Surry Hills NSW</div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:16px;">
+            <span style="font-family:'Sora',system-ui,sans-serif;font-weight:800;font-size:32px;color:var(--ink-900);line-height:1;">$234</span>
+            <span style="font-size:13px;color:var(--ink-400);">est. · $31.19/hr</span>
           </div>
-          <div style="height:1px;background:var(--ink-50);margin:14px 0;"></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
-            <div class="mg-mono" style="color:var(--ink-700);font-size:13px;font-weight:600;">Tue 27 May · 6:30am–2:00pm</div>
-            <button class="btn btn-stamp btn-sm">Secure shift</button>
+          <div class="shift-footer">
+            <div class="shift-time">Tue 26 May · 6:30am–2:00pm</div>
+            <button class="shift-cta">Secure shift</button>
           </div>
         </div>
+        <p class="card-note">Money in AUD, always with cents. Time in 12-hour local, lowercase am/pm. Industry tint chip — never used elsewhere on the same screen. One stamp CTA.</p>
       </div>
     </section>
 
-    <!-- ══ STAMP MOTIF ══ -->
+    <!-- ══ STAMP MOTIF ════════════════════════════════════════════════════ -->
     <section class="ds-section" id="stamp">
       <div class="ds-eyebrow">Components</div>
-      <h2 class="ds-title">Stamp motif</h2>
-      <p class="ds-desc">Hi-vis fill + 3px ink border + hard 4px offset shadow. Feels like a job-site sign. <strong>Once per screen, max.</strong></p>
+      <h2 class="ds-title">Stamp Motif</h2>
+      <p class="ds-desc">A deliberate brand moment. Feels like a job-site sign / parking permit. Used on primary CTAs, hero badges, compliance callouts. Once per screen, max.</p>
       <div class="ds-divider"></div>
 
       <div class="card">
         <div class="card-label">Stamp variants</div>
-        <div style="display:flex;gap:32px;align-items:center;flex-wrap:wrap;padding:8px 0 16px;">
-          <div style="display:inline-flex;align-items:center;gap:10px;padding:12px 20px;background:var(--hivis-500);border:3px solid var(--ink-900);border-radius:var(--r-md);box-shadow:var(--sh-stamp);transform:rotate(-2deg);">
-            <span class="mg-display" style="font-size:20px;color:var(--ink-900);line-height:1;">90%+ fill rate</span>
+        <div style="display:flex;gap:32px;align-items:center;flex-wrap:wrap;padding:16px 0;">
+          <div class="stamp stamp-tilt">90%+ FILL RATE</div>
+          <div class="stamp stamp-dark stamp-tilt2" style="display:inline-flex;flex-direction:column;align-items:center;gap:2px;padding:14px 24px;">
+            <span style="font-family:'Sora',system-ui,sans-serif;font-size:20px;font-weight:800;color:var(--brand-300);line-height:1;">EOR</span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0.12em;text-transform:uppercase;">NSW · WA · TAS · NT</span>
           </div>
-          <div style="display:inline-flex;flex-direction:column;align-items:center;gap:2px;padding:14px 22px;background:var(--ink-900);border:3px solid var(--ink-900);border-radius:var(--r-md);box-shadow:4px 4px 0 var(--hivis-500);transform:rotate(2deg);">
-            <span class="mg-display" style="font-size:24px;color:var(--hivis-500);line-height:1;">EOR</span>
-            <span class="mg-eyebrow" style="color:white;font-size:9px;">NSW · WA · TAS · NT</span>
-          </div>
-          <button class="btn btn-stamp" style="font-size:16px;padding:16px 28px;">Post a shift</button>
+          <div class="stamp" style="transform:rotate(1deg);padding:12px 20px;font-size:15px;">VERIFIED WORKER</div>
         </div>
-        <p class="card-note">Token: <code>--sh-stamp: 4px 4px 0 var(--ink-900)</code> · <code>--bw-stamp: 3px</code></p>
+        <p class="card-note">CSS: <code>background: var(--brand-500); border: 3px solid var(--ink-900); box-shadow: 4px 4px 0 var(--ink-900);</code> — never use on more than one element per screen.</p>
       </div>
     </section>
 
-    <!-- ══ TOGGLES ══ -->
+    <!-- ══ TOGGLES & FORMS ═══════════════════════════════════════════════ -->
     <section class="ds-section" id="toggles">
       <div class="ds-eyebrow">Components</div>
-      <h2 class="ds-title">Toggles, segmented &amp; checkboxes</h2>
+      <h2 class="ds-title">Toggles &amp; Forms</h2>
+      <p class="ds-desc">Toggle on = brand violet. Checkbox checked = brand violet fill with ink border. Segmented control active = ink-900.</p>
       <div class="ds-divider"></div>
 
       <div class="card">
-        <div class="card-label">Toggle switch</div>
-        <div style="display:flex;align-items:center;gap:32px;margin-bottom:24px;flex-wrap:wrap;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:44px;height:26px;background:var(--ink-900);border-radius:var(--r-pill);position:relative;flex-shrink:0;">
-              <div style="position:absolute;right:3px;top:3px;width:20px;height:20px;background:var(--hivis-500);border-radius:50%;"></div>
-            </div>
-            <span class="mg-body-sm" style="color:var(--ink-700);">Auto-accept top workers</span>
+        <div class="card-label">Toggles</div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div class="toggle-track toggle-on"><div class="toggle-thumb"></div></div>
+            <span style="font-family:var(--font-body);font-size:14px;font-weight:600;color:var(--ink-700);">Notifications on</span>
           </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:44px;height:26px;background:var(--ink-100);border-radius:var(--r-pill);position:relative;flex-shrink:0;">
-              <div style="position:absolute;left:3px;top:3px;width:20px;height:20px;background:white;border-radius:50%;box-shadow:var(--sh-1);"></div>
-            </div>
-            <span class="mg-body-sm" style="color:var(--ink-400);">Notify via SMS</span>
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div class="toggle-track toggle-off"><div class="toggle-thumb"></div></div>
+            <span style="font-family:var(--font-body);font-size:14px;color:var(--ink-400);">Location tracking off</span>
           </div>
         </div>
+      </div>
 
-        <div class="card-label" style="margin-bottom:12px;">Segmented control</div>
-        <div style="display:inline-flex;padding:4px;background:var(--ink-50);border-radius:var(--r-pill);margin-bottom:24px;">
-          <button style="padding:8px 18px;border-radius:var(--r-pill);background:var(--ink-900);color:white;border:none;font-family:var(--font-body);font-weight:700;font-size:13px;cursor:pointer;">Open shifts</button>
-          <button style="padding:8px 18px;border-radius:var(--r-pill);background:transparent;color:var(--ink-500);border:none;font-family:var(--font-body);font-weight:600;font-size:13px;cursor:pointer;">My pool</button>
-          <button style="padding:8px 18px;border-radius:var(--r-pill);background:transparent;color:var(--ink-500);border:none;font-family:var(--font-body);font-weight:600;font-size:13px;cursor:pointer;">Completed</button>
-        </div>
-
-        <div class="card-label" style="margin-bottom:12px;">Checkboxes</div>
-        <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-            <span style="width:20px;height:20px;background:var(--hivis-500);border:2px solid var(--ink-900);border-radius:var(--r-xs);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-900);font-weight:900;flex-shrink:0;">✓</span>
-            <span class="mg-body-sm" style="color:var(--ink-700);">Workers compensation included</span>
-          </label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-            <span style="width:20px;height:20px;background:white;border:1.5px solid var(--ink-200);border-radius:var(--r-xs);flex-shrink:0;"></span>
-            <span class="mg-body-sm" style="color:var(--ink-700);">Repeat weekly</span>
-          </label>
+      <div class="card">
+        <div class="card-label">Checkboxes</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="check-box check-on">✓</div>
+            <span style="font-family:var(--font-body);font-size:14px;color:var(--ink-700);">RSA certified — verified</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="check-box check-on">✓</div>
+            <span style="font-family:var(--font-body);font-size:14px;color:var(--ink-700);">Food handling certificate</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="check-box check-off"></div>
+            <span style="font-family:var(--font-body);font-size:14px;color:var(--ink-400);">Forklift licence (not yet added)</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ══ ICONOGRAPHY ══ -->
+    <!-- ══ AMY AI ═════════════════════════════════════════════════════════ -->
+    <section class="ds-section" id="amy">
+      <div class="ds-eyebrow">Components</div>
+      <h2 class="ds-title">Amy — the AI assistant</h2>
+      <p class="ds-desc">Amy is MyGig's AI assistant. She lives in the Business platform and handles workforce work end-to-end. She proposes; the user disposes. Never auto-acts without explicit confirm.</p>
+      <div class="ds-divider"></div>
+
+      <div class="card">
+        <div class="card-label">Amy mark — 3 sizes</div>
+        <div style="display:flex;gap:24px;align-items:center;">
+          <div style="text-align:center;">
+            <div style="width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 38% 38%,#8B80FF,#4B3FD9);display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:700;font-size:7px;color:white;">Aa</div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);margin-top:6px;">sm 18</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 38% 38%,#8B80FF,#4B3FD9);display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:700;font-size:9px;color:white;">Aa</div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);margin-top:6px;">md 24</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 38% 38%,#8B80FF,#4B3FD9);display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:700;font-size:12px;color:white;">Aa</div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);margin-top:6px;">lg 32</div>
+          </div>
+        </div>
+        <p class="card-note">Radial-gradient orb — never a stock robot icon, never a human-style avatar. The spark glyph <strong>✦</strong> is Amy's signature — use as a bullet in front of AI-generated suggestions.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Amy message bubble</div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div class="amy-mark">Aa</div>
+          <div>
+            <div class="amy-bubble">
+              <div class="amy-label">AMY · NOTICED SOMETHING</div>
+              <p style="font-family:var(--font-body);font-size:14px;color:var(--ink-700);line-height:1.55;margin-bottom:12px;">✦ Your Thursday lunch shift (Single O, 10am–3pm) has 0 workers confirmed with 30 hrs to go. I found 3 workers in your pool — want me to invite them?</p>
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-primary btn-sm">Invite all 3</button>
+                <button class="btn btn-ghost btn-sm">Edit first</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="card-note">Open with action. Show, don't tell — Amy generates an artifact, not a wall of text. One-click out — every response has a primary CTA and ghost "Edit". Always cite the basis.</p>
+      </div>
+    </section>
+
+    <!-- ══ ICONOGRAPHY ════════════════════════════════════════════════════ -->
     <section class="ds-section" id="iconography">
       <div class="ds-eyebrow">Guidelines</div>
       <h2 class="ds-title">Iconography</h2>
-      <p class="ds-desc">We use <strong>Lucide</strong> — open source, stroke-based, MIT licensed. Never solid/filled icons in product chrome.</p>
+      <p class="ds-desc"><strong>Lucide</strong> — open source, stroke-based, comprehensive workforce/calendar/payment coverage. 1.75–2px stroke weight. Sizes 16, 20, 24px.</p>
       <div class="ds-divider"></div>
 
       <div class="card">
-        <div class="card-label">Core icons (Lucide · stroke 1.75px)</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px;">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 12px;background:var(--surface-0);border:1px solid var(--ink-100);border-radius:var(--r-md);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--ink-700)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);">Calendar</span>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 12px;background:var(--surface-0);border:1px solid var(--ink-100);border-radius:var(--r-md);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--ink-700)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);">Clock</span>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 12px;background:var(--surface-0);border:1px solid var(--ink-100);border-radius:var(--r-md);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--ink-700)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);">MapPin</span>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 12px;background:var(--surface-0);border:1px solid var(--ink-100);border-radius:var(--r-md);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--ink-700)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);">ShieldCheck</span>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 12px;background:var(--surface-0);border:1px solid var(--ink-100);border-radius:var(--r-md);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--ink-700)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-400);">User</span>
-          </div>
+        <div class="card-label">Common icons</div>
+        <div class="icon-grid">
+          <div class="icon-card"><div class="icon-bg">📅</div><div class="icon-label">Calendar</div></div>
+          <div class="icon-card"><div class="icon-bg">🕐</div><div class="icon-label">Clock</div></div>
+          <div class="icon-card"><div class="icon-bg">📍</div><div class="icon-label">MapPin</div></div>
+          <div class="icon-card"><div class="icon-bg">💳</div><div class="icon-label">Wallet</div></div>
+          <div class="icon-card"><div class="icon-bg">🛡</div><div class="icon-label">ShieldCheck</div></div>
+          <div class="icon-card"><div class="icon-bg">💼</div><div class="icon-label">Briefcase</div></div>
+          <div class="icon-card"><div class="icon-bg">⭐</div><div class="icon-label">Star</div></div>
+          <div class="icon-card"><div class="icon-bg">👥</div><div class="icon-label">Users</div></div>
+          <div class="icon-card"><div class="icon-bg">🔔</div><div class="icon-label">Bell</div></div>
+          <div class="icon-card"><div class="icon-bg">✓</div><div class="icon-label">Check</div></div>
+          <div class="icon-card"><div class="icon-bg">➜</div><div class="icon-label">ChevronRight</div></div>
+          <div class="icon-card"><div class="icon-bg">⊞</div><div class="icon-label">Grid</div></div>
         </div>
-        <p class="card-note">Stroke weight: 1.75–2px. Sizes: 16, 20, 24px. Colour: <code>--ink-700</code> primary · <code>--ink-400</code> secondary · <code>--hivis-700</code> active. Load via <code>lucide-react</code> or <code>unpkg.com/lucide-static</code>.</p>
+        <p class="card-note">Colour: <code>--ink-700</code> primary · <code>--ink-400</code> secondary · <code>--brand-700</code> active nav. Load via <code>lucide-react</code> or <code>unpkg.com/lucide-static</code>. Never rotate or skew icons for effect.</p>
       </div>
     </section>
 
-    <!-- ══ STATES & MOTION ══ -->
-    <section class="ds-section" id="states">
+    <!-- ══ STATES & MOTION ═══════════════════════════════════════════════ -->
+    <section class="ds-section" id="motion">
       <div class="ds-eyebrow">Guidelines</div>
       <h2 class="ds-title">States &amp; Motion</h2>
+      <p class="ds-desc">Default: 200ms ease-out-quint. Fast: 120ms for hover/press. Slow: 400ms for full-screen sheets. No bounce animations in business UI.</p>
       <div class="ds-divider"></div>
 
-      <div class="card" style="padding:0;overflow:hidden;">
-        <table class="ds-table">
+      <div class="card">
+        <div class="card-label">Interaction states</div>
+        <table class="states-table">
           <thead><tr><th>State</th><th>Treatment</th></tr></thead>
           <tbody>
-            <tr><td>Hover</td><td>Background shifts one step on scale. Stamp CTAs lift translate(-1px, -1px).</td></tr>
-            <tr><td>Press / active</td><td>translate(2px, 2px) on stamp — shadow disappears. Feels like pressing a physical stamp.</td></tr>
-            <tr><td>Focus (keyboard)</td><td><code>outline: 2px solid var(--hivis-500); outline-offset: 2px</code> — never blue.</td></tr>
-            <tr><td>Disabled</td><td><code>opacity: 0.45</code> only. No grey fill. Don't pretend it's clickable.</td></tr>
-            <tr><td>Loading</td><td>Pulsing shimmer on 1.2s loop, ink-50 → ink-100. No spinners except pull-to-refresh.</td></tr>
+            <tr><td><strong>Hover</strong></td><td>Background steps one shade darker (e.g. <code>ink-50</code>→<code>ink-100</code>). Stamp CTAs lift <code>translate(-1px,-1px)</code>, shadow grows to 5px.</td></tr>
+            <tr><td><strong>Press / active</strong></td><td>Stamp CTAs: <code>translate(2px,2px)</code>, shadow shrinks to 1px — feels like pressing a real button. Other buttons: <code>--brand-700</code> fill.</td></tr>
+            <tr><td><strong>Focus (keyboard)</strong></td><td><code>outline: 2px solid var(--brand-500); outline-offset: 2px;</code> — never default browser blue. Applies to all interactive elements.</td></tr>
+            <tr><td><strong>Disabled</strong></td><td><code>opacity: 0.45</code>. No grey fill swap — we don't pretend it's clickable.</td></tr>
+            <tr><td><strong>Loading</strong></td><td>Pulsing shimmer on 1.2s loop, <code>ink-50</code>→<code>ink-100</code>. No spinners except worker mobile pull-to-refresh.</td></tr>
           </tbody>
         </table>
       </div>
 
-      <div class="card" style="margin-top:16px;">
+      <div class="card">
         <div class="card-label">Motion tokens</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-          <div style="padding:16px;background:var(--ink-50);border-radius:var(--r-md);border:1px solid var(--ink-100);">
-            <div style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--ink-900);margin-bottom:6px;">Fast</div>
-            <div style="font-family:var(--font-mono);font-size:12px;color:var(--hivis-900);margin-bottom:4px;">--dur-fast: 120ms</div>
-            <div style="font-family:var(--font-body);font-size:12px;color:var(--ink-400);">Hover &amp; press feedback</div>
+        <div class="motion-grid">
+          <div class="motion-card">
+            <div class="motion-ms">120ms</div>
+            <div class="motion-name">--dur-fast</div>
+            <div class="motion-desc">Hover / press feedback. Immediate response.</div>
           </div>
-          <div style="padding:16px;background:var(--ink-50);border-radius:var(--r-md);border:1px solid var(--ink-100);">
-            <div style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--ink-900);margin-bottom:6px;">Base</div>
-            <div style="font-family:var(--font-mono);font-size:12px;color:var(--hivis-900);margin-bottom:4px;">--dur-base: 200ms</div>
-            <div style="font-family:var(--font-body);font-size:12px;color:var(--ink-400);">Default transitions</div>
+          <div class="motion-card">
+            <div class="motion-ms">200ms</div>
+            <div class="motion-name">--dur-base</div>
+            <div class="motion-desc">Default for most transitions, panels, tooltips.</div>
           </div>
-          <div style="padding:16px;background:var(--ink-50);border-radius:var(--r-md);border:1px solid var(--ink-100);">
-            <div style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--ink-900);margin-bottom:6px;">Slow</div>
-            <div style="font-family:var(--font-mono);font-size:12px;color:var(--hivis-900);margin-bottom:4px;">--dur-slow: 400ms</div>
-            <div style="font-family:var(--font-body);font-size:12px;color:var(--ink-400);">Sheet transitions</div>
+          <div class="motion-card">
+            <div class="motion-ms">400ms</div>
+            <div class="motion-name">--dur-slow</div>
+            <div class="motion-desc">Full-screen sheet transitions, modals.</div>
           </div>
         </div>
-        <p class="card-note" style="margin-top:12px;">Easing: <code>cubic-bezier(0.22, 1, 0.36, 1)</code> (ease-out-quint). No bouncy/spring in business UI.</p>
+        <p class="card-note" style="margin-top:16px;">Easing: <code>cubic-bezier(0.22, 1, 0.36, 1)</code> (ease-out-quint). Page transitions: slide up + fade for mobile bottom sheets; fade only for desktop modals.</p>
       </div>
     </section>
 
-    <!-- ══ IMAGERY ══ -->
+    <!-- ══ IMAGERY ═══════════════════════════════════════════════════════ -->
     <section class="ds-section" id="imagery">
       <div class="ds-eyebrow">Guidelines</div>
       <h2 class="ds-title">Imagery</h2>
-      <p class="ds-desc">Real workers. Real worksites. Documentary-feeling. Never generate fake AI worker photography.</p>
+      <p class="ds-desc">Real workers. Real worksites. Documentary-feeling. Natural light, warm tones. Eyes on the work, not the camera. Never cold blue tech lighting, never staged stock.</p>
       <div class="ds-divider"></div>
 
       <div class="card">
-        <div class="card-label">Photography guidelines</div>
-        <div class="do-dont">
-          <div class="do-col">
-            <div class="do-dont-header">✓ Do</div>
-            <div class="do-dont-item">Warm-toned, natural light.</div>
-            <div class="do-dont-item">Hi-vis vests, aprons, hard hats, forklifts, hospo benches.</div>
-            <div class="do-dont-item">People mid-action — clocking in, stacking pallets, prepping food.</div>
-            <div class="do-dont-item">Faces visible. Trust is the product.</div>
-            <div class="do-dont-item">Light grain is acceptable.</div>
-          </div>
-          <div class="dont-col">
-            <div class="do-dont-header">✗ Don't</div>
-            <div class="do-dont-item">Posed studio shots or generic stock imagery.</div>
-            <div class="do-dont-item">Cold blue tech imagery or gradient overlays.</div>
-            <div class="do-dont-item">Generate fake AI worker photography.</div>
-            <div class="do-dont-item">Full-bleed photos behind text without a solid block.</div>
-            <div class="do-dont-item">Heavy filters or artificial lighting.</div>
-          </div>
+        <div class="card-label">The hero stack</div>
+        <div class="img-hero-row">
+          <div class="img-hero-cell"><img src="project/assets/imagery/worker-hero-1-construction.webp" alt="Construction"><span class="img-tag"><span class="img-tag-dot"></span>Construction</span></div>
+          <div class="img-hero-cell"><img src="project/assets/imagery/worker-hero-2-retail.webp" alt="Retail"><span class="img-tag"><span class="img-tag-dot"></span>Retail</span></div>
+          <div class="img-hero-cell"><img src="project/assets/imagery/worker-hero-3-hospo.webp" alt="Hospitality"><span class="img-tag"><span class="img-tag-dot"></span>Hospitality</span></div>
+          <div class="img-hero-cell"><img src="project/assets/imagery/worker-hero-4-mining.webp" alt="Mining"><span class="img-tag"><span class="img-tag-dot"></span>Mining</span></div>
+          <div class="img-hero-cell"><img src="project/assets/imagery/worker-hero-5-portrait.webp" alt="Portrait"><span class="img-tag"><span class="img-tag-dot"></span>Portrait</span></div>
+          <div class="img-hero-cell"><img src="project/assets/imagery/worker-hero-6-agriculture.webp" alt="Agriculture"><span class="img-tag"><span class="img-tag-dot"></span>Agriculture</span></div>
         </div>
-        <div style="display:flex;gap:16px;margin-top:16px;flex-wrap:wrap;">
-          <div style="width:200px;height:140px;background:var(--ink-900);border-radius:var(--r-md);position:relative;display:flex;align-items:center;justify-content:center;">
-            <div style="position:absolute;top:10px;right:10px;background:var(--hivis-500);color:var(--ink-900);font-family:var(--font-body);font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:4px 8px;border-radius:var(--r-xs);">Photo: worker on shift</div>
-            <div style="color:rgba(255,255,255,0.2);font-family:var(--font-body);font-size:12px;">600 × 400</div>
-          </div>
-          <div style="flex:1;font-family:var(--font-body);font-size:13px;color:var(--ink-400);line-height:1.6;padding-top:8px;min-width:200px;">
-            If real photography isn't available, use a black placeholder with a hi-vis corner label: "Photo: worker on shift". This signals intent without leaving empty space.
-          </div>
-        </div>
+        <p class="card-note">Signature pattern: vertical portrait cards (4:5 ratio), one per industry, lined up under the headline. Corners <code>--r-md (12px)</code>. Three cards rotated at +3°, −2°, straight for the hero stack. Always include one ink-900 card in the mix.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Imagery rules</div>
+        <table class="states-table">
+          <thead><tr><th>Rule</th><th>Guideline</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Subject</strong></td><td>Workers mid-task. Eyes on the work. Aprons, hard hats, hi-vis gear, forklifts, espresso bars, retail floors.</td></tr>
+            <tr><td><strong>Light</strong></td><td>Natural, warm. Golden hour, daylight through windows, kitchen tungsten. Never cold blue tech lighting.</td></tr>
+            <tr><td><strong>Mood</strong></td><td>Documentary, not staged. Saturation 0.85–1.0. Subtle grain ok. No filters.</td></tr>
+            <tr><td><strong>Diversity</strong></td><td>Represent Australia's casual workforce honestly. Age, gender, ethnicity — all real, all on the floor.</td></tr>
+            <tr><td><strong>Placeholder</strong></td><td>Solid ink-900 block at intended dimensions with a brand-300 corner label naming the planned shot. Never AI-generated fake worker photography.</td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
-    <!-- ══ UI KITS ══ -->
-    <section class="ds-section" id="ui-kits">
+    <!-- ══ UI KITS ════════════════════════════════════════════════════════ -->
+    <section class="ds-section" id="kits">
       <div class="ds-eyebrow">UI Kits</div>
-      <h2 class="ds-title">Contexts in use</h2>
-      <p class="ds-desc">Full-fidelity recreations of each platform surface — using tokens and components from this system.</p>
+      <h2 class="ds-title">Assembled screens</h2>
+      <p class="ds-desc">Full-fidelity HTML prototypes for each surface. Open in a browser — no build step required.</p>
       <div class="ds-divider"></div>
 
       <div class="kit-grid">
-        <a class="kit-link" href="ui_kits/marketing/index.html">
-          <div class="kit-icon" style="background:var(--hivis-100);">🌐</div>
-          <div class="kit-title">Marketing site</div>
-          <div class="kit-desc">Hero, value props, stats, EOR section, audience split, CTA, footer.</div>
-          <div class="kit-arrow">Open kit →</div>
+        <a class="kit-card" href="project/ui_kits/marketing/index.html">
+          <div class="kit-header">
+            <div class="kit-icon">🌐</div>
+            <div class="kit-title">Marketing site</div>
+          </div>
+          <div class="kit-body">
+            <div class="kit-desc">Hero, audience toggle, how-it-works steps, features, stats, footer. 1440px viewport.</div>
+            <div class="kit-arrow">Open kit →</div>
+          </div>
         </a>
-        <a class="kit-link" href="project/ui_kits/business/index.html">
-          <div class="kit-icon" style="background:var(--ink-50);">🏢</div>
-          <div class="kit-title">Business platform</div>
-          <div class="kit-desc">Dashboard, KPIs, shift table, post-a-shift modal, Amy AI strip.</div>
-          <div class="kit-arrow">Open kit →</div>
+        <a class="kit-card" href="project/ui_kits/business/index.html">
+          <div class="kit-header">
+            <div class="kit-icon">🏢</div>
+            <div class="kit-title">Business platform</div>
+          </div>
+          <div class="kit-body">
+            <div class="kit-desc">Dashboard, KPIs, shift table, post-a-shift modal, Amy AI strip. 3-column layout.</div>
+            <div class="kit-arrow">Open kit →</div>
+          </div>
         </a>
-        <a class="kit-link" href="project/ui_kits/worker/index.html">
-          <div class="kit-icon" style="background:var(--tag-hospo);">📱</div>
-          <div class="kit-title">Worker app</div>
-          <div class="kit-desc">4 mobile screens: shift feed, active shift, wallet, profile.</div>
-          <div class="kit-arrow">Open kit →</div>
+        <a class="kit-card" href="project/ui_kits/worker/index.html">
+          <div class="kit-header">
+            <div class="kit-icon">📱</div>
+            <div class="kit-title">Worker app</div>
+          </div>
+          <div class="kit-body">
+            <div class="kit-desc">4 mobile screens: Home feed, shift detail, wallet, profile. iPhone 14 frames.</div>
+            <div class="kit-arrow">Open kit →</div>
+          </div>
+        </a>
+      </div>
+
+      <div style="margin-top:20px;">
+        <a class="kit-card" href="project/design-system.html" style="display:block;text-decoration:none;">
+          <div class="kit-header" style="background:var(--brand-500);">
+            <div class="kit-icon">🎨</div>
+            <div class="kit-title">Design System — deck presentation</div>
+          </div>
+          <div class="kit-body" style="background:white;">
+            <div class="kit-desc">Full design system as a slide deck — brand story, colour, type, voice, components, screens. Click through with arrow keys.</div>
+            <div class="kit-arrow">Open deck →</div>
+          </div>
         </a>
       </div>
     </section>
