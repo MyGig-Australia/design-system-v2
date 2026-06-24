@@ -306,6 +306,43 @@
     .swatch-grid { grid-template-columns: repeat(2, 1fr) !important; }
     .worker-chip { flex-wrap: wrap; }
   }
+
+  /* ── Tokens for Developers ────────────────────── */
+  .token-group-title {
+    font-family: var(--font-body); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-400);
+    margin-bottom: 10px; margin-top: 24px;
+  }
+  .token-table { width: 100%; border-collapse: collapse; }
+  .token-table tr { border-bottom: 1px solid var(--ink-50); }
+  .token-table tr:last-child { border-bottom: none; }
+  .token-table td { padding: 7px 8px; vertical-align: middle; }
+  .token-name {
+    font-family: var(--font-mono); font-size: 12px; color: var(--brand-700);
+    white-space: nowrap; width: 1%; cursor: pointer; user-select: all;
+  }
+  .token-name:hover { color: var(--brand-500); }
+  .token-value { font-family: var(--font-mono); font-size: 12px; color: var(--ink-500); white-space: nowrap; width: 1%; }
+  .token-swatch { width: 18px; height: 18px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); display: inline-block; vertical-align: middle; }
+  .token-desc { color: var(--ink-400); font-size: 12px; }
+  .code-block {
+    background: var(--ink-900); color: #A8A294; border-radius: var(--r-md);
+    padding: 16px 20px; font-family: var(--font-mono); font-size: 12px;
+    line-height: 1.7; overflow-x: auto; margin-bottom: 16px; position: relative;
+  }
+  .code-block .kw { color: #B8B1F7; }
+  .code-block .val { color: #8B80FF; }
+  .code-block .cmt { color: rgba(255,255,255,0.25); font-style: italic; }
+  .code-block .str { color: #6DDCAC; }
+  .copy-btn {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.55); border-radius: var(--r-sm);
+    font-family: var(--font-body); font-size: 11px; font-weight: 700;
+    padding: 4px 10px; cursor: pointer; transition: background 120ms;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,0.18); color: white; }
+  .copy-btn.copied { color: #8B80FF; border-color: #8B80FF; }
 </style>
 </head>
 <body>
@@ -352,6 +389,10 @@
       <a class="nav-link" href="#iconography"><span class="nav-dot"></span>Iconography</a>
       <a class="nav-link" href="#motion"><span class="nav-dot"></span>States &amp; motion</a>
       <a class="nav-link" href="#imagery"><span class="nav-dot"></span>Imagery</a>
+    </div>
+    <div class="nav-group">
+      <span class="nav-group-label">For Developers</span>
+      <a class="nav-link" href="#tokens"><span class="nav-dot"></span>Tokens reference</a>
     </div>
     <div class="nav-group">
       <span class="nav-group-label">UI Kits</span>
@@ -1080,6 +1121,241 @@
       </div>
     </section>
 
+
+    <!-- ══ TOKENS FOR DEVELOPERS ═══════════════════════════════════════════ -->
+    <section class="ds-section" id="tokens">
+      <div class="ds-eyebrow">For Developers</div>
+      <h2 class="ds-title">Tokens reference</h2>
+      <p class="ds-desc">All CSS custom properties defined in <code style="font-family:var(--font-mono);font-size:13px;">project/colors_and_type.css</code>. Import once — everything inherits.</p>
+      <div class="ds-divider"></div>
+
+      <!-- Import snippet -->
+      <div class="card">
+        <div class="card-label">Import</div>
+        <div class="code-block">
+          <button class="copy-btn" data-copy='@import url("project/colors_and_type.css");'>Copy</button>
+<span class="cmt">/* In any HTML file */</span>
+&lt;<span class="kw">link</span> <span class="val">rel</span>=<span class="str">"stylesheet"</span> <span class="val">href</span>=<span class="str">"project/colors_and_type.css"</span>&gt;
+
+<span class="cmt">/* Or in CSS */</span>
+<span class="kw">@import</span> <span class="str">url("project/colors_and_type.css")</span>;
+
+<span class="cmt">/* Then use any token */</span>
+.<span class="val">my-button</span> { <span class="kw">background</span>: <span class="val">var</span>(--brand-500); <span class="kw">color</span>: white; }</div>
+        <p class="card-note">All tokens are on <code>:root</code> — available globally. No build step or preprocessor required.</p>
+      </div>
+
+      <!-- COLOUR TOKENS -->
+      <div class="card">
+        <div class="card-label">Colour tokens</div>
+
+        <div class="token-group-title">INK — neutrals</div>
+        <table class="token-table">
+          <tr><td class="token-name">--ink-0</td><td><span class="token-swatch" style="background:#FAF8F4;"></span></td><td class="token-value">#FAF8F4</td><td class="token-desc">Paper — app background</td></tr>
+          <tr><td class="token-name">--ink-50</td><td><span class="token-swatch" style="background:#F2EFE8;"></span></td><td class="token-value">#F2EFE8</td><td class="token-desc">Subtle surface, hover state</td></tr>
+          <tr><td class="token-name">--ink-100</td><td><span class="token-swatch" style="background:#E5E1D7;"></span></td><td class="token-value">#E5E1D7</td><td class="token-desc">Divider, input border</td></tr>
+          <tr><td class="token-name">--ink-200</td><td><span class="token-swatch" style="background:#CFC9BA;"></span></td><td class="token-value">#CFC9BA</td><td class="token-desc">Disabled stroke</td></tr>
+          <tr><td class="token-name">--ink-300</td><td><span class="token-swatch" style="background:#A8A294;"></span></td><td class="token-value">#A8A294</td><td class="token-desc">Placeholder text</td></tr>
+          <tr><td class="token-name">--ink-400</td><td><span class="token-swatch" style="background:#6F6A60;"></span></td><td class="token-value">#6F6A60</td><td class="token-desc">Secondary text</td></tr>
+          <tr><td class="token-name">--ink-500</td><td><span class="token-swatch" style="background:#3D3A33;"></span></td><td class="token-value">#3D3A33</td><td class="token-desc">Body text on paper</td></tr>
+          <tr><td class="token-name">--ink-700</td><td><span class="token-swatch" style="background:#1F1D19;"></span></td><td class="token-value">#1F1D19</td><td class="token-desc">Near-black</td></tr>
+          <tr><td class="token-name">--ink-900</td><td><span class="token-swatch" style="background:#0E0D0B;border-color:rgba(255,255,255,.15);"></span></td><td class="token-value">#0E0D0B</td><td class="token-desc">The wordmark black — never #000</td></tr>
+        </table>
+
+        <div class="token-group-title">BRAND — signature violet</div>
+        <table class="token-table">
+          <tr><td class="token-name">--brand-50</td><td><span class="token-swatch" style="background:#F5F4FE;"></span></td><td class="token-value">#F5F4FE</td><td class="token-desc">Hover tint, AI panel background</td></tr>
+          <tr><td class="token-name">--brand-100</td><td><span class="token-swatch" style="background:#E8E6F9;"></span></td><td class="token-value">#E8E6F9</td><td class="token-desc">Badge background, info chip</td></tr>
+          <tr><td class="token-name">--brand-200</td><td><span class="token-swatch" style="background:#DBD8FA;"></span></td><td class="token-value">#DBD8FA</td><td class="token-desc">Secondary fill, Amy border</td></tr>
+          <tr><td class="token-name">--brand-300</td><td><span class="token-swatch" style="background:#B8B1F7;"></span></td><td class="token-value">#B8B1F7</td><td class="token-desc">Links on tint, on-dark labels</td></tr>
+          <tr><td class="token-name">--brand-500</td><td><span class="token-swatch" style="background:#6C60FF;border-color:rgba(0,0,0,.15);"></span></td><td class="token-value">#6C60FF</td><td class="token-desc"><strong>THE brand violet</strong> — primary CTA, selection, key moments</td></tr>
+          <tr><td class="token-name">--brand-700</td><td><span class="token-swatch" style="background:#4B3FD9;"></span></td><td class="token-value">#4B3FD9</td><td class="token-desc">Pressed / active state</td></tr>
+          <tr><td class="token-name">--brand-900</td><td><span class="token-swatch" style="background:#2D2580;"></span></td><td class="token-value">#2D2580</td><td class="token-desc">Brand text on light background</td></tr>
+        </table>
+
+        <div class="token-group-title">Semantic — status</div>
+        <table class="token-table">
+          <tr><td class="token-name">--success-50</td><td><span class="token-swatch" style="background:#E8F6EE;"></span></td><td class="token-value">#E8F6EE</td><td class="token-desc">Success pill background</td></tr>
+          <tr><td class="token-name">--success-500</td><td><span class="token-swatch" style="background:#1F8A4C;"></span></td><td class="token-value">#1F8A4C</td><td class="token-desc">Confirmed, paid, on-time</td></tr>
+          <tr><td class="token-name">--success-700</td><td><span class="token-swatch" style="background:#135E33;"></span></td><td class="token-value">#135E33</td><td class="token-desc">Success text</td></tr>
+          <tr><td class="token-name">--warn-50</td><td><span class="token-swatch" style="background:#FFF3DC;"></span></td><td class="token-value">#FFF3DC</td><td class="token-desc">Warning pill background</td></tr>
+          <tr><td class="token-name">--warn-500</td><td><span class="token-swatch" style="background:#E89B14;"></span></td><td class="token-value">#E89B14</td><td class="token-desc">Expiring cert, unread shift</td></tr>
+          <tr><td class="token-name">--danger-50</td><td><span class="token-swatch" style="background:#FCE7E4;"></span></td><td class="token-value">#FCE7E4</td><td class="token-desc">Error pill background</td></tr>
+          <tr><td class="token-name">--danger-500</td><td><span class="token-swatch" style="background:#D03826;"></span></td><td class="token-value">#D03826</td><td class="token-desc">No-show, cancellation, error</td></tr>
+          <tr><td class="token-name">--danger-700</td><td><span class="token-swatch" style="background:#821F12;"></span></td><td class="token-value">#821F12</td><td class="token-desc">Error text</td></tr>
+          <tr><td class="token-name">--info-50</td><td><span class="token-swatch" style="background:#E4ECF7;"></span></td><td class="token-value">#E4ECF7</td><td class="token-desc">Info pill background</td></tr>
+          <tr><td class="token-name">--info-500</td><td><span class="token-swatch" style="background:#2563C8;"></span></td><td class="token-value">#2563C8</td><td class="token-desc">Tooltips, compliance notes</td></tr>
+        </table>
+
+        <div class="token-group-title">Industry tag tints — for category chips only</div>
+        <table class="token-table">
+          <tr><td class="token-name">--tag-hospo</td><td><span class="token-swatch" style="background:#FFD6A8;"></span></td><td class="token-value">#FFD6A8</td><td class="token-desc">Hospitality</td></tr>
+          <tr><td class="token-name">--tag-events</td><td><span class="token-swatch" style="background:#F2C9FF;"></span></td><td class="token-value">#F2C9FF</td><td class="token-desc">Events</td></tr>
+          <tr><td class="token-name">--tag-warehouse</td><td><span class="token-swatch" style="background:#B8E2FF;"></span></td><td class="token-value">#B8E2FF</td><td class="token-desc">Warehousing / logistics</td></tr>
+          <tr><td class="token-name">--tag-construction</td><td><span class="token-swatch" style="background:#FFDF6B;"></span></td><td class="token-value">#FFDF6B</td><td class="token-desc">Construction</td></tr>
+          <tr><td class="token-name">--tag-retail</td><td><span class="token-swatch" style="background:#F6B8C8;"></span></td><td class="token-value">#F6B8C8</td><td class="token-desc">Retail</td></tr>
+          <tr><td class="token-name">--tag-mining</td><td><span class="token-swatch" style="background:#C3D3A6;"></span></td><td class="token-value">#C3D3A6</td><td class="token-desc">Mining</td></tr>
+          <tr><td class="token-name">--tag-agriculture</td><td><span class="token-swatch" style="background:#C9E8C2;"></span></td><td class="token-value">#C9E8C2</td><td class="token-desc">Agriculture</td></tr>
+        </table>
+      </div>
+
+      <!-- TYPOGRAPHY TOKENS -->
+      <div class="card">
+        <div class="card-label">Typography tokens</div>
+
+        <div class="token-group-title">Font families</div>
+        <table class="token-table">
+          <tr><td class="token-name">--font-display</td><td colspan="2" class="token-value">"Sora", system-ui, sans-serif</td><td class="token-desc">Headlines, numbers, hero copy — weight 700–800</td></tr>
+          <tr><td class="token-name">--font-body</td><td colspan="2" class="token-value">"Manrope", system-ui, sans-serif</td><td class="token-desc">UI, forms, paragraphs, data — weight 400–700</td></tr>
+          <tr><td class="token-name">--font-script</td><td colspan="2" class="token-value">"Permanent Marker", cursive</td><td class="token-desc">Pull-quotes, campaign callouts only — sparingly</td></tr>
+          <tr><td class="token-name">--font-mono</td><td colspan="2" class="token-value">"JetBrains Mono", monospace</td><td class="token-desc">Timestamps, IDs, payslip line items, shift codes</td></tr>
+        </table>
+
+        <div class="token-group-title">Size scale</div>
+        <table class="token-table">
+          <tr><td class="token-name">--fs-display-xl</td><td colspan="2" class="token-value">88px</td><td class="token-desc">Hero display — landing pages only</td></tr>
+          <tr><td class="token-name">--fs-display-l</td><td colspan="2" class="token-value">64px</td><td class="token-desc">Section hero</td></tr>
+          <tr><td class="token-name">--fs-display</td><td colspan="2" class="token-value">44px</td><td class="token-desc">Display heading</td></tr>
+          <tr><td class="token-name">--fs-h1</td><td colspan="2" class="token-value">36px</td><td class="token-desc">Page title</td></tr>
+          <tr><td class="token-name">--fs-h2</td><td colspan="2" class="token-value">28px</td><td class="token-desc">Section heading</td></tr>
+          <tr><td class="token-name">--fs-h3</td><td colspan="2" class="token-value">22px</td><td class="token-desc">Sub-section / card heading</td></tr>
+          <tr><td class="token-name">--fs-h4</td><td colspan="2" class="token-value">18px</td><td class="token-desc">Label heading</td></tr>
+          <tr><td class="token-name">--fs-body</td><td colspan="2" class="token-value">16px</td><td class="token-desc">Body text (default)</td></tr>
+          <tr><td class="token-name">--fs-body-sm</td><td colspan="2" class="token-value">14px</td><td class="token-desc">UI / data tables</td></tr>
+          <tr><td class="token-name">--fs-caption</td><td colspan="2" class="token-value">12px</td><td class="token-desc">Metadata, timestamps</td></tr>
+          <tr><td class="token-name">--fs-micro</td><td colspan="2" class="token-value">11px</td><td class="token-desc">Labels, badges, eyebrows</td></tr>
+        </table>
+
+        <div class="token-group-title">Utility classes (from colors_and_type.css)</div>
+        <table class="token-table">
+          <tr><td class="token-name">.mg-display-xl</td><td colspan="3" class="token-desc">Sora 800 · 88px · tight tracking</td></tr>
+          <tr><td class="token-name">.mg-display-l</td><td colspan="3" class="token-desc">Sora 800 · 64px · tight tracking</td></tr>
+          <tr><td class="token-name">.mg-display</td><td colspan="3" class="token-desc">Sora 700 · 44px · snug tracking</td></tr>
+          <tr><td class="token-name">.mg-h1</td><td colspan="3" class="token-desc">Sora 700 · 36px · snug tracking</td></tr>
+          <tr><td class="token-name">.mg-h2</td><td colspan="3" class="token-desc">Sora 700 · 28px · snug tracking</td></tr>
+          <tr><td class="token-name">.mg-h3</td><td colspan="3" class="token-desc">Sora 600 · 22px</td></tr>
+          <tr><td class="token-name">.mg-body</td><td colspan="3" class="token-desc">Manrope 400 · 16px</td></tr>
+          <tr><td class="token-name">.mg-body-sm</td><td colspan="3" class="token-desc">Manrope 400 · 14px</td></tr>
+          <tr><td class="token-name">.mg-caption</td><td colspan="3" class="token-desc">Manrope 500 · 12px</td></tr>
+          <tr><td class="token-name">.mg-eyebrow</td><td colspan="3" class="token-desc">Manrope 700 · 12px · uppercase · wide tracking</td></tr>
+          <tr><td class="token-name">.mg-mono</td><td colspan="3" class="token-desc">JetBrains Mono 500 · 14px</td></tr>
+          <tr><td class="token-name">.mg-script</td><td colspan="3" class="token-desc">Permanent Marker · display size</td></tr>
+          <tr><td class="token-name">.mg-card</td><td colspan="3" class="token-desc">White surface · ink-100 border · r-md · sh-1</td></tr>
+          <tr><td class="token-name">.mg-card--raised</td><td colspan="3" class="token-desc">White surface · ink-100 border · r-lg · sh-3</td></tr>
+          <tr><td class="token-name">.mg-stamp-shadow</td><td colspan="3" class="token-desc">sh-stamp + bw-stamp border</td></tr>
+        </table>
+      </div>
+
+      <!-- SPACING, RADII, SHADOW, MOTION -->
+      <div class="card">
+        <div class="card-label">Spacing, Radii, Shadow &amp; Motion</div>
+
+        <div class="token-group-title">Spacing — 4pt grid</div>
+        <table class="token-table">
+          <tr><td class="token-name">--sp-1</td><td colspan="2" class="token-value">4px</td><td class="token-desc">Micro gap</td></tr>
+          <tr><td class="token-name">--sp-2</td><td colspan="2" class="token-value">8px</td><td class="token-desc">Icon gap, tight inline</td></tr>
+          <tr><td class="token-name">--sp-3</td><td colspan="2" class="token-value">12px</td><td class="token-desc">Button padding vertical</td></tr>
+          <tr><td class="token-name">--sp-4</td><td colspan="2" class="token-value">16px</td><td class="token-desc">Mobile gutter</td></tr>
+          <tr><td class="token-name">--sp-6</td><td colspan="2" class="token-value">24px</td><td class="token-desc">Card padding (default)</td></tr>
+          <tr><td class="token-name">--sp-8</td><td colspan="2" class="token-value">32px</td><td class="token-desc">Section sub-spacing</td></tr>
+          <tr><td class="token-name">--sp-12</td><td colspan="2" class="token-value">48px</td><td class="token-desc">Marketing gutter</td></tr>
+          <tr><td class="token-name">--sp-16</td><td colspan="2" class="token-value">64px</td><td class="token-desc">Section gap</td></tr>
+          <tr><td class="token-name">--sp-24</td><td colspan="2" class="token-value">96px</td><td class="token-desc">Hero padding</td></tr>
+        </table>
+
+        <div class="token-group-title">Radii</div>
+        <table class="token-table">
+          <tr><td class="token-name">--r-xs</td><td colspan="2" class="token-value">4px</td><td class="token-desc">Tags, badges</td></tr>
+          <tr><td class="token-name">--r-sm</td><td colspan="2" class="token-value">8px</td><td class="token-desc">Chips, small elements</td></tr>
+          <tr><td class="token-name">--r-md</td><td colspan="2" class="token-value">12px</td><td class="token-desc"><strong>Default</strong> — cards, inputs, buttons</td></tr>
+          <tr><td class="token-name">--r-lg</td><td colspan="2" class="token-value">18px</td><td class="token-desc">Large cards, modals</td></tr>
+          <tr><td class="token-name">--r-xl</td><td colspan="2" class="token-value">28px</td><td class="token-desc">Hero cards, mobile sheets</td></tr>
+          <tr><td class="token-name">--r-pill</td><td colspan="2" class="token-value">999px</td><td class="token-desc">Status pills, tags — brand signature</td></tr>
+        </table>
+
+        <div class="token-group-title">Borders</div>
+        <table class="token-table">
+          <tr><td class="token-name">--bw-hair</td><td colspan="2" class="token-value">1px</td><td class="token-desc">Dividers</td></tr>
+          <tr><td class="token-name">--bw-rule</td><td colspan="2" class="token-value">1.5px</td><td class="token-desc">Input borders</td></tr>
+          <tr><td class="token-name">--bw-heavy</td><td colspan="2" class="token-value">2px</td><td class="token-desc">Selected state</td></tr>
+          <tr><td class="token-name">--bw-stamp</td><td colspan="2" class="token-value">3px</td><td class="token-desc">Stamp motif CTA only</td></tr>
+        </table>
+
+        <div class="token-group-title">Elevation — shadows</div>
+        <table class="token-table">
+          <tr><td class="token-name">--sh-1</td><td colspan="3" class="token-desc">Cards at rest — very subtle</td></tr>
+          <tr><td class="token-name">--sh-2</td><td colspan="3" class="token-desc">Hover / active states</td></tr>
+          <tr><td class="token-name">--sh-3</td><td colspan="3" class="token-desc">Dropdowns, popovers</td></tr>
+          <tr><td class="token-name">--sh-4</td><td colspan="3" class="token-desc">Modals, drawers</td></tr>
+          <tr><td class="token-name">--sh-stamp</td><td colspan="3" class="token-desc"><strong>4px 4px 0 var(--ink-900)</strong> — hard inky offset. Brand motif on primary CTAs. Once per screen.</td></tr>
+          <tr><td class="token-name">--sh-stamp-brand</td><td colspan="3" class="token-desc"><strong>4px 4px 0 var(--brand-500)</strong> — violet variant for dark surfaces</td></tr>
+          <tr><td class="token-name">--sh-inset</td><td colspan="3" class="token-desc">Inset shadow for pressed inputs</td></tr>
+        </table>
+
+        <div class="token-group-title">Motion</div>
+        <table class="token-table">
+          <tr><td class="token-name">--dur-fast</td><td colspan="2" class="token-value">120ms</td><td class="token-desc">Hover, press, toggle</td></tr>
+          <tr><td class="token-name">--dur-base</td><td colspan="2" class="token-value">200ms</td><td class="token-desc">Default transition</td></tr>
+          <tr><td class="token-name">--dur-slow</td><td colspan="2" class="token-value">400ms</td><td class="token-desc">Full-screen sheets, modals</td></tr>
+          <tr><td class="token-name">--ease-out-quint</td><td colspan="2" class="token-value">cubic-bezier(.22,1,.36,1)</td><td class="token-desc">Default easing — feels fast, lands clean</td></tr>
+          <tr><td class="token-name">--ease-in-out</td><td colspan="2" class="token-value">cubic-bezier(.65,0,.35,1)</td><td class="token-desc">Drawer/modal in-and-out</td></tr>
+        </table>
+
+        <div class="token-group-title">Layout</div>
+        <table class="token-table">
+          <tr><td class="token-name">--container-narrow</td><td colspan="2" class="token-value">720px</td><td class="token-desc">Blog, legal, narrow content</td></tr>
+          <tr><td class="token-name">--container</td><td colspan="2" class="token-value">1140px</td><td class="token-desc">Business platform max-width</td></tr>
+          <tr><td class="token-name">--container-wide</td><td colspan="2" class="token-value">1320px</td><td class="token-desc">Marketing site max-width</td></tr>
+          <tr><td class="token-name">--gutter</td><td colspan="2" class="token-value">24px</td><td class="token-desc">Default grid gutter</td></tr>
+        </table>
+      </div>
+
+      <!-- Full token dump -->
+      <div class="card">
+        <div class="card-label">Full token dump — copy into your project</div>
+        <div class="code-block" id="full-token-block">
+          <button class="copy-btn" id="copy-all-btn">Copy all</button>
+<span class="cmt">/* MyGig Design Tokens — colors_and_type.css */</span>
+<span class="kw">:root</span> {
+  <span class="cmt">/* INK */</span>
+  --ink-0: <span class="val">#FAF8F4</span>; --ink-50: <span class="val">#F2EFE8</span>; --ink-100: <span class="val">#E5E1D7</span>;
+  --ink-200: <span class="val">#CFC9BA</span>; --ink-300: <span class="val">#A8A294</span>; --ink-400: <span class="val">#6F6A60</span>;
+  --ink-500: <span class="val">#3D3A33</span>; --ink-700: <span class="val">#1F1D19</span>; --ink-900: <span class="val">#0E0D0B</span>;
+  <span class="cmt">/* BRAND */</span>
+  --brand-50: <span class="val">#F5F4FE</span>; --brand-100: <span class="val">#E8E6F9</span>; --brand-200: <span class="val">#DBD8FA</span>;
+  --brand-300: <span class="val">#B8B1F7</span>; --brand-500: <span class="val">#6C60FF</span>; --brand-700: <span class="val">#4B3FD9</span>; --brand-900: <span class="val">#2D2580</span>;
+  <span class="cmt">/* STATUS */</span>
+  --success-50: <span class="val">#E8F6EE</span>; --success-500: <span class="val">#1F8A4C</span>; --success-700: <span class="val">#135E33</span>;
+  --warn-50: <span class="val">#FFF3DC</span>; --warn-500: <span class="val">#E89B14</span>; --warn-700: <span class="val">#8A5A00</span>;
+  --danger-50: <span class="val">#FCE7E4</span>; --danger-500: <span class="val">#D03826</span>; --danger-700: <span class="val">#821F12</span>;
+  --info-50: <span class="val">#E4ECF7</span>; --info-500: <span class="val">#2563C8</span>; --info-700: <span class="val">#173E80</span>;
+  <span class="cmt">/* TAGS */</span>
+  --tag-hospo: <span class="val">#FFD6A8</span>; --tag-events: <span class="val">#F2C9FF</span>; --tag-warehouse: <span class="val">#B8E2FF</span>;
+  --tag-construction: <span class="val">#FFDF6B</span>; --tag-retail: <span class="val">#F6B8C8</span>; --tag-mining: <span class="val">#C3D3A6</span>; --tag-agriculture: <span class="val">#C9E8C2</span>;
+  <span class="cmt">/* TYPE */</span>
+  --font-display: <span class="str">"Sora"</span>, system-ui, sans-serif;
+  --font-body:    <span class="str">"Manrope"</span>, system-ui, sans-serif;
+  --font-script:  <span class="str">"Permanent Marker"</span>, cursive;
+  --font-mono:    <span class="str">"JetBrains Mono"</span>, monospace;
+  <span class="cmt">/* SPACING */</span>
+  --sp-1: <span class="val">4px</span>; --sp-2: <span class="val">8px</span>; --sp-3: <span class="val">12px</span>; --sp-4: <span class="val">16px</span>; --sp-5: <span class="val">20px</span>;
+  --sp-6: <span class="val">24px</span>; --sp-8: <span class="val">32px</span>; --sp-10: <span class="val">40px</span>; --sp-12: <span class="val">48px</span>; --sp-16: <span class="val">64px</span>; --sp-20: <span class="val">80px</span>; --sp-24: <span class="val">96px</span>;
+  <span class="cmt">/* RADII */</span>
+  --r-xs: <span class="val">4px</span>; --r-sm: <span class="val">8px</span>; --r-md: <span class="val">12px</span>; --r-lg: <span class="val">18px</span>; --r-xl: <span class="val">28px</span>; --r-pill: <span class="val">999px</span>;
+  <span class="cmt">/* BORDERS */</span>
+  --bw-hair: <span class="val">1px</span>; --bw-rule: <span class="val">1.5px</span>; --bw-heavy: <span class="val">2px</span>; --bw-stamp: <span class="val">3px</span>;
+  <span class="cmt">/* SHADOW */</span>
+  --sh-stamp: <span class="val">4px 4px 0 var(--ink-900)</span>; --sh-stamp-brand: <span class="val">4px 4px 0 var(--brand-500)</span>;
+  <span class="cmt">/* MOTION */</span>
+  --ease-out-quint: <span class="val">cubic-bezier(.22,1,.36,1)</span>; --ease-in-out: <span class="val">cubic-bezier(.65,0,.35,1)</span>;
+  --dur-fast: <span class="val">120ms</span>; --dur-base: <span class="val">200ms</span>; --dur-slow: <span class="val">400ms</span>;
+  <span class="cmt">/* LAYOUT */</span>
+  --container-narrow: <span class="val">720px</span>; --container: <span class="val">1140px</span>; --container-wide: <span class="val">1320px</span>; --gutter: <span class="val">24px</span>;
+}</div>
+        <p class="card-note">Or just <code>&lt;link rel="stylesheet" href="project/colors_and_type.css"&gt;</code> — no need to copy manually.</p>
+      </div>
+    </section>
+
     <!-- ══ UI KITS ════════════════════════════════════════════════════════ -->
     <section class="ds-section" id="kits">
       <div class="ds-eyebrow">UI Kits</div>
@@ -1193,6 +1469,36 @@
   document.addEventListener('click', e => {
     if (window.innerWidth > 768) return;
     if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) closeSidebar();
+  });
+
+  // Copy buttons in token section
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      let text = btn.dataset.copy;
+      if (!text) {
+        // Copy the code block text (strip HTML tags)
+        const block = btn.closest('.code-block');
+        text = block.innerText.replace(/^Copy\n?/, '').trim();
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1800);
+      });
+    });
+  });
+
+  // Token name click-to-copy
+  document.querySelectorAll('.token-name').forEach(el => {
+    el.title = 'Click to copy';
+    el.addEventListener('click', () => {
+      navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+        const orig = el.style.color;
+        el.style.color = 'var(--brand-500)';
+        setTimeout(() => { el.style.color = orig; }, 900);
+      });
+    });
   });
 </script>
 </body>
