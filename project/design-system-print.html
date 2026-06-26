@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MyGig Design System — v1</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<script src="deck-stage.js"></script>
+<style>
+  :root {
+    --slide-pad: 96px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ink-700); font-family: var(--font-body); color: var(--ink-700); }
+
+  deck-stage > section {
+    background: var(--ink-0);
+    padding: var(--slide-pad);
+    color: var(--ink-700);
+    overflow: hidden;
+    position: relative;
+  }
+  section.dark { background: var(--ink-900); color: white; }
+  section.brand-loud { background: var(--brand-500); color: white; }
+  section.brand-soft { background: var(--brand-100); }
+
+  /* ===== PRINT ===== */
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { background: #fff !important; }
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      animation-delay: -99s !important; animation-duration: .001s !important;
+      animation-iteration-count: 1 !important; animation-fill-mode: both !important;
+      animation-play-state: running !important; transition-duration: 0s !important;
+    }
+  }
+
+  /* Reusable type */
+  .eyebrow {
+    font-family: var(--font-body); font-weight: 700;
+    font-size: 16px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-400);
+  }
+  .dark .eyebrow { color: var(--brand-300); }
+  .brand-loud .eyebrow { color: rgba(255,255,255,0.7); }
+  .brand-soft .eyebrow { color: var(--brand-700); }
+
+  .h-display {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: 140px; line-height: 0.92; letter-spacing: -0.025em;
+    color: var(--ink-900); margin: 0;
+  }
+  .dark .h-display { color: white; }
+  .brand-loud .h-display { color: white; }
+  .h-title {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: 92px; line-height: 0.98; letter-spacing: -0.022em;
+    color: var(--ink-900); margin: 0;
+  }
+  .dark .h-title { color: white; }
+  .brand-loud .h-title { color: white; }
+  .h-section {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 64px; line-height: 1.02; letter-spacing: -0.02em;
+    color: var(--ink-900); margin: 0;
+  }
+  .dark .h-section { color: white; }
+  .brand-loud .h-section { color: white; }
+  .lede {
+    font-size: 28px; line-height: 1.4; color: var(--ink-500);
+    max-width: 1100px;
+  }
+  .dark .lede { color: rgba(255,255,255,0.72); }
+  .brand-loud .lede { color: rgba(255,255,255,0.85); }
+  .body-lg { font-size: 22px; line-height: 1.55; color: var(--ink-500); }
+  .dark .body-lg { color: rgba(255,255,255,0.7); }
+  .small { font-size: 18px; line-height: 1.5; color: var(--ink-400); }
+  .dark .small { color: rgba(255,255,255,0.55); }
+  .mono { font-family: var(--font-mono); }
+
+  .script {
+    font-family: var(--font-script); font-weight: 400;
+    color: var(--ink-900); display: inline-block; transform: rotate(-3deg);
+  }
+  .dark .script { color: var(--brand-300); }
+
+  .stack { display: flex; flex-direction: column; gap: 28px; }
+  .row { display: flex; gap: 32px; align-items: center; }
+  .row-stack { display: flex; gap: 56px; align-items: flex-start; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 22px; border-radius: 999px;
+    background: var(--ink-900); color: white;
+    font-weight: 700; font-size: 16px;
+  }
+  .dark .pill { background: var(--brand-500); color: white; }
+
+  /* Brand stamp */
+  .stamp {
+    display: inline-flex; align-items: center; gap: 14px;
+    background: var(--brand-500); color: white;
+    border: 5px solid var(--ink-900);
+    box-shadow: 8px 8px 0 var(--ink-900);
+    padding: 18px 32px; border-radius: 16px;
+    font-family: var(--font-display); font-weight: 800; font-size: 28px;
+    line-height: 1;
+  }
+  .stamp.tilt { transform: rotate(-3deg); }
+
+  /* TITLE slide */
+  .title-slide { display: grid; grid-template-rows: 1fr auto; height: 100%; }
+  .title-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .title-logo { height: 56px; filter: invert(1); }
+  .title-meta { text-align: right; font-size: 16px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+  .title-meta b { color: white; font-weight: 700; }
+  .title-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 48px; }
+  .title-h {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: 200px; line-height: 0.9; letter-spacing: -0.03em;
+    color: white; margin: 0;
+  }
+  .title-tag { font-size: 28px; color: rgba(255,255,255,0.7); max-width: 520px; }
+
+  /* Section opener */
+  .section-opener { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+  .section-num {
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: 20px; color: var(--brand-500); letter-spacing: 0.1em;
+    margin-bottom: 32px;
+  }
+  .section-opener .h-section {
+    font-size: 160px; line-height: 0.92;
+  }
+
+  /* COLOR SWATCH */
+  .swatch-grid { display: grid; gap: 16px; }
+  .swatch {
+    background: var(--swatch-bg, white);
+    color: var(--swatch-fg, var(--ink-900));
+    border-radius: 16px; padding: 24px;
+    border: 1.5px solid rgba(0,0,0,0.06);
+    display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 180px;
+  }
+  .swatch .name {
+    font-family: var(--font-display); font-weight: 800; font-size: 22px; line-height: 1;
+  }
+  .swatch .hex {
+    font-family: var(--font-mono); font-weight: 600; font-size: 18px;
+  }
+  .swatch .role { font-size: 14px; opacity: 0.7; margin-top: 4px; }
+
+  /* Type spec */
+  .type-spec { display: flex; flex-direction: column; gap: 8px; padding: 28px 0; border-bottom: 1px solid var(--ink-100); }
+  .type-spec:last-child { border-bottom: none; }
+  .type-spec .label { font-size: 14px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-400); display: flex; gap: 16px; }
+  .type-spec .label .mono { color: var(--ink-700); }
+  .type-spec .sample { color: var(--ink-900); }
+
+  /* Component preview frames */
+  .frame {
+    background: var(--surface-0);
+    border: 1.5px solid var(--ink-100);
+    border-radius: 18px;
+    box-shadow: 0 18px 48px rgba(14,13,11,0.08);
+    overflow: hidden;
+  }
+
+  /* Buttons row */
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 18px 32px; border-radius: 14px;
+    font-family: var(--font-body); font-weight: 700; font-size: 22px;
+    cursor: pointer; border: none; line-height: 1;
+  }
+  .btn-primary { background: var(--brand-500); color: white; border: 4px solid var(--ink-900); box-shadow: 6px 6px 0 var(--ink-900); padding: 18px 32px; }
+  .btn-secondary { background: var(--ink-900); color: white; }
+  .btn-ghost { background: white; color: var(--ink-900); border: 2px solid var(--ink-100); }
+
+  /* Shift card mini */
+  .shift-card {
+    background: white; border: 1.5px solid var(--ink-100); border-radius: 20px;
+    padding: 28px; box-shadow: 0 8px 24px rgba(14,13,11,0.06);
+  }
+  .shift-card .row { justify-content: space-between; align-items: flex-start; }
+  .shift-card .tag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: #FFD6A8; border-radius: 999px; font-weight: 700; font-size: 16px; }
+  .shift-card .tag .dot { width: 8px; height: 8px; background: var(--ink-900); border-radius: 50%; }
+  .shift-card .title { font-family: var(--font-display); font-weight: 700; font-size: 32px; color: var(--ink-900); line-height: 1.1; margin-top: 12px; }
+  .shift-card .meta { font-family: var(--font-mono); font-size: 18px; color: var(--ink-500); margin-top: 12px; font-weight: 600; }
+  .shift-card .pay { text-align: right; }
+  .shift-card .pay .amt { font-family: var(--font-display); font-weight: 800; font-size: 56px; color: var(--ink-900); line-height: 1; }
+  .shift-card .pay .rate { font-size: 18px; color: var(--ink-400); margin-top: 4px; }
+  .shift-card .divider { height: 1px; background: var(--ink-50); margin: 22px 0; }
+  .shift-card .cta-row { display: flex; justify-content: space-between; align-items: center; }
+  .shift-card .secure {
+    background: var(--brand-500); color: white;
+    border: 3px solid var(--ink-900); border-radius: 12px;
+    padding: 14px 28px; font-family: var(--font-body); font-weight: 800; font-size: 20px;
+    box-shadow: 4px 4px 0 var(--ink-900);
+  }
+
+  /* Stats grid */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+  .stat .num {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: 140px; line-height: 0.9; letter-spacing: -0.03em;
+    color: var(--ink-900);
+  }
+  .stat .label {
+    font-size: 22px; font-weight: 600; color: var(--ink-900);
+    max-width: 280px; line-height: 1.35; margin-top: 12px;
+  }
+
+  /* Voice DO/DONT */
+  .vc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .vc-col h4 { font-family: var(--font-display); font-weight: 700; font-size: 28px; margin: 0 0 20px; display: flex; align-items: center; gap: 12px; }
+  .vc-col .icon { width: 40px; height: 40px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; }
+  .vc-col.do .icon { background: var(--brand-500); color: white; border: 3px solid var(--ink-900); }
+  .vc-col.dont .icon { background: var(--ink-900); color: white; }
+  .vc-item {
+    padding: 22px 24px; border-radius: 14px; background: white;
+    border: 1.5px solid var(--ink-100); margin-bottom: 14px;
+    font-size: 22px; line-height: 1.45; color: var(--ink-700);
+  }
+  .vc-item.bad { text-decoration: line-through; color: var(--ink-400); }
+
+  /* Logo lockup */
+  .logo-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: stretch; }
+  .logo-tile {
+    border-radius: 24px; padding: 56px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1.5px solid var(--ink-100);
+    min-height: 320px;
+  }
+  .logo-tile.light { background: var(--surface-0); }
+  .logo-tile.dark { background: var(--ink-900); border-color: var(--ink-900); }
+  .logo-tile img { max-width: 80%; height: auto; max-height: 160px; }
+
+  /* Final */
+  .final-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; height: 100%; }
+  .next-list { display: flex; flex-direction: column; gap: 18px; }
+  .next-item { display: flex; gap: 16px; align-items: flex-start; }
+  .next-item .num { font-family: var(--font-mono); color: var(--brand-500); font-weight: 700; font-size: 18px; min-width: 32px; padding-top: 4px; }
+  .next-item .text { color: white; font-size: 22px; line-height: 1.4; }
+  .next-item .text b { font-family: var(--font-display); font-weight: 700; }
+
+  /* Imagery helpers */
+  .deck-hero-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; margin-top: 48px; }
+  .deck-hero-row .pic { aspect-ratio: 9/18; border-radius: var(--r-lg); overflow: hidden; background: var(--ink-100); position: relative; }
+  .deck-hero-row .pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .deck-hero-row .pic .tag { position: absolute; bottom: 14px; left: 14px; display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; background: var(--ink-900); color: white; border-radius: var(--r-pill); font-size: 15px; font-weight: 700; }
+  .deck-hero-row .pic .tag .dot { width: 7px; height: 7px; background: var(--brand-300); border-radius: 50%; }
+
+  /* Full-bleed image section */
+  section.imgbg { padding: 0; }
+  section.imgbg .bg { position: absolute; inset: 0; }
+  section.imgbg .bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  section.imgbg .scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(14,13,11,0.92) 0%, rgba(14,13,11,0.78) 42%, rgba(14,13,11,0.28) 100%); }
+  section.imgbg .inner { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: var(--slide-pad); }
+
+  /* Card image */
+  .card-img { width: 100%; aspect-ratio: 16/11; border-radius: var(--r-md); overflow: hidden; background: var(--ink-100); margin-bottom: 18px; }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* Mobile render */
+  .device-shot { display: flex; align-items: center; justify-content: center; }
+  .device-shot img { max-height: 760px; width: auto; filter: drop-shadow(0 40px 80px rgba(14,13,11,0.45)); }
+
+  /* ===== Redesigned worker app phones (slide 16) ===== */
+  .app-phones { display: flex; align-items: center; justify-content: center; gap: 28px; position: relative; }
+  .ph { width: 340px; height: 720px; background: var(--ink-900); border-radius: 46px; padding: 12px; box-shadow: 0 50px 90px rgba(14,13,11,0.5); flex-shrink: 0; }
+  .ph.back { transform: rotate(-4deg) translateY(18px) scale(0.95); opacity: 0.96; }
+  .ph.front { transform: rotate(3deg); position: relative; z-index: 2; }
+  .ph-screen { width: 100%; height: 100%; background: var(--ink-0); border-radius: 34px; overflow: hidden; position: relative; display: flex; flex-direction: column; font-family: var(--font-body); }
+  .ph-notch { position: absolute; top: 9px; left: 50%; transform: translateX(-50%); width: 100px; height: 28px; background: var(--ink-900); border-radius: 16px; z-index: 10; }
+  .ph-status { display: flex; justify-content: space-between; align-items: center; padding: 13px 24px 0; font-weight: 700; font-size: 14px; color: var(--ink-900); }
+  .ph-status.light { color: white; }
+  .ph-status .r { letter-spacing: 1px; font-size: 12px; }
+  /* app bar */
+  .ph-appbar { padding: 18px 22px 12px; display: flex; align-items: center; gap: 12px; }
+  .ph-appbar .av { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 1.5px solid var(--ink-900); flex-shrink: 0; }
+  .ph-appbar .av img { width: 100%; height: 100%; object-fit: cover; }
+  .ph-appbar .hi { font-size: 13px; color: var(--ink-400); }
+  .ph-appbar .nm { font-family: var(--font-display); font-weight: 700; font-size: 19px; color: var(--ink-900); line-height: 1.05; }
+  .ph-appbar .bell { margin-left: auto; width: 40px; height: 40px; border-radius: 11px; background: white; border: 1px solid var(--ink-100); display: flex; align-items: center; justify-content: center; font-size: 16px; position: relative; }
+  .ph-appbar .bell::after { content: ''; position: absolute; top: 8px; right: 8px; width: 9px; height: 9px; background: var(--brand-500); border: 1.5px solid white; border-radius: 50%; }
+  /* earnings hero */
+  .ph-earn { margin: 6px 18px 16px; padding: 20px 22px; background: var(--ink-900); border-radius: 22px; color: white; position: relative; overflow: hidden; }
+  .ph-earn .lab { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+  .ph-earn .amt { font-family: var(--font-display); font-weight: 800; font-size: 42px; color: var(--brand-300); line-height: 1; margin-top: 7px; }
+  .ph-earn .sub { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 8px; display: flex; justify-content: space-between; }
+  .ph-earn .stamp { position: absolute; right: -8px; top: 16px; background: var(--brand-500); color: white; border: 2px solid var(--ink-900); border-radius: 9px; padding: 5px 10px; transform: rotate(8deg); font-family: var(--font-display); font-weight: 800; font-size: 11px; box-shadow: 2px 2px 0 var(--ink-900); }
+  /* section head */
+  .ph-sec { padding: 4px 22px 10px; display: flex; align-items: baseline; justify-content: space-between; }
+  .ph-sec h3 { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--ink-900); margin: 0; }
+  .ph-sec .more { font-size: 13px; font-weight: 600; color: var(--ink-500); }
+  /* shift card */
+  .ph-shift { margin: 0 18px 14px; background: white; border: 1px solid var(--ink-100); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 9px; box-shadow: var(--sh-1); }
+  .ph-shift .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .ph-shift .tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; color: var(--ink-900); }
+  .ph-shift .tag .dot { width: 6px; height: 6px; background: var(--ink-900); border-radius: 50%; }
+  .ph-shift .ttl { font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--ink-900); line-height: 1.2; margin-top: 7px; }
+  .ph-shift .meta { font-size: 12px; color: var(--ink-400); display: flex; gap: 10px; margin-top: 3px; }
+  .ph-shift .pay { text-align: right; }
+  .ph-shift .pay .a { font-family: var(--font-display); font-weight: 800; font-size: 23px; color: var(--ink-900); line-height: 1; }
+  .ph-shift .pay .r { font-size: 11px; color: var(--ink-400); margin-top: 2px; }
+  .ph-shift .when { font-weight: 600; color: var(--ink-700); font-family: var(--font-mono); font-size: 12px; }
+  .ph-shift .acts { display: flex; gap: 9px; margin-top: 3px; }
+  .ph-shift .acts button { flex: 1; padding: 11px 0; border-radius: 11px; font-family: var(--font-body); font-weight: 700; font-size: 13px; border: none; }
+  .ph-shift .acts .pri { background: var(--brand-500); color: white; border: 2px solid var(--ink-900); box-shadow: 2px 2px 0 var(--ink-900); }
+  .ph-shift .acts .gho { background: transparent; color: var(--ink-700); border: 1.5px solid var(--ink-100); }
+  /* tab bar */
+  .ph-tabs { margin-top: auto; display: flex; padding: 10px 0 30px; background: white; border-top: 1px solid var(--ink-100); }
+  .ph-tabs a { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--ink-300); }
+  .ph-tabs a.active { color: var(--ink-900); }
+  .ph-tabs .ic { width: 30px; height: 30px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--ink-700); border: 1.5px solid transparent; }
+  .ph-tabs a.active .ic { background: var(--brand-500); color: white; border-color: var(--ink-900); }
+  /* detail hero (front phone) */
+  .ph-dethero { background: var(--ink-900); color: white; padding: 6px 22px 22px; }
+  .ph-dethero .back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-size: 14px; margin: 8px 0 14px; }
+  .ph-dethero .tag { display: inline-flex; align-items: center; gap: 6px; background: var(--brand-500); color: white; padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+  .ph-dethero .tag .dot { width: 6px; height: 6px; background: white; border-radius: 50%; }
+  .ph-dethero h2 { font-family: var(--font-display); font-weight: 800; font-size: 26px; color: white; margin: 12px 0 5px; line-height: 1.12; }
+  .ph-dethero .where { font-size: 14px; color: rgba(255,255,255,0.7); }
+  .ph-dethero .payrow { display: flex; align-items: baseline; gap: 14px; margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.12); }
+  .ph-dethero .payrow .a { font-family: var(--font-display); font-weight: 800; font-size: 38px; color: var(--brand-300); line-height: 1; }
+  .ph-dethero .payrow .s { font-size: 13px; color: rgba(255,255,255,0.65); }
+  .ph-detsec { padding: 16px 22px; border-bottom: 1px solid var(--ink-50); }
+  .ph-detsec h4 { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-400); margin: 0 0 10px; }
+  .ph-detrow { display: flex; gap: 12px; padding: 7px 0; align-items: flex-start; }
+  .ph-detrow .ic { width: 26px; height: 26px; flex-shrink: 0; background: var(--ink-0); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .ph-detrow .l { font-size: 12px; color: var(--ink-400); }
+  .ph-detrow .v { font-size: 14px; color: var(--ink-900); font-weight: 600; }
+  .ph-detacts { padding: 16px 22px 22px; display: flex; gap: 10px; margin-top: auto; background: white; border-top: 1px solid var(--ink-100); }
+  .ph-detacts button { flex: 1; padding: 15px; border-radius: 13px; font-family: var(--font-body); font-weight: 800; font-size: 15px; border: none; }
+  .ph-detacts .save { background: white; color: var(--ink-700); border: 1.5px solid var(--ink-100); }
+  .ph-detacts .secure { background: var(--brand-500); color: white; border: 2.5px solid var(--ink-900); box-shadow: 3px 3px 0 var(--ink-900); }
+</style>
+</head>
+<body>
+
+<template id="__bundler_thumbnail" data-bg-color="#0E0D0B">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0E0D0B"/>
+    <circle cx="600" cy="330" r="120" fill="#6C60FF"/>
+    <text x="600" y="372" font-family="Sora, sans-serif" font-size="120" font-weight="800" fill="#FFFFFF" text-anchor="middle">my</text>
+    <text x="600" y="560" font-family="Sora, sans-serif" font-size="86" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="-2">MyGig</text>
+    <text x="600" y="630" font-family="Manrope, sans-serif" font-size="30" font-weight="700" fill="#6C60FF" text-anchor="middle" letter-spacing="6">DESIGN SYSTEM</text>
+  </svg>
+</template>
+
+<deck-stage>
+
+  <!-- ============ 1. TITLE ============ -->
+  <section class="dark" data-screen-label="01 Title">
+    <div class="title-slide">
+      <div class="title-top">
+        <img src="assets/logo-wordmark-white.png" alt="MyGig" class="title-logo">
+        <div class="title-meta">
+          <b>Design System · v1</b><br>
+          Prepared for review<br>
+          23 May 2026
+        </div>
+      </div>
+      <div class="title-bottom">
+        <h1 class="title-h">
+          Work your <span class="script" style="font-size:0.7em;">Way.</span>
+        </h1>
+        <div class="title-tag">
+          The brand, voice, and product UI for Australia's AI-powered Workforce-as-a-Service.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. WHAT MYGIG IS ============ -->
+  <section data-screen-label="02 What MyGig is">
+    <div class="stack">
+      <div class="eyebrow">A workforce platform, not a job board.</div>
+      <h2 class="h-title">We're the<br>Employer of Record.</h2>
+      <p class="lede" style="max-width:1300px;">
+        Businesses post shifts. Vetted workers secure them. MyGig handles payroll, super, workers comp, and award interpretation — across hospitality, warehousing, events, retail, construction, agriculture, and mining.
+      </p>
+      <div style="display:flex; gap:16px; margin-top:24px;">
+        <span class="pill">For businesses · the platform</span>
+        <span class="pill">For workers · the mobile app</span>
+        <span class="pill">For everyone · the marketing site</span>
+      </div>
+
+      <div class="deck-hero-row">
+        <div class="pic"><img src="assets/imagery/worker-hero-1-construction.webp" alt=""><span class="tag"><span class="dot"></span>Construction</span></div>
+        <div class="pic"><img src="assets/imagery/worker-hero-2-retail.webp" alt=""><span class="tag"><span class="dot"></span>Retail</span></div>
+        <div class="pic"><img src="assets/imagery/worker-hero-3-hospo.webp" alt=""><span class="tag"><span class="dot"></span>Hospitality</span></div>
+        <div class="pic"><img src="assets/imagery/worker-hero-4-mining.webp" alt=""><span class="tag"><span class="dot"></span>Mining</span></div>
+        <div class="pic"><img src="assets/imagery/worker-hero-5-portrait.webp" alt=""><span class="tag"><span class="dot"></span>Hospitality</span></div>
+        <div class="pic"><img src="assets/imagery/worker-hero-6-agriculture.webp" alt=""><span class="tag"><span class="dot"></span>Agriculture</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. THE BIG IDEA ============ -->
+  <section class="dark" data-screen-label="03 The big idea">
+    <div class="stack" style="max-width: 1500px;">
+      <div class="eyebrow">The big idea</div>
+      <h2 class="h-title" style="font-size: 120px;">
+        Human grit<br>
+        meets <span style="color: var(--brand-500);">confident systems.</span>
+      </h2>
+      <p class="lede" style="max-width:1200px;">
+        The MyGig wordmark sets the whole system: a <i>hand-painted "my"</i> sitting next to a <b>bold geometric "Gig"</b>. Every visual decision lands somewhere on that spectrum.
+      </p>
+      <div style="margin-top:48px; background:white; padding:64px; border-radius:24px; display:flex; justify-content:center;">
+        <img src="assets/logo-wordmark-black.png" alt="MyGig wordmark" style="height:140px;">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. SECTION — COLOUR ============ -->
+  <section class="brand-loud" data-screen-label="04 Section — Colour">
+    <div class="section-opener">
+      <div class="section-num" style="color:white;">PART 01 — FOUNDATIONS</div>
+      <h2 class="h-section" style="font-size: 220px;">Colour.</h2>
+      <p class="lede" style="margin-top:32px; max-width:1200px;">
+        Three commitments: deep off-true black, the MyGig violet, warm paper. No gradients. No corporate blue.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 5. COLOUR — THE THREE ============ -->
+  <section data-screen-label="05 Colour — the three">
+    <div class="stack">
+      <div class="eyebrow">The three commitments</div>
+      <h2 class="h-section">A palette borrowed<br>from the worksite.</h2>
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top:32px;">
+        <div class="swatch" style="--swatch-bg: #0E0D0B; --swatch-fg: white;">
+          <div>
+            <div class="eyebrow" style="color: rgba(255,255,255,0.5); margin-bottom:8px;">Ink</div>
+            <div class="name">Brand black</div>
+            <div class="role" style="margin-top:6px;">The wordmark black. Never pure #000. Primary surface, type.</div>
+          </div>
+          <div class="hex">#0E0D0B</div>
+        </div>
+        <div class="swatch" style="--swatch-bg: #6C60FF; --swatch-fg: white;">
+          <div>
+            <div class="eyebrow" style="margin-bottom:8px; color: rgba(255,255,255,0.7);">Brand violet</div>
+            <div class="name">Signature accent</div>
+            <div class="role" style="margin-top:6px; opacity:0.85;">Pulled straight from mygig.com.au. Used confidently — CTAs, key brand moments, info chips. White text reads on top.</div>
+          </div>
+          <div class="hex">#6C60FF</div>
+        </div>
+        <div class="swatch" style="--swatch-bg: #FAF8F4;">
+          <div>
+            <div class="eyebrow" style="margin-bottom:8px;">Paper</div>
+            <div class="name">App background</div>
+            <div class="role" style="margin-top:6px;">Warm off-white, not cool grey. Gives every screen a tiny analog feel.</div>
+          </div>
+          <div class="hex">#FAF8F4</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. COLOUR — SCALES ============ -->
+  <section data-screen-label="06 Colour — full scales">
+    <div class="stack">
+      <div class="eyebrow">Full scales</div>
+      <h2 class="h-section">Ink &amp; Brand, in 6+ steps.</h2>
+
+      <div style="display:flex; flex-direction:column; gap:14px; margin-top:24px;">
+        <div class="eyebrow" style="color:var(--ink-700);">Ink</div>
+        <div style="display:grid; grid-template-columns: repeat(8, 1fr); gap:12px;">
+          <div style="height:140px; background:#FAF8F4; border-radius:12px; border:1px solid var(--ink-100); padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">ink-0</span><span class="mono" style="font-size:13px; color:var(--ink-400);">#FAF8F4</span></div>
+          <div style="height:140px; background:#F2EFE8; border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">ink-50</span><span class="mono" style="font-size:13px; color:var(--ink-400);">#F2EFE8</span></div>
+          <div style="height:140px; background:#E5E1D7; border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">ink-100</span><span class="mono" style="font-size:13px; color:var(--ink-700);">#E5E1D7</span></div>
+          <div style="height:140px; background:#CFC9BA; border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">ink-200</span><span class="mono" style="font-size:13px;">#CFC9BA</span></div>
+          <div style="height:140px; background:#A8A294; color:white; border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">ink-300</span><span class="mono" style="font-size:13px;">#A8A294</span></div>
+          <div style="height:140px; background:#6F6A60; color:white; border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">ink-400</span><span class="mono" style="font-size:13px; opacity:0.8;">#6F6A60</span></div>
+          <div style="height:140px; background:#3D3A33; color:white; border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">ink-500</span><span class="mono" style="font-size:13px; opacity:0.8;">#3D3A33</span></div>
+          <div style="height:140px; background:#0E0D0B; color:white; border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">ink-900</span><span class="mono" style="font-size:13px; opacity:0.7;">#0E0D0B</span></div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:14px; margin-top:8px;">
+        <div class="eyebrow" style="color:var(--ink-700);">Brand · the MyGig violet</div>
+        <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:12px;">
+          <div style="height:120px; background:#F5F4FE; border-radius:12px; border:1px solid var(--ink-100); padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">brand-50</span><span class="mono" style="font-size:13px; color:var(--ink-400);">#F5F4FE</span></div>
+          <div style="height:120px; background:#E8E6F9; border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">brand-100</span><span class="mono" style="font-size:13px; color:var(--ink-400);">#E8E6F9</span></div>
+          <div style="height:120px; background:#B8B1F7; border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">brand-300</span><span class="mono" style="font-size:13px;">#B8B1F7</span></div>
+          <div style="height:120px; background:#6C60FF; color:white; border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">brand-500</span><span class="mono" style="font-size:13px;">#6C60FF</span></div>
+          <div style="height:120px; background:#4B3FD9; color:white; border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">brand-700</span><span class="mono" style="font-size:13px;">#4B3FD9</span></div>
+          <div style="height:120px; background:#2D2580; color:white; border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;"><span style="font-weight:700; font-size:16px;">brand-900</span><span class="mono" style="font-size:13px; opacity:0.8;">#2D2580</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. SECTION — TYPE ============ -->
+  <section class="dark" data-screen-label="07 Section — Type">
+    <div class="section-opener">
+      <div class="section-num">PART 02 — FOUNDATIONS</div>
+      <h2 class="h-section" style="font-size: 220px;">Type.</h2>
+      <p class="lede" style="margin-top:32px; max-width:1200px;">
+        Three voices that mirror the wordmark composition.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 8. TYPE SPECS ============ -->
+  <section data-screen-label="08 Type specs">
+    <div class="stack">
+      <div class="eyebrow">Three voices, one wordmark.</div>
+      <h2 class="h-section">A heavy display, a workhorse body,<br>a brushed accent.</h2>
+
+      <div style="margin-top:24px;">
+        <div class="type-spec">
+          <div class="label">DISPLAY <span class="mono">— Sora 700/800</span> <span style="margin-left:auto; color:var(--ink-400);">The "Gig" voice. Hero, big numbers.</span></div>
+          <div class="sample" style="font-family:var(--font-display); font-weight:800; font-size: 88px; line-height: 0.95; letter-spacing:-0.025em;">Post a shift in 60 seconds.</div>
+        </div>
+
+        <div class="type-spec">
+          <div class="label">BODY <span class="mono">— Manrope 400/500/600/700</span> <span style="margin-left:auto; color:var(--ink-400);">UI, paragraphs, data.</span></div>
+          <div class="sample" style="font-family:var(--font-body); font-weight:500; font-size: 36px; line-height: 1.4; color: var(--ink-500);">Every worker is verified across 30+ data points, including skills, certifications, and work history.</div>
+        </div>
+
+        <div class="type-spec">
+          <div class="label">SCRIPT <span class="mono">— Permanent Marker</span> <span style="margin-left:auto; color:var(--ink-400);">The "my" voice. Hero only — never UI.</span></div>
+          <div class="sample" style="font-family:var(--font-script); font-size: 80px; line-height: 1; transform:rotate(-3deg); display:inline-block;">Work your Way</div>
+        </div>
+
+        <div class="type-spec">
+          <div class="label">MONO <span class="mono">— JetBrains Mono</span> <span style="margin-left:auto; color:var(--ink-400);">Shift IDs, timestamps, payslip lines.</span></div>
+          <div class="sample mono" style="font-size:30px; font-weight:600;">MG-2026-04823 · 6:30am–2:00pm · $31.19/hr</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 9. SECTION — VOICE ============ -->
+  <section class="brand-loud" data-screen-label="09 Section — Voice">
+    <div class="section-opener">
+      <div class="section-num" style="color:white;">PART 03 — FOUNDATIONS</div>
+      <h2 class="h-section" style="font-size: 220px;">Voice.</h2>
+      <p class="lede" style="margin-top:32px; max-width:1200px;">
+        Plain-spoken Aussie. Confident. Evidence-led.<br>Talk like a competent ops manager who respects the worker on the floor.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 10. VOICE DO/DONT ============ -->
+  <section data-screen-label="10 Voice — do / don't">
+    <div class="stack">
+      <div class="eyebrow">What we sound like</div>
+      <h2 class="h-section">Concrete &gt; clever.<br>Numbers &gt; adjectives.</h2>
+
+      <div class="vc-grid" style="margin-top:24px;">
+        <div class="vc-col do">
+          <h4><span class="icon">✓</span> Do</h4>
+          <div class="vc-item">"Post a shift in under 60 seconds."</div>
+          <div class="vc-item">"We're the Employer of Record — we take the legal weight, you get the workers."</div>
+          <div class="vc-item">"Get paid the day after your shift."</div>
+          <div class="vc-item">"Top workers get first dibs on shifts."</div>
+        </div>
+        <div class="vc-col dont">
+          <h4><span class="icon">✕</span> Don't</h4>
+          <div class="vc-item bad">"Streamline your workforce procurement journey."</div>
+          <div class="vc-item bad">"We provide an EOR layer."</div>
+          <div class="vc-item bad">"Optimised payout cadences."</div>
+          <div class="vc-item bad">"Premium-tier operatives receive prioritised allocation."</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 11. SECTION — SYSTEM ============ -->
+  <section class="dark imgbg" data-screen-label="11 Section — System">
+    <div class="bg"><img src="assets/imagery/worker-story-hivis.webp" alt=""></div>
+    <div class="scrim"></div>
+    <div class="inner">
+      <div class="section-num">PART 04 — IN PRODUCT</div>
+      <h2 class="h-section" style="font-size: 200px;">System.</h2>
+      <p class="lede" style="margin-top:32px; max-width:1100px;">
+        Tokens, components, motifs — how the foundations turn into shipped UI.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 12. COMPONENTS ============ -->
+  <section data-screen-label="12 Components">
+    <div class="stack">
+      <div class="eyebrow">Components</div>
+      <h2 class="h-section">Buttons, pills, and the<br>stamp motif.</h2>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:32px; margin-top:32px;">
+
+        <div class="frame" style="padding:40px;">
+          <div class="eyebrow" style="color:var(--ink-400); margin-bottom:24px;">Buttons</div>
+          <div style="display:flex; gap:18px; flex-wrap:wrap; align-items:center;">
+            <button class="btn btn-primary">Post a shift</button>
+            <button class="btn btn-secondary">Cancel</button>
+            <button class="btn btn-ghost">Save draft</button>
+          </div>
+          <div class="small" style="margin-top:24px;">Primary uses the stamp motif — violet fill + 4px ink border + offset shadow.</div>
+        </div>
+
+        <div class="frame" style="padding:40px;">
+          <div class="eyebrow" style="color:var(--ink-400); margin-bottom:24px;">Status pills</div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <span style="display:inline-flex; align-items:center; gap:10px; padding:10px 20px; background:#E8F6EE; color:#135E33; border-radius:999px; font-weight:700; font-size:18px;"><span style="width:10px; height:10px; background:#1F8A4C; border-radius:50%;"></span>Confirmed</span>
+            <span style="display:inline-flex; align-items:center; gap:10px; padding:10px 20px; background:#E8E6F9; color:#0E0D0B; border-radius:999px; font-weight:700; font-size:18px;"><span style="width:10px; height:10px; background:#4B3FD9; border-radius:50%;"></span>Open</span>
+            <span style="display:inline-flex; align-items:center; gap:10px; padding:10px 20px; background:#FFF3DC; color:#8A5A00; border-radius:999px; font-weight:700; font-size:18px;"><span style="width:10px; height:10px; background:#E89B14; border-radius:50%;"></span>Cert expiring</span>
+            <span style="display:inline-flex; align-items:center; gap:10px; padding:10px 20px; background:#0E0D0B; color:white; border-radius:999px; font-weight:700; font-size:18px;">★ Top worker</span>
+          </div>
+          <div class="small" style="margin-top:24px;">Pills are a signature — used heavily for shift state, certs, worker tier.</div>
+        </div>
+      </div>
+
+      <div class="frame" style="padding:48px; margin-top:8px;">
+        <div class="eyebrow" style="color:var(--ink-400); margin-bottom:24px;">Stamp motif — a deliberate brand moment</div>
+        <div style="display:flex; gap:40px; align-items:center;">
+          <div class="stamp tilt">90%+ FILL RATE</div>
+          <div style="background:var(--ink-900); border:5px solid var(--ink-900); box-shadow:8px 8px 0 var(--brand-500); padding:18px 32px; border-radius:16px; display:inline-flex; flex-direction:column; align-items:center; gap:4px; transform:rotate(2deg);">
+            <span style="font-family:var(--font-display); font-weight:800; font-size:32px; color:var(--brand-300); line-height:1;">EOR</span>
+            <span style="font-size:13px; color:white; letter-spacing:0.14em; text-transform:uppercase; font-weight:700;">NSW · WA · TAS · NT</span>
+          </div>
+          <div class="small" style="flex:1;">Feels like a job-site sign / parking permit. Used on the primary CTA, hero badges, and the compliance callout. <b>Once per screen, max.</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 13. THE SHIFT CARD ============ -->
+  <section data-screen-label="13 The Shift card">
+    <div class="row-stack">
+      <div style="flex: 1; max-width: 700px;">
+        <div class="eyebrow">The atomic unit</div>
+        <h2 class="h-section" style="margin-top: 16px;">The Shift card.</h2>
+        <p class="lede" style="margin-top:24px;">
+          Every worker-facing screen revolves around this. Industry tag, position, location, time, est. earnings, and a single brand-violet CTA.
+        </p>
+        <ul style="font-size:22px; line-height:1.7; color:var(--ink-500); margin-top:24px; padding-left:24px;">
+          <li>Money in AUD, always with cents</li>
+          <li>Time in 12-hour local, lowercase am/pm</li>
+          <li>Industry tint chip · never elsewhere</li>
+          <li>One stamp CTA · "Secure shift"</li>
+        </ul>
+      </div>
+
+      <div style="flex:1; max-width:780px;">
+        <div class="shift-card">
+          <div class="row">
+            <div style="flex:1;">
+              <span class="tag"><span class="dot"></span>Hospitality · Barista</span>
+              <div class="title">Single O Surry Hills</div>
+              <div class="small" style="margin-top:8px; font-size:18px;">📍 Reservoir St, Surry Hills NSW</div>
+            </div>
+            <div class="pay">
+              <div class="amt">$234</div>
+              <div class="rate">est. earnings · $31.19/hr</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="cta-row">
+            <div class="meta">Tue 26 May · 6:30am–2:00pm</div>
+            <button class="secure">Secure shift</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 13b. IMAGERY ============ -->
+  <section data-screen-label="13b Imagery">
+    <div class="stack">
+      <div class="eyebrow">Imagery — the MyGig look</div>
+      <h2 class="h-section">Real workers. Real worksites.<br>Documentary, not stock.</h2>
+      <p class="lede" style="max-width:1200px; margin-top:8px;">
+        The signature pattern: vertical portrait cards, one per industry, lined up under the headline. Warm natural light, faces visible, the work in frame.
+      </p>
+      <div class="deck-hero-row" style="margin-top:36px;">
+        <div class="pic"><img src="assets/imagery/worker-hero-3-hospo.webp" alt=""><span class="tag"><span class="dot"></span>Hospo</span></div>
+        <div class="pic"><img src="assets/imagery/worker-hero-2-retail.webp" alt=""><span class="tag"><span class="dot"></span>Retail</span></div>
+        <div class="pic"><img src="assets/imagery/worker-hero-1-construction.webp" alt=""><span class="tag"><span class="dot"></span>Construction</span></div>
+        <div class="pic"><img src="assets/imagery/worker-hero-4-mining.webp" alt=""><span class="tag"><span class="dot"></span>Mining</span></div>
+        <div class="pic"><img src="assets/imagery/worker-hero-6-agriculture.webp" alt=""><span class="tag"><span class="dot"></span>Agriculture</span></div>
+        <div class="pic"><img src="assets/imagery/worker-hero-5-portrait.webp" alt=""><span class="tag"><span class="dot"></span>FOH</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 14. STATS ============ -->
+  <section class="brand-soft" data-screen-label="14 Numbers we lean on">
+    <div class="stack">
+      <div class="eyebrow">Numbers we lean on</div>
+      <h2 class="h-section">Proof, not adjectives.</h2>
+
+      <div class="stats-grid" style="margin-top:48px;">
+        <div class="stat">
+          <div class="num">90%+</div>
+          <div class="label">fill rate · industry avg is 65%</div>
+        </div>
+        <div class="stat">
+          <div class="num">2%</div>
+          <div class="label">no-show rate</div>
+        </div>
+        <div class="stat">
+          <div class="num">30+</div>
+          <div class="label">data points verified per worker</div>
+        </div>
+        <div class="stat">
+          <div class="num">1 day</div>
+          <div class="label">workers paid after their shift</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 15. THE THREE SURFACES ============ -->
+  <section data-screen-label="15 Three surfaces">
+    <div class="stack">
+      <div class="eyebrow">One brand, three surfaces</div>
+      <h2 class="h-section">Same system. Different tone<br>for each audience.</h2>
+
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:24px; margin-top:32px;">
+        <div class="frame" style="padding:36px; display:flex; flex-direction:column; gap:14px;">
+          <div class="card-img"><img src="assets/imagery/worker-retail-bananas.avif" alt="" style="object-position: 50% 24%;"></div>
+          <div class="pill" style="background:var(--ink-900); color:white; padding:6px 16px; font-size:14px; width:fit-content;">01 — Marketing site</div>
+          <div style="font-family:var(--font-display); font-weight:700; font-size:36px; line-height:1.1; color:var(--ink-900);">Confident, evidence-led.</div>
+          <div class="body-lg">Big stamped CTAs. Real-photo hero cards. Numbers up top. The audience is making a decision — give them proof.</div>
+        </div>
+        <div class="frame" style="padding:36px; display:flex; flex-direction:column; gap:14px;">
+          <div class="card-img"><img src="assets/imagery/worker-hero-4-mining.webp" alt=""></div>
+          <div class="pill" style="background:var(--ink-900); color:white; padding:6px 16px; font-size:14px; width:fit-content;">02 — Business platform</div>
+          <div style="font-family:var(--font-display); font-weight:700; font-size:36px; line-height:1.1; color:var(--ink-900);">Operational, calm.</div>
+          <div class="body-lg">Dense tables, fixed sidebar, the compliance strip as the one brand moment. They're at work, not browsing.</div>
+        </div>
+        <div class="frame" style="padding:36px; display:flex; flex-direction:column; gap:14px;">
+          <div class="card-img"><img src="assets/imagery/worker-hero-3-hospo.webp" alt=""></div>
+          <div class="pill" style="background:var(--ink-900); color:white; padding:6px 16px; font-size:14px; width:fit-content;">03 — Worker app</div>
+          <div style="font-family:var(--font-display); font-weight:700; font-size:36px; line-height:1.1; color:var(--ink-900);">Friendly, motivating.</div>
+          <div class="body-lg">Earnings on the hero. Streak stamps. Big tap-targets. Profile photos when we have them. Repeat engagement is the goal.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 16. WHAT'S NEXT ============ -->
+  <section class="dark" data-screen-label="16 What's next">
+    <div class="final-grid">
+      <div>
+        <div class="eyebrow">Roadmap</div>
+        <h2 class="h-title" style="margin-top:16px;">v1 ready.<br><span style="color:var(--brand-300);">Figma next.</span></h2>
+        <p class="lede" style="margin-top:24px;">
+          This v1 is built from the wordmark, the public site, and a strong reading of MyGig's positioning. Real source materials will refine every layer.
+        </p>
+        <div class="next-list" style="margin-top:40px;">
+          <div class="next-item">
+            <span class="num">01.</span>
+            <span class="text"><b>Figma reconciliation.</b><br>Align colours, type, components against the canonical source when files arrive.</span>
+          </div>
+          <div class="next-item">
+            <span class="num">02.</span>
+            <span class="text"><b>Photography library.</b><br>Real workers on real worksites — the library is already live.</span>
+          </div>
+          <div class="next-item">
+            <span class="num">03.</span>
+            <span class="text"><b>Icon set.</b><br>Lucide is the v1 choice — swap for MyGig custom if one exists.</span>
+          </div>
+          <div class="next-item">
+            <span class="num">04.</span>
+            <span class="text"><b>More screens.</b><br>Post-a-shift flow, worker onboarding, payslip, incident reporting.</span>
+          </div>
+        </div>
+      </div>
+      <div class="app-phones">
+
+        <!-- BACK PHONE — Home -->
+        <div class="ph back">
+          <div class="ph-screen">
+            <div class="ph-notch"></div>
+            <div class="ph-status"><span>9:41</span><span class="r">● ● ▮</span></div>
+            <div class="ph-appbar">
+              <div class="av"><img src="assets/worker-sarah-m.jpg" alt=""></div>
+              <div>
+                <div class="hi">G'day,</div>
+                <div class="nm">Sarah</div>
+              </div>
+              <div class="bell">🔔</div>
+            </div>
+            <div class="ph-earn">
+              <div class="stamp">💪 STREAK 5</div>
+              <div class="lab">This week</div>
+              <div class="amt">$847.20</div>
+              <div class="sub"><span>3 shifts · 26h</span><span style="color:var(--brand-300);">↑ 12% vs last wk</span></div>
+            </div>
+            <div class="ph-sec"><h3>Open shifts near you</h3><span class="more">See all →</span></div>
+            <div class="ph-shift">
+              <div class="top">
+                <div>
+                  <span class="tag" style="background:#FFD6A8;"><span class="dot"></span>Hospitality</span>
+                  <div class="ttl">Barista · Single O</div>
+                  <div class="meta"><span>📍 2.4 km</span><span>★ host 4.8</span></div>
+                </div>
+                <div class="pay"><div class="a">$234</div><div class="r">$31.19/hr</div></div>
+              </div>
+              <div class="when">Tue 26 May · 6:30am–2:00pm</div>
+              <div class="acts"><button class="gho">Details</button><button class="pri">Secure</button></div>
+            </div>
+            <div class="ph-shift">
+              <div class="top">
+                <div>
+                  <span class="tag" style="background:#B8E2FF;"><span class="dot"></span>Warehousing</span>
+                  <div class="ttl">Pick &amp; pack · Toll</div>
+                  <div class="meta"><span>📍 8.1 km</span><span>★ host 4.6</span></div>
+                </div>
+                <div class="pay"><div class="a">$276</div><div class="r">$34.50/hr</div></div>
+              </div>
+              <div class="when">Wed 27 May · 5:00am–1:00pm</div>
+            </div>
+            <div class="ph-tabs">
+              <a class="active"><div class="ic">⌂</div>Home</a>
+              <a><div class="ic">⊞</div>Shifts</a>
+              <a><div class="ic">$</div>Wallet</a>
+              <a><div class="ic">◉</div>Profile</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- FRONT PHONE — Shift detail -->
+        <div class="ph front">
+          <div class="ph-screen">
+            <div class="ph-notch"></div>
+            <div class="ph-dethero">
+              <div class="ph-status light" style="padding-left:2px; padding-right:2px;"><span>9:41</span><span class="r">● ● ▮</span></div>
+              <a class="back">← Back</a>
+              <span class="tag"><span class="dot"></span>Hospitality · Barista</span>
+              <h2>Single O Surry Hills</h2>
+              <div class="where">📍 Reservoir St, Surry Hills NSW</div>
+              <div class="payrow">
+                <div>
+                  <div class="a">$234.00</div>
+                  <div class="s">7.5 hours estimated</div>
+                </div>
+                <div style="margin-left:auto; text-align:right;">
+                  <div style="font-family:var(--font-display); font-weight:700; font-size:17px;">$31.19<span style="font-size:12px; color:rgba(255,255,255,0.6);">/hr</span></div>
+                  <div class="s">Hospitality Award L2</div>
+                </div>
+              </div>
+            </div>
+            <div class="ph-detsec">
+              <h4>When &amp; where</h4>
+              <div class="ph-detrow"><div class="ic">📅</div><div><div class="l">Shift time</div><div class="v">Tue 26 May · 6:30am – 2:00pm</div></div></div>
+              <div class="ph-detrow"><div class="ic">📍</div><div><div class="l">Address</div><div class="v">60–64 Reservoir St, Surry Hills</div></div></div>
+            </div>
+            <div class="ph-detsec">
+              <h4>What you'll do</h4>
+              <div style="font-size:14px; color:var(--ink-500); line-height:1.55;">Espresso bar service during morning rush. La Marzocco GB5. Black t-shirt, closed-toe shoes. Ask for Lily.</div>
+            </div>
+            <div class="ph-detacts">
+              <button class="save">Save</button>
+              <button class="secure">Secure shift</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 17. CLOSER ============ -->
+  <section class="dark" data-screen-label="17 Closer">
+    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; height:100%; gap:40px;">
+      <img src="assets/logo-wordmark-white.png" alt="MyGig" style="height:80px;">
+      <h2 style="font-family:var(--font-display); font-weight:800; font-size:160px; line-height:0.9; color:white; margin:0;">
+        Work your <span class="script" style="font-size:0.8em;">Way.</span>
+      </h2>
+      <p class="lede" style="text-align:center; max-width:900px;">Thanks. Comments, redlines, and the Figma drop very welcome.</p>
+    </div>
+  </section>
+
+</deck-stage>
+
+<script>
+  (function () {
+    function activateAll() {
+      document.querySelectorAll('deck-stage > section').forEach(function (s) {
+        s.setAttribute('data-deck-active', '');
+      });
+    }
+    function ready() {
+      activateAll();
+      setTimeout(activateAll, 300);
+      (async function () {
+        try { await document.fonts.ready; } catch (e) {}
+        var imgs = Array.prototype.slice.call(document.images).filter(function (i) { return !i.complete; });
+        await Promise.race([
+          Promise.allSettled(imgs.map(function (i) { return i.decode().catch(function(){}); })),
+          new Promise(function (r) { setTimeout(r, 8000); })
+        ]);
+        activateAll();
+        setTimeout(function () { window.print(); }, 500);
+      })();
+    }
+    if (document.readyState === 'complete') ready();
+    else window.addEventListener('load', ready);
+  })();
+</script>
+
+</body>
+</html>

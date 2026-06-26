@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Components — Buttons" subtitle="Primary uses the stamp motif" viewport="700x280" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--ink-0); }
+  body { padding: 20px; box-sizing: border-box; min-height: 280px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  
+  .btn { 
+    display:inline-flex; align-items:center; gap:8px;
+    padding:12px 20px; border-radius:var(--r-md);
+    font-family: var(--font-body); font-weight:700; font-size:15px;
+    cursor:pointer; transition: all var(--dur-base) var(--ease-out-quint);
+    border:none; line-height:1;
+  }
+  .btn-primary {
+    background: var(--brand-500); color: white;
+    border: 3px solid var(--ink-900);
+    box-shadow: var(--sh-stamp);
+    padding: 12px 22px;
+  }
+  .btn-secondary {
+    background: var(--ink-900);
+    color: white;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-900);
+    border: 1.5px solid var(--ink-100);
+  }
+  .btn-danger {
+    background: transparent;
+    color: var(--danger-500);
+    border: 1.5px solid var(--danger-500);
+  }
+  .btn-sm { padding: 8px 14px; font-size:13px; }
+
+</style>
+</head>
+<body>
+
+  <div style="display:flex; flex-direction:column; gap:14px;">
+    <div class="mg-eyebrow" style="color:var(--ink-400);">Buttons</div>
+    <div class="row" style="gap:16px;">
+      <button class="btn btn-primary">Post a shift</button>
+      <button class="btn btn-secondary">Cancel</button>
+      <button class="btn btn-ghost">Save draft</button>
+      <button class="btn btn-danger">Remove worker</button>
+    </div>
+    <div class="row" style="gap:16px;">
+      <button class="btn btn-primary btn-sm">Accept shift</button>
+      <button class="btn btn-secondary btn-sm">View profile</button>
+      <button class="btn btn-ghost btn-sm">Filter</button>
+    </div>
+    <div class="mg-body-sm" style="color:var(--ink-400); margin-top:4px;">Primary uses the stamp motif — hi-vis fill + 3px ink border + 4px offset shadow.</div>
+  </div>
+
+</body>
+</html>

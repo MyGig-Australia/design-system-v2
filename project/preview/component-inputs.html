@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Components — Form inputs" subtitle="Default, focused, disabled" viewport="700x380" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--ink-0); }
+  body { padding: 20px; box-sizing: border-box; min-height: 380px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  
+</style>
+</head>
+<body>
+
+  <div style="display:flex; flex-direction:column; gap:18px; max-width:520px;">
+    <div class="mg-eyebrow" style="color:var(--ink-400);">Form inputs</div>
+    <label style="display:flex; flex-direction:column; gap:6px;">
+      <span class="mg-caption" style="color:var(--ink-700); font-weight:600;">Position</span>
+      <input value="Barista" style="padding:12px 14px; border:1.5px solid var(--ink-100); border-radius:var(--r-md); font-family:var(--font-body); font-size:15px; background:white; color:var(--ink-900); outline:none;">
+    </label>
+    <label style="display:flex; flex-direction:column; gap:6px;">
+      <span class="mg-caption" style="color:var(--ink-700); font-weight:600;">Shift start</span>
+      <input value="6:30am" style="padding:12px 14px; border:2px solid var(--brand-500); border-radius:var(--r-md); font-family:var(--font-body); font-size:15px; background:white; color:var(--ink-900); outline:none; box-shadow: 0 0 0 4px rgba(108,96,255,0.25);">
+      <span class="mg-caption" style="color:var(--ink-400);">Focused state — 2px hi-vis ring at 4px offset.</span>
+    </label>
+    <label style="display:flex; flex-direction:column; gap:6px;">
+      <span class="mg-caption" style="color:var(--ink-700); font-weight:600;">Notes for the worker</span>
+      <textarea style="padding:12px 14px; border:1.5px solid var(--ink-100); border-radius:var(--r-md); font-family:var(--font-body); font-size:15px; background:white; color:var(--ink-300); outline:none; resize:vertical; min-height:60px;" disabled>e.g. Black t-shirt, closed-toe shoes, ask for Sam at reception.</textarea>
+    </label>
+  </div>
+
+</body>
+</html>

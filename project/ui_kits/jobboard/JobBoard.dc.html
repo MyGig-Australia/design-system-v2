@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<!-- @dsCard group="UI Kit — Job Board" name="UI kit — Casual Job Board" subtitle="Landing, browse+filters, detail, list-a-job, mobile, apply — Amy AI throughout" viewport="1440x1200" -->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./ds-base.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--ink-0); }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--ink-200); border-radius: 999px; }
+  @keyframes mgpop { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+  @keyframes mgfade { from { opacity: 0; } to { opacity: 1; } }
+  input, select, textarea, button { font-family: var(--font-body); }
+  input::placeholder, textarea::placeholder { color: var(--ink-300); }
+</style>
+</helmet>
+
+<div style="min-height:100vh; background:var(--ink-0); color:var(--ink-700); font-family:var(--font-body); padding-bottom:64px;">
+
+  <!-- ============ PRODUCT NAV ============ -->
+  <header style="position:sticky; top:0; z-index:60; background:rgba(250,248,244,.92); backdrop-filter:blur(10px); border-bottom:1px solid var(--ink-100);">
+    <div style="max-width:1280px; margin:0 auto; padding:0 28px; height:68px; display:flex; align-items:center; gap:28px;">
+      <a onClick="{{ goLanding }}" style="display:flex; align-items:center; gap:9px; cursor:pointer;">
+        <img src="assets/logo-wordmark-black.png" alt="MyGig" style="height:26px; display:block;">
+        <span style="font-family:var(--font-body); font-weight:700; font-size:12px; color:var(--ink-400); border-left:1px solid var(--ink-200); padding-left:9px; letter-spacing:-.01em;">Jobs</span>
+      </a>
+      <nav style="display:flex; gap:24px; margin-left:8px;">
+        <a onClick="{{ goBrowse }}" style="font-weight:600; font-size:14.5px; color:{{ browseLink }}; cursor:pointer;">Browse jobs</a>
+        <a onClick="{{ goList }}" style="font-weight:600; font-size:14.5px; color:{{ listLink }}; cursor:pointer;">List a job</a>
+        <a onClick="{{ goMobile }}" style="font-weight:600; font-size:14.5px; color:{{ mobileLink }}; cursor:pointer;">For workers</a>
+      </nav>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:12px;">
+        <button style="display:inline-flex; align-items:center; gap:7px; padding:8px 13px; border-radius:var(--r-pill); background:#fff; border:1.5px solid var(--ink-100); cursor:pointer; font-weight:700; font-size:12.5px; color:var(--ink-700);">
+          <img src="assets/amy-avatar.png" alt="Amy" style="width:18px; height:18px; border-radius:50%; display:block;">
+          Ask Amy <span style="color:var(--ink-300); font-family:var(--font-mono); font-size:11px;">⌘K</span>
+        </button>
+        <a style="font-weight:600; font-size:14px; color:var(--ink-700); cursor:pointer;">Sign in</a>
+        <button onClick="{{ goList }}" style="padding:10px 16px; border-radius:var(--r-md); background:var(--brand-500); color:#fff; border:2.5px solid var(--ink-900); box-shadow:3px 3px 0 var(--ink-900); cursor:pointer; font-weight:700; font-size:13.5px;">Post a job — free</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ LANDING ============ -->
+  <sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}">
+  <main>
+    <!-- HERO -->
+    <section style="background:var(--ink-900); color:#fff; padding:72px 28px 88px; position:relative; overflow:hidden;">
+      <div style="max-width:1080px; margin:0 auto; position:relative; z-index:2; text-align:center;">
+        <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:var(--r-pill); background:rgba(108,96,255,.18); border:1px solid rgba(108,96,255,.4); font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--brand-300); margin-bottom:26px;">Free casual jobs board</div>
+        <h1 style="font-family:var(--font-display); font-weight:800; font-size:clamp(40px,6vw,74px); line-height:.98; letter-spacing:-.025em; margin:0 0 20px;">Every casual shift in Australia.<br>One search.<span style="font-family:var(--font-script); font-weight:400; color:var(--brand-300); display:inline-block; transform:rotate(-3deg); font-size:.62em; margin-left:14px;">Work your Way</span></h1>
+        <p style="font-size:19px; line-height:1.5; color:rgba(255,255,255,.66); max-width:620px; margin:0 auto 34px;">We pull casual jobs from across the major job boards, classifieds, social groups and MyGig Shifts into one place. Apply once — we fast-track you and handle the rest.</p>
+
+        <!-- search bar -->
+        <div style="display:flex; gap:8px; max-width:760px; margin:0 auto; background:#fff; border:2.5px solid var(--ink-900); border-radius:var(--r-pill); padding:7px; box-shadow:5px 5px 0 var(--brand-500);">
+          <div style="flex:1.3; display:flex; align-items:center; gap:9px; padding:0 14px; border-right:1.5px solid var(--ink-100);">
+            <span style="color:var(--ink-300); display:flex;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg></span>
+            <input value="{{ search }}" onInput="{{ setSearch }}" placeholder="Barista, warehouse, event…" style="flex:1; border:none; outline:none; background:transparent; font-size:15px; font-weight:600; color:var(--ink-900); padding:11px 0;">
+          </div>
+          <div style="flex:1; display:flex; align-items:center; gap:9px; padding:0 14px;">
+            <span style="color:var(--ink-300); display:flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
+            <input value="{{ location }}" onInput="{{ setLocation }}" placeholder="Suburb or postcode" style="flex:1; border:none; outline:none; background:transparent; font-size:15px; font-weight:600; color:var(--ink-900); padding:11px 0;">
+          </div>
+          <button onClick="{{ goBrowse }}" style="padding:0 28px; border-radius:var(--r-pill); background:var(--brand-500); color:#fff; border:none; cursor:pointer; font-weight:800; font-size:15px;">Find shifts</button>
+        </div>
+        <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:18px;">
+          <sc-for list="{{ heroChips }}" as="chip" hint-placeholder-count="4">
+            <button onClick="{{ chip.go }}" style="padding:7px 13px; border-radius:var(--r-pill); background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); color:rgba(255,255,255,.82); cursor:pointer; font-weight:600; font-size:12.5px;">{{ chip.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCE STRIP -->
+    <div style="border-bottom:1px solid var(--ink-100); background:var(--ink-0); padding:20px 28px;">
+      <div style="max-width:1080px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:24px; flex-wrap:wrap;">
+        <span style="font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-400);">Aggregating from</span>
+        <span style="font-family:var(--font-display); font-weight:800; font-size:17px; color:var(--ink-500);">Major job boards</span>
+        <span style="color:var(--ink-200); font-weight:700;">·</span>
+        <span style="font-family:var(--font-display); font-weight:800; font-size:17px; color:var(--ink-500);">Classifieds</span>
+        <span style="color:var(--ink-200); font-weight:700;">·</span>
+        <span style="font-family:var(--font-display); font-weight:800; font-size:17px; color:var(--ink-500);">Social groups</span>
+        <span style="color:var(--ink-200); font-weight:700;">·</span>
+        <span style="display:inline-flex; align-items:center; gap:6px; font-family:var(--font-display); font-weight:800; font-size:17px; color:var(--brand-700);">✦ MyGig Shifts</span>
+      </div>
+    </div>
+
+    <!-- VALUE ROW -->
+    <section style="max-width:1180px; margin:0 auto; padding:64px 28px 8px;">
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:18px;">
+        <sc-for list="{{ valueProps }}" as="v" hint-placeholder-count="4">
+          <div style="background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-lg); padding:24px 22px; box-shadow:var(--sh-1);">
+            <div style="width:40px; height:40px; border-radius:var(--r-md); background:var(--brand-100); color:var(--brand-700); display:flex; align-items:center; justify-content:center; margin-bottom:14px;">{{ v.icon }}</div>
+            <div style="font-family:var(--font-display); font-weight:700; font-size:17px; color:var(--ink-900); margin-bottom:5px;">{{ v.title }}</div>
+            <div style="font-size:13.5px; color:var(--ink-400); line-height:1.5;">{{ v.body }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section style="max-width:1180px; margin:0 auto; padding:56px 28px;">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:24px;">
+        <div>
+          <div style="font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--brand-900); margin-bottom:10px;">Browse by industry</div>
+          <h2 style="font-family:var(--font-display); font-weight:800; font-size:34px; color:var(--ink-900); margin:0; letter-spacing:-.02em;">Pick your kind of work</h2>
+        </div>
+        <a onClick="{{ goBrowse }}" style="font-weight:700; font-size:14px; color:var(--brand-700); cursor:pointer;">See all jobs →</a>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px;">
+        <sc-for list="{{ categories }}" as="c" hint-placeholder-count="8">
+          <button onClick="{{ c.go }}" style="text-align:left; cursor:pointer; background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); padding:18px; display:flex; align-items:center; gap:14px;" style-hover="box-shadow:var(--sh-2); border-color:var(--ink-200);">
+            <div style="width:44px; height:44px; border-radius:var(--r-sm); background:{{ c.color }}; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; color:var(--ink-900); font-size:18px;">{{ c.initial }}</div>
+            <div>
+              <div style="font-family:var(--font-display); font-weight:700; font-size:15.5px; color:var(--ink-900);">{{ c.label }}</div>
+              <div style="font-size:12px; color:var(--ink-400);">{{ c.count }} open</div>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- BUSINESS BAND -->
+    <section style="background:var(--brand-100); border-top:3px solid var(--ink-900); border-bottom:3px solid var(--ink-900);">
+      <div style="max-width:1180px; margin:0 auto; padding:56px 28px; display:flex; align-items:center; justify-content:space-between; gap:40px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:300px;">
+          <div style="font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--brand-900); margin-bottom:12px;">For businesses</div>
+          <h2 style="font-family:var(--font-display); font-weight:800; font-size:36px; color:var(--ink-900); margin:0 0 12px; letter-spacing:-.02em; line-height:1.05;">List a casual job. Free, forever.</h2>
+          <p style="font-size:16px; color:var(--ink-500); margin:0; max-width:520px; line-height:1.5;">Post once and reach every casual worker browsing the board. Want it filled in minutes with vetted, no-show-proof workers? Flip it into a MyGig Shift and we become your Employer of Record.</p>
+        </div>
+        <button onClick="{{ goList }}" style="padding:15px 26px; border-radius:var(--r-md); background:var(--brand-500); color:#fff; border:3px solid var(--ink-900); box-shadow:var(--sh-stamp); cursor:pointer; font-weight:800; font-size:16px;">List a job free →</button>
+      </div>
+    </section>
+
+    <!-- AMY BAND -->
+    <section style="max-width:1180px; margin:0 auto; padding:64px 28px;">
+      <div style="background:var(--ink-900); border-radius:var(--r-xl); padding:44px; display:flex; align-items:center; gap:32px; flex-wrap:wrap;">
+        <img src="assets/amy-avatar.png" alt="Amy" style="width:64px; height:64px; border-radius:50%; flex-shrink:0; display:block;">
+        <div style="flex:1; min-width:280px;">
+          <div style="font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--brand-300); margin-bottom:8px;">✦ Amy · your AI shift-finder</div>
+          <h3 style="font-family:var(--font-display); font-weight:700; font-size:24px; color:#fff; margin:0 0 6px;">"Find me a weekend barista shift near Surry Hills that pays next day."</h3>
+          <p style="font-size:15px; color:rgba(255,255,255,.6); margin:0;">Ask in plain English. Amy filters the whole board, ranks the best matches, and gets your profile in front of the business.</p>
+        </div>
+        <button onClick="{{ goBrowse }}" style="padding:13px 22px; border-radius:var(--r-md); background:#fff; color:var(--ink-900); border:none; cursor:pointer; font-weight:800; font-size:15px; flex-shrink:0;">Try it →</button>
+      </div>
+    </section>
+
+    <footer style="border-top:1px solid var(--ink-100); padding:32px 28px;">
+      <div style="max-width:1180px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:13px; color:var(--ink-400);">
+        <img src="assets/logo-wordmark-black.png" alt="MyGig" style="height:22px; opacity:.85;">
+        <span>The board is free. MyGig is an authorised Employer of Record in NSW · WA · TAS · NT.</span>
+        <span>© 2026 Workforce Technologies Pty Ltd</span>
+      </div>
+    </footer>
+  </main>
+  </sc-if>
+
+  <!-- ============ BROWSE / CATALOGUE ============ -->
+  <sc-if value="{{ isBrowse }}" hint-placeholder-val="{{ true }}">
+  <main style="max-width:1280px; margin:0 auto; padding:0 28px;">
+    <!-- search header -->
+    <div style="position:sticky; top:68px; z-index:40; background:var(--ink-0); padding:22px 0 16px;">
+      <div style="display:flex; gap:8px; background:#fff; border:2px solid var(--ink-900); border-radius:var(--r-md); padding:6px; box-shadow:var(--sh-1);">
+        <div style="flex:1.3; display:flex; align-items:center; gap:9px; padding:0 12px; border-right:1.5px solid var(--ink-100);">
+          <span style="color:var(--ink-300); display:flex;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg></span>
+          <input value="{{ search }}" onInput="{{ setSearch }}" placeholder="Search casual jobs…" style="flex:1; border:none; outline:none; background:transparent; font-size:14.5px; font-weight:600; color:var(--ink-900); padding:9px 0;">
+        </div>
+        <div style="flex:1; display:flex; align-items:center; gap:9px; padding:0 12px;">
+          <span style="color:var(--ink-300); display:flex;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
+          <input value="{{ location }}" onInput="{{ setLocation }}" placeholder="Suburb or postcode" style="flex:1; border:none; outline:none; background:transparent; font-size:14.5px; font-weight:600; color:var(--ink-900); padding:9px 0;">
+        </div>
+        <button style="padding:0 22px; border-radius:var(--r-sm); background:var(--brand-500); color:#fff; border:none; cursor:pointer; font-weight:700; font-size:14px;">Search</button>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:264px 1fr; gap:28px; align-items:start; padding:8px 0 40px;">
+      <!-- FILTER SIDEBAR -->
+      <aside style="position:sticky; top:168px; background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-lg); padding:20px; box-shadow:var(--sh-1);">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:8px; font-family:var(--font-display); font-weight:700; font-size:16px; color:var(--ink-900);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="4" y1="21" y2="14"></line><line x1="4" x2="4" y1="10" y2="3"></line><line x1="12" x2="12" y1="21" y2="12"></line><line x1="12" x2="12" y1="8" y2="3"></line><line x1="20" x2="20" y1="21" y2="16"></line><line x1="20" x2="20" y1="12" y2="3"></line><line x1="1" x2="7" y1="14" y2="14"></line><line x1="9" x2="15" y1="8" y2="8"></line><line x1="17" x2="23" y1="16" y2="16"></line></svg>
+            Filters
+          </div>
+          <button onClick="{{ clearFilters }}" style="background:none; border:none; cursor:pointer; font-size:12px; font-weight:700; color:var(--brand-700);">Clear</button>
+        </div>
+
+        <div style="font-weight:700; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); margin:0 0 10px;">Industry</div>
+        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-bottom:20px;">
+          <sc-for list="{{ industryChips }}" as="chip" hint-placeholder-count="7">
+            <button onClick="{{ chip.toggle }}" style="display:inline-flex; align-items:center; gap:6px; padding:6px 11px; border-radius:var(--r-pill); border:1.5px solid {{ chip.border }}; background:{{ chip.bg }}; color:var(--ink-900); cursor:pointer; font-weight:600; font-size:12px;"><span style="width:8px; height:8px; border-radius:50%; background:{{ chip.color }};"></span>{{ chip.label }}</button>
+          </sc-for>
+        </div>
+
+        <div style="font-weight:700; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); margin:0 0 10px;">Job type</div>
+        <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:20px;">
+          <sc-for list="{{ jobTypeChips }}" as="chip" hint-placeholder-count="3">
+            <button onClick="{{ chip.toggle }}" style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:var(--r-sm); border:1.5px solid {{ chip.border }}; background:{{ chip.bg }}; cursor:pointer; font-weight:600; font-size:13px; color:var(--ink-700); text-align:left;"><span style="width:16px; height:16px; border-radius:5px; border:1.5px solid {{ chip.box }}; background:{{ chip.boxbg }}; display:flex; align-items:center; justify-content:center; color:#fff; font-size:10px;">{{ chip.check }}</span>{{ chip.label }}</button>
+          </sc-for>
+        </div>
+
+        <div style="font-weight:700; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); margin:0 0 4px;">Min pay</div>
+        <div style="font-family:var(--font-display); font-weight:800; font-size:20px; color:var(--ink-900); margin-bottom:6px;">{{ payMinLabel }}</div>
+        <input type="range" min="0" max="45" step="1" value="{{ payMin }}" onInput="{{ setPayMin }}" style="width:100%; accent-color:var(--brand-500); margin-bottom:20px;">
+
+        <div style="font-weight:700; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); margin:0 0 10px;">When</div>
+        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-bottom:20px;">
+          <sc-for list="{{ timingChips }}" as="chip" hint-placeholder-count="4">
+            <button onClick="{{ chip.toggle }}" style="padding:6px 12px; border-radius:var(--r-pill); border:1.5px solid {{ chip.border }}; background:{{ chip.bg }}; color:{{ chip.fg }}; cursor:pointer; font-weight:600; font-size:12px;">{{ chip.label }}</button>
+          </sc-for>
+        </div>
+
+        <div style="font-weight:700; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); margin:0 0 10px;">Good for</div>
+        <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:20px;">
+          <button onClick="{{ toggleNoExp }}" style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:var(--r-sm); border:1.5px solid {{ noExpBorder }}; background:{{ noExpBg }}; cursor:pointer; font-weight:600; font-size:13px; color:var(--ink-700); text-align:left;"><span style="width:16px; height:16px; border-radius:5px; border:1.5px solid {{ noExpBox }}; background:{{ noExpBoxbg }}; display:flex; align-items:center; justify-content:center; color:#fff; font-size:10px;">{{ noExpCheck }}</span>No experience needed</button>
+          <button onClick="{{ toggleVisa }}" style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:var(--r-sm); border:1.5px solid {{ visaBorder }}; background:{{ visaBg }}; cursor:pointer; font-weight:600; font-size:13px; color:var(--ink-700); text-align:left;"><span style="width:16px; height:16px; border-radius:5px; border:1.5px solid {{ visaBox }}; background:{{ visaBoxbg }}; display:flex; align-items:center; justify-content:center; color:#fff; font-size:10px;">{{ visaCheck }}</span>Visa / backpacker friendly</button>
+        </div>
+
+        <div style="font-weight:700; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); margin:0 0 10px;">Source</div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <sc-for list="{{ sourceChips }}" as="chip" hint-placeholder-count="5">
+            <button onClick="{{ chip.toggle }}" style="display:flex; align-items:center; gap:9px; padding:7px 10px; border-radius:var(--r-sm); border:1.5px solid {{ chip.border }}; background:{{ chip.bg }}; cursor:pointer; font-weight:600; font-size:13px; color:{{ chip.fg }}; text-align:left;">{{ chip.label }}</button>
+          </sc-for>
+        </div>
+      </aside>
+
+      <!-- RESULTS -->
+      <section>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <div style="font-family:var(--font-display); font-weight:800; font-size:22px; color:var(--ink-900);">{{ resultCount }} casual jobs</div>
+            <div style="font-size:13px; color:var(--ink-400);">{{ mixNote }}</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:12.5px; color:var(--ink-400); font-weight:600;">Sort</span>
+            <select value="{{ sort }}" onChange="{{ setSort }}" style="padding:9px 12px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); background:#fff; font-weight:600; font-size:13px; color:var(--ink-700); cursor:pointer;">
+              <option value="relevance">Best match</option>
+              <option value="pay">Highest pay</option>
+              <option value="close">Closest</option>
+              <option value="new">Newest</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Amy assist strip -->
+        <div style="background:linear-gradient(100deg, #2D2580, #6C60FF); border-radius:var(--r-md); padding:14px 16px; display:flex; align-items:center; gap:13px; margin-bottom:16px; flex-wrap:wrap;">
+          <img src="assets/amy-avatar.png" alt="Amy" style="width:32px; height:32px; border-radius:50%; flex-shrink:0; display:block; border:1.5px solid rgba(255,255,255,.5);">
+          <div style="flex:1; min-width:200px; color:#fff;">
+            <div style="font-weight:700; font-size:13.5px;">✦ Let Amy do the searching</div>
+            <div style="font-size:12.5px; color:rgba(255,255,255,.78);">Try one of these — Amy filters the whole board for you</div>
+          </div>
+          <div style="display:flex; gap:7px; flex-wrap:wrap;">
+            <sc-for list="{{ amyChips }}" as="chip" hint-placeholder-count="3">
+              <button onClick="{{ chip.go }}" style="padding:7px 12px; border-radius:var(--r-pill); background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.25); color:#fff; cursor:pointer; font-weight:600; font-size:12px; white-space:nowrap;">{{ chip.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- job cards -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <sc-for list="{{ jobs }}" as="job" hint-placeholder-count="5">
+            <div onClick="{{ job.open }}" style="background:#fff; border:1px solid var(--ink-100); border-left:5px solid {{ job.tagColor }}; border-radius:var(--r-md); padding:18px 20px; box-shadow:var(--sh-1); display:flex; gap:18px; align-items:flex-start; cursor:pointer; transition:box-shadow var(--dur-base) var(--ease-out-quint), transform var(--dur-base) var(--ease-out-quint);" style-hover="box-shadow:var(--sh-3); transform:translateY(-1px);">
+              <div style="flex:1; min-width:0;">
+                <div style="display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin-bottom:9px;">
+                  <span style="display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:var(--r-pill); background:{{ job.tagColor }}; font-weight:700; font-size:11px; color:var(--ink-900);"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink-900);"></span>{{ job.industryLabel }}</span>
+                  <sc-if value="{{ job.isMyGig }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex; align-items:center; gap:4px; padding:3px 9px; border-radius:var(--r-pill); background:var(--brand-500); color:#fff; font-weight:800; font-size:10.5px; letter-spacing:.02em;">✦ MyGig Shift</span></sc-if>
+                  <sc-if value="{{ job.isExternal }}"><span style="padding:3px 9px; border-radius:var(--r-pill); background:var(--ink-50); color:var(--ink-400); border:1px solid var(--ink-100); font-weight:700; font-size:10.5px;">{{ job.sourceLabel }}</span></sc-if>
+                  <sc-if value="{{ job.instantPay }}"><span style="display:inline-flex; align-items:center; gap:3px; padding:3px 9px; border-radius:var(--r-pill); background:var(--success-50); color:var(--success-700); font-weight:700; font-size:10.5px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"></path></svg>Instant Pay</span></sc-if>
+                </div>
+                <div style="font-family:var(--font-display); font-weight:700; font-size:19px; color:var(--ink-900); line-height:1.2;">{{ job.title }}</div>
+                <div style="font-size:14px; color:var(--ink-500); font-weight:600; margin-top:2px;">{{ job.business }}</div>
+                <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:11px; font-size:12.5px; color:var(--ink-400); font-weight:600;">
+                  <span style="display:inline-flex; align-items:center; gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>{{ job.location }} · {{ job.distance }}</span>
+                  <span style="display:inline-flex; align-items:center; gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>{{ job.when }}</span>
+                  <span style="display:inline-flex; align-items:center; gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>{{ job.jobTypeLabel }}</span>
+                </div>
+              </div>
+              <div style="text-align:right; flex-shrink:0; display:flex; flex-direction:column; align-items:flex-end; gap:9px;">
+                <div>
+                  <div style="font-family:var(--font-display); font-weight:800; font-size:24px; color:var(--ink-900); line-height:1;">{{ job.payDisplay }}<span style="font-size:13px; color:var(--ink-400); font-weight:600;">/hr</span></div>
+                  <div style="font-size:11px; color:var(--ink-400); margin-top:3px;">{{ job.positions }} spots open</div>
+                </div>
+                <button onClick="{{ job.apply }}" style="padding:9px 18px; border-radius:var(--r-sm); background:var(--brand-500); color:#fff; border:2px solid var(--ink-900); box-shadow:2px 2px 0 var(--ink-900); cursor:pointer; font-weight:700; font-size:13px; white-space:nowrap;">{{ job.applyLabel }}</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- empty state -->
+        <sc-if value="{{ noResults }}">
+          <div style="text-align:center; padding:64px 24px; background:#fff; border:1px dashed var(--ink-200); border-radius:var(--r-lg);">
+            <div style="font-family:var(--font-display); font-weight:800; font-size:20px; color:var(--ink-900);">No shifts match those filters</div>
+            <div style="font-size:14px; color:var(--ink-400); margin:8px 0 18px;">Widen your search — or let Amy hunt for you.</div>
+            <button onClick="{{ clearFilters }}" style="padding:11px 20px; border-radius:var(--r-md); background:var(--ink-900); color:#fff; border:none; cursor:pointer; font-weight:700; font-size:14px;">Clear all filters</button>
+          </div>
+        </sc-if>
+      </section>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ============ JOB DETAIL ============ -->
+  <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ true }}">
+  <main style="max-width:1080px; margin:0 auto; padding:24px 28px 48px;">
+    <button onClick="{{ goBrowse }}" style="display:inline-flex; align-items:center; gap:7px; background:none; border:none; cursor:pointer; font-weight:700; font-size:14px; color:var(--ink-500); margin-bottom:18px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>Back to results</button>
+
+    <div style="display:grid; grid-template-columns:1fr 348px; gap:28px; align-items:start;">
+      <div>
+        <!-- hero -->
+        <div style="background:var(--ink-900); border-radius:var(--r-xl); padding:30px 32px; color:#fff; position:relative; overflow:hidden;">
+          <div style="position:absolute; right:-30px; top:-30px; width:160px; height:160px; border-radius:50%; background:{{ detailJob.tagColor }}; opacity:.18;"></div>
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px; position:relative;">
+            <span style="display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:var(--r-pill); background:{{ detailJob.tagColor }}; font-weight:700; font-size:11.5px; color:var(--ink-900);"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink-900);"></span>{{ detailJob.industryLabel }}</span>
+            <span style="padding:4px 11px; border-radius:var(--r-pill); background:rgba(255,255,255,.12); font-weight:700; font-size:11.5px; color:#fff;">{{ detailJob.jobTypeLabel }}</span>
+            <sc-if value="{{ detailJob.instantPay }}"><span style="display:inline-flex; align-items:center; gap:4px; padding:4px 11px; border-radius:var(--r-pill); background:var(--brand-500); font-weight:700; font-size:11.5px; color:#fff;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"></path></svg>Instant Pay</span></sc-if>
+          </div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:32px; margin:0 0 6px; line-height:1.1; position:relative;">{{ detailJob.title }}</h1>
+          <div style="font-size:16px; color:rgba(255,255,255,.72); font-weight:600; position:relative;">{{ detailJob.business }}</div>
+          <div style="display:flex; align-items:baseline; gap:18px; margin-top:22px; padding-top:18px; border-top:1px solid rgba(255,255,255,.14); position:relative;">
+            <div>
+              <div style="font-family:var(--font-display); font-weight:800; font-size:36px; color:var(--brand-300); line-height:1;">{{ detailJob.payDisplay }}<span style="font-size:15px; color:rgba(255,255,255,.6);">/hr</span></div>
+              <div style="font-size:12px; color:rgba(255,255,255,.55); margin-top:5px;">{{ detailJob.awardNote }}</div>
+            </div>
+            <div style="margin-left:auto; text-align:right; flex-shrink:0;">
+              <div style="font-size:13px; color:#fff; font-weight:700; white-space:nowrap;">{{ detailJob.when }}</div>
+              <div style="font-size:12px; color:rgba(255,255,255,.55); margin-top:4px;">{{ detailJob.location }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- provenance -->
+        <div style="display:flex; align-items:center; gap:10px; margin-top:14px; padding:12px 16px; background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); font-size:13px; color:var(--ink-500);">
+          <span style="display:flex; color:var(--ink-300);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg></span>
+          <span>{{ detailJob.provenance }}</span>
+        </div>
+
+        <!-- description -->
+        <div style="background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-lg); padding:24px; margin-top:14px;">
+          <div style="font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-400); margin-bottom:12px;">About the shift</div>
+          <p style="font-size:15px; line-height:1.6; color:var(--ink-500); margin:0 0 18px;">{{ detailJob.desc }}</p>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <sc-for list="{{ detailJob.reqs }}" as="r" hint-placeholder-count="3">
+              <span style="padding:6px 12px; border-radius:var(--r-pill); background:var(--ink-50); font-weight:600; font-size:12.5px; color:var(--ink-700);">{{ r }}</span>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- what mygig handles -->
+        <div style="background:var(--brand-50); border:1px solid var(--brand-200); border-radius:var(--r-lg); padding:24px; margin-top:14px;">
+          <div style="display:flex; align-items:center; gap:9px; margin-bottom:14px;">
+            <img src="assets/amy-avatar.png" alt="Amy" style="width:28px; height:28px; border-radius:50%; display:block;">
+            <div style="font-weight:700; font-size:13px; color:var(--brand-900);">{{ detailJob.amyHeading }}</div>
+          </div>
+          <p style="font-size:14px; line-height:1.55; color:var(--ink-500); margin:0;">{{ detailJob.amyBody }}</p>
+        </div>
+      </div>
+
+      <!-- apply rail -->
+      <aside style="position:sticky; top:88px; background:#fff; border:2px solid var(--ink-900); border-radius:var(--r-lg); padding:22px; box-shadow:var(--sh-stamp);">
+        <div style="font-family:var(--font-display); font-weight:800; font-size:28px; color:var(--ink-900); line-height:1;">{{ detailJob.payDisplay }}<span style="font-size:15px; color:var(--ink-400); font-weight:600;">/hr</span></div>
+        <div style="font-size:13px; color:var(--ink-400); margin-top:4px;">{{ detailJob.positions }} spots · {{ detailJob.when }}</div>
+        <button onClick="{{ detailJob.apply }}" style="width:100%; margin-top:18px; padding:14px; border-radius:var(--r-md); background:var(--brand-500); color:#fff; border:none; cursor:pointer; font-weight:800; font-size:16px;">{{ detailJob.applyLabel }}</button>
+        <div style="font-size:12px; color:var(--ink-400); text-align:center; margin-top:9px;">Free · 60-second profile · no CV needed</div>
+        <div style="height:1px; background:var(--ink-100); margin:18px 0;"></div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <sc-for list="{{ detailJob.perks }}" as="p" hint-placeholder-count="3">
+            <div style="display:flex; align-items:flex-start; gap:10px;">
+              <span style="color:var(--success-500); flex-shrink:0; margin-top:1px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+              <div>
+                <div style="font-weight:700; font-size:13.5px; color:var(--ink-900);">{{ p.t }}</div>
+                <div style="font-size:12.5px; color:var(--ink-400); line-height:1.4;">{{ p.d }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </aside>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ============ LIST A JOB ============ -->
+  <sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+  <main style="max-width:1080px; margin:0 auto; padding:36px 28px 56px;">
+    <sc-if value="{{ listSubmitted }}">
+      <div style="max-width:620px; margin:40px auto; text-align:center; animation:mgpop .4s var(--ease-out-quint);">
+        <div style="display:inline-block; background:var(--brand-500); color:#fff; border:3px solid var(--ink-900); box-shadow:var(--sh-stamp); border-radius:var(--r-md); padding:10px 18px; transform:rotate(-2deg); font-family:var(--font-display); font-weight:800; font-size:14px; letter-spacing:.06em; margin-bottom:24px;">✓ YOUR LISTING IS LIVE</div>
+        <h1 style="font-family:var(--font-display); font-weight:800; font-size:36px; color:var(--ink-900); margin:0 0 12px; letter-spacing:-.02em;">It's on the board — for free.</h1>
+        <p style="font-size:16px; color:var(--ink-500); line-height:1.5; margin:0 0 28px;">Your job is now searchable by every casual worker on MyGig Jobs. We'll email you the moment someone applies.</p>
+        <div style="background:var(--ink-900); border-radius:var(--r-xl); padding:28px; text-align:left; color:#fff; margin-bottom:20px;">
+          <div style="font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--brand-300); margin-bottom:8px;">Want it filled in minutes?</div>
+          <h3 style="font-family:var(--font-display); font-weight:700; font-size:22px; margin:0 0 8px;">Convert it to a MyGig Shift</h3>
+          <p style="font-size:14px; color:rgba(255,255,255,.66); margin:0 0 18px; line-height:1.5;">We become your Employer of Record — vetted workers, 90%+ fill rate, 2% no-shows, award-correct pay, and one simple invoice. You only pay when someone shows up.</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button style="padding:12px 20px; border-radius:var(--r-md); background:var(--brand-500); color:#fff; border:2.5px solid #fff; cursor:pointer; font-weight:800; font-size:14px;">Upgrade to a MyGig Shift →</button>
+            <button onClick="{{ resetList }}" style="padding:12px 20px; border-radius:var(--r-md); background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.3); cursor:pointer; font-weight:700; font-size:14px;">List another job</button>
+          </div>
+        </div>
+        <button onClick="{{ goBrowse }}" style="background:none; border:none; cursor:pointer; font-weight:700; font-size:14px; color:var(--brand-700);">View the board →</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ listForm }}">
+    <div>
+      <div style="text-align:center; margin-bottom:32px;">
+        <div style="font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--brand-900); margin-bottom:10px;">List a job — free, forever</div>
+        <h1 style="font-family:var(--font-display); font-weight:800; font-size:40px; color:var(--ink-900); margin:0 0 10px; letter-spacing:-.025em;">Post a casual job in 60 seconds</h1>
+        <p style="font-size:16px; color:var(--ink-500); margin:0;">No credit card. No catch. Reach every worker on the board.</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 320px; gap:28px; align-items:start;">
+        <div style="display:flex; flex-direction:column; gap:18px;">
+          <!-- Amy banner -->
+          <div style="background:linear-gradient(100deg,#2D2580,#6C60FF); border-radius:var(--r-md); padding:16px 18px; display:flex; align-items:center; gap:13px;">
+            <img src="assets/amy-avatar.png" alt="Amy" style="width:34px; height:34px; border-radius:50%; flex-shrink:0; display:block; border:1.5px solid rgba(255,255,255,.5);">
+            <div style="flex:1; color:#fff;">
+              <div style="font-weight:700; font-size:14px;">✦ Let Amy write it for you</div>
+              <div style="font-size:12.5px; color:rgba(255,255,255,.78);">Paste a sentence — "need 2 baristas Sat morning, Surry Hills" — and Amy drafts the listing with award-correct pay.</div>
+            </div>
+            <button style="padding:9px 15px; border-radius:var(--r-sm); background:#fff; color:var(--brand-900); border:none; cursor:pointer; font-weight:800; font-size:13px; white-space:nowrap;">Draft with Amy</button>
+          </div>
+
+          <!-- business details -->
+          <div style="background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-lg); padding:24px;">
+            <div style="font-family:var(--font-display); font-weight:700; font-size:17px; color:var(--ink-900); margin-bottom:4px;">Your business</div>
+            <div style="font-size:13px; color:var(--ink-400); margin-bottom:18px;">We'll create your free employer account as you post.</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-weight:700; font-size:12.5px; color:var(--ink-700);">Business name</span><input placeholder="e.g. Single O" style="padding:11px 13px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none;" style-focus="border-color:var(--brand-500);"></label>
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-weight:700; font-size:12.5px; color:var(--ink-700);">ABN <span style="color:var(--ink-300); font-weight:500;">(optional)</span></span><input placeholder="00 000 000 000" style="padding:11px 13px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none; font-family:var(--font-mono);" style-focus="border-color:var(--brand-500);"></label>
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-weight:700; font-size:12.5px; color:var(--ink-700);">Your name</span><input placeholder="Contact name" style="padding:11px 13px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none;" style-focus="border-color:var(--brand-500);"></label>
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-weight:700; font-size:12.5px; color:var(--ink-700);">Work email</span><input placeholder="you@business.com.au" style="padding:11px 13px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none;" style-focus="border-color:var(--brand-500);"></label>
+            </div>
+          </div>
+
+          <!-- job details -->
+          <div style="background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-lg); padding:24px;">
+            <div style="font-family:var(--font-display); font-weight:700; font-size:17px; color:var(--ink-900); margin-bottom:18px;">The job</div>
+            <div style="display:flex; flex-direction:column; gap:14px;">
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-weight:700; font-size:12.5px; color:var(--ink-700);">Job title</span><input placeholder="e.g. Weekend barista" style="padding:11px 13px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none;" style-focus="border-color:var(--brand-500);"></label>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-weight:700; font-size:12.5px; color:var(--ink-700);">Industry</span><select style="padding:11px 13px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none; background:#fff;" style-focus="border-color:var(--brand-500);"><option>Hospitality</option><option>Events</option><option>Warehousing</option><option>Construction</option><option>Retail</option><option>Mining</option><option>Agriculture</option></select></label>
+                <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-weight:700; font-size:12.5px; color:var(--ink-700);">Suburb</span><input placeholder="Surry Hills, NSW" style="padding:11px 13px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none;" style-focus="border-color:var(--brand-500);"></label>
+              </div>
+              <div>
+                <span style="font-weight:700; font-size:12.5px; color:var(--ink-700); display:block; margin-bottom:8px;">Job type</span>
+                <div style="display:flex; gap:8px;">
+                  <sc-for list="{{ empTypeChips }}" as="t" hint-placeholder-count="3">
+                    <button onClick="{{ t.pick }}" style="flex:1; padding:11px; border-radius:var(--r-sm); border:1.5px solid {{ t.border }}; background:{{ t.bg }}; cursor:pointer; font-weight:700; font-size:13px; color:{{ t.fg }};">{{ t.label }}</button>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ showCasualSub }}" hint-placeholder-val="{{ true }}">
+                  <div style="margin-top:10px; padding:12px; background:var(--brand-50); border:1px solid var(--brand-200); border-radius:var(--r-sm);">
+                    <span style="font-weight:700; font-size:12px; color:var(--ink-700); display:block; margin-bottom:8px;">Casual basis</span>
+                    <div style="display:flex; gap:8px;">
+                      <sc-for list="{{ casualSubChips }}" as="t" hint-placeholder-count="2">
+                        <button onClick="{{ t.pick }}" style="flex:1; padding:9px; border-radius:var(--r-sm); border:1.5px solid {{ t.border }}; background:{{ t.bg }}; cursor:pointer; font-weight:700; font-size:12.5px; color:{{ t.fg }};">{{ t.label }}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+              <div>
+                <span style="font-weight:700; font-size:12.5px; color:var(--ink-700); display:block; margin-bottom:8px;">Pay rate</span>
+                <div style="background:var(--brand-50); border:1px solid var(--brand-200); border-radius:var(--r-sm); padding:14px;">
+                  <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+                    <img src="assets/amy-avatar.png" alt="Amy" style="width:24px; height:24px; border-radius:50%; display:block;">
+                    <span style="font-weight:700; font-size:12.5px; color:var(--brand-900);">✦ Amy sets the Award Rate for you</span>
+                  </div>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <label style="display:flex; flex-direction:column; gap:5px;"><span style="font-weight:700; font-size:11.5px; color:var(--ink-500);">Award</span><select value="{{ awardKey }}" onChange="{{ setAward }}" style="padding:10px 11px; border-radius:var(--r-sm); border:1.5px solid var(--brand-200); font-size:13px; outline:none; background:#fff;" style-focus="border-color:var(--brand-500);"><sc-for list="{{ awardOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></label>
+                    <label style="display:flex; flex-direction:column; gap:5px;"><span style="font-weight:700; font-size:11.5px; color:var(--ink-500);">Classification</span><select value="{{ classKey }}" onChange="{{ setClass }}" style="padding:10px 11px; border-radius:var(--r-sm); border:1.5px solid var(--brand-200); font-size:13px; outline:none; background:#fff;" style-focus="border-color:var(--brand-500);"><sc-for list="{{ classOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></label>
+                  </div>
+                  <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; padding:11px 14px; background:#fff; border:1.5px dashed var(--brand-300); border-radius:var(--r-sm);">
+                    <span style="font-size:12px; color:var(--ink-500); font-weight:600;">Award rate · casual loading incl.</span>
+                    <span style="font-family:var(--font-display); font-weight:800; font-size:20px; color:var(--ink-900);">{{ awardRateDisplay }}<span style="font-size:12px; color:var(--ink-400); font-weight:600;">/hr</span></span>
+                  </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px; margin:12px 0;"><div style="flex:1; height:1px; background:var(--ink-100);"></div><span style="font-size:11px; color:var(--ink-400); font-weight:600;">or set your own rate</span><div style="flex:1; height:1px; background:var(--ink-100);"></div></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                  <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-weight:700; font-size:12.5px; color:var(--ink-700);">Custom rate ($/hr)</span><input placeholder="e.g. 32.00" style="padding:11px 13px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none; font-family:var(--font-mono);" style-focus="border-color:var(--brand-500);"></label>
+                  <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-weight:700; font-size:12.5px; color:var(--ink-700);">Positions</span><input placeholder="2" style="padding:11px 13px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none; font-family:var(--font-mono);" style-focus="border-color:var(--brand-500);"></label>
+                </div>
+              </div>
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-weight:700; font-size:12.5px; color:var(--ink-700);">Description</span><textarea rows="3" placeholder="What's the work, what to wear, who to ask for…" style="padding:11px 13px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none; resize:vertical; font-family:var(--font-body);" style-focus="border-color:var(--brand-500);"></textarea></label>
+              <div>
+                <span style="font-weight:700; font-size:12.5px; color:var(--ink-700); display:block; margin-bottom:8px;">Good to flag</span>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                  <sc-for list="{{ listFlags }}" as="f" hint-placeholder-count="3">
+                    <button onClick="{{ f.toggle }}" style="display:inline-flex; align-items:center; gap:7px; padding:8px 13px; border-radius:var(--r-pill); border:1.5px solid {{ f.border }}; background:{{ f.bg }}; cursor:pointer; font-weight:600; font-size:13px; color:var(--ink-700);"><span style="width:15px; height:15px; border-radius:5px; border:1.5px solid {{ f.box }}; background:{{ f.boxbg }}; display:flex; align-items:center; justify-content:center; color:#fff; font-size:9px;">{{ f.check }}</span>{{ f.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button onClick="{{ submitList }}" style="padding:15px; border-radius:var(--r-md); background:var(--brand-500); color:#fff; border:3px solid var(--ink-900); box-shadow:var(--sh-stamp); cursor:pointer; font-weight:800; font-size:16px;">Post job to the board — free →</button>
+        </div>
+
+        <!-- rail -->
+        <aside style="position:sticky; top:88px; display:flex; flex-direction:column; gap:16px;">
+          <div style="background:var(--ink-900); border-radius:var(--r-lg); padding:22px; color:#fff;">
+            <div style="font-family:var(--font-display); font-weight:700; font-size:17px; margin-bottom:14px;">Why list here</div>
+            <div style="display:flex; flex-direction:column; gap:13px;">
+              <sc-for list="{{ listPerks }}" as="p" hint-placeholder-count="4">
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                  <span style="color:var(--brand-300); flex-shrink:0; margin-top:1px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+                  <div style="font-size:13.5px; color:rgba(255,255,255,.82); line-height:1.45;">{{ p }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:var(--brand-100); border:1.5px solid var(--brand-200); border-radius:var(--r-lg); padding:18px;">
+            <div style="display:inline-block; background:var(--brand-500); color:#fff; border:2px solid var(--ink-900); box-shadow:3px 3px 0 var(--ink-900); border-radius:var(--r-sm); padding:6px 12px; transform:rotate(-2deg); font-family:var(--font-display); font-weight:800; font-size:13px; margin-bottom:12px;">$0 — ALWAYS FREE</div>
+            <p style="font-size:13px; color:var(--ink-500); margin:0; line-height:1.5;">Listing is genuinely free. You only pay if you upgrade a job to a fully-managed MyGig Shift.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+    </sc-if>
+  </main>
+  </sc-if>
+
+  <!-- ============ MOBILE / FOR WORKERS ============ -->
+  <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ true }}">
+  <main data-screen-label="Mobile" style="background:var(--ink-50); padding:40px 28px 64px; min-height:60vh;">
+    <div style="max-width:1180px; margin:0 auto;">
+      <div style="text-align:center; margin-bottom:36px;">
+        <div style="font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--brand-900); margin-bottom:10px;">For workers · on the go</div>
+        <h1 style="font-family:var(--font-display); font-weight:800; font-size:38px; color:var(--ink-900); margin:0 0 10px; letter-spacing:-.025em;">Browse, apply, get paid — from your phone</h1>
+        <p style="font-size:16px; color:var(--ink-500); margin:0;">Apply once and you're in the MyGig pool. Same flow on the web and in the app.</p>
+      </div>
+      <div style="display:flex; gap:32px; justify-content:center; flex-wrap:wrap;">
+
+        <!-- PHONE 1 — Browse feed -->
+        <div>
+          <div style="width:300px; height:620px; background:var(--ink-900); border-radius:42px; padding:11px; box-shadow:0 30px 70px rgba(14,13,11,.2);">
+            <div style="width:100%; height:100%; background:var(--ink-0); border-radius:31px; overflow:hidden; position:relative; display:flex; flex-direction:column;">
+              <div style="position:absolute; top:8px; left:50%; transform:translateX(-50%); width:84px; height:24px; background:var(--ink-900); border-radius:13px; z-index:10;"></div>
+              <div style="display:flex; justify-content:space-between; padding:12px 20px 4px; font-weight:700; font-size:12px; color:var(--ink-900);"><span>9:41</span><span>● ● ▮</span></div>
+              <div style="padding:10px 16px 8px;">
+                <div style="font-family:var(--font-display); font-weight:800; font-size:19px; color:var(--ink-900);">Casual jobs near you</div>
+                <div style="display:flex; gap:7px; margin-top:10px; background:#fff; border:1.5px solid var(--ink-900); border-radius:var(--r-pill); padding:8px 14px; align-items:center;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-300)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                  <span style="font-size:12.5px; color:var(--ink-300); font-weight:600;">Barista, warehouse…</span>
+                </div>
+                <div style="display:flex; gap:6px; margin-top:9px; overflow:hidden;">
+                  <span style="padding:5px 11px; border-radius:var(--r-pill); background:var(--ink-900); color:#fff; font-size:10.5px; font-weight:700;">All</span>
+                  <span style="padding:5px 11px; border-radius:var(--r-pill); background:#fff; border:1px solid var(--ink-100); color:var(--ink-500); font-size:10.5px; font-weight:600;">Today</span>
+                  <span style="padding:5px 11px; border-radius:var(--r-pill); background:#fff; border:1px solid var(--ink-100); color:var(--ink-500); font-size:10.5px; font-weight:600;">No exp</span>
+                </div>
+              </div>
+              <div style="flex:1; overflow:hidden; padding:0 16px;">
+                <div style="background:#fff; border:1px solid var(--ink-100); border-left:4px solid #FFD6A8; border-radius:var(--r-md); padding:12px; margin-bottom:10px; box-shadow:var(--sh-1);">
+                  <div style="display:flex; gap:5px; margin-bottom:6px;"><span style="padding:2px 7px; border-radius:var(--r-pill); background:#FFD6A8; font-size:9px; font-weight:700; color:var(--ink-900);">Hospitality</span><span style="padding:2px 7px; border-radius:var(--r-pill); background:var(--brand-500); color:#fff; font-size:9px; font-weight:800;">✦ MyGig</span></div>
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start;"><div><div style="font-family:var(--font-display); font-weight:700; font-size:14px; color:var(--ink-900);">Barista</div><div style="font-size:11px; color:var(--ink-400);">Single O · 2.4 km</div></div><div style="text-align:right;"><div style="font-family:var(--font-display); font-weight:800; font-size:16px; color:var(--ink-900);">$31.19</div><div style="font-size:9px; color:var(--ink-400);">/hr</div></div></div>
+                </div>
+                <div style="background:#fff; border:1px solid var(--ink-100); border-left:4px solid #F2C9FF; border-radius:var(--r-md); padding:12px; margin-bottom:10px; box-shadow:var(--sh-1);">
+                  <div style="display:flex; gap:5px; margin-bottom:6px;"><span style="padding:2px 7px; border-radius:var(--r-pill); background:#F2C9FF; font-size:9px; font-weight:700; color:var(--ink-900);">Events</span><span style="padding:2px 7px; border-radius:var(--r-pill); background:var(--success-50); color:var(--success-700); font-size:9px; font-weight:700;">⚡ Instant Pay</span></div>
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start;"><div><div style="font-family:var(--font-display); font-weight:700; font-size:14px; color:var(--ink-900);">Event Steward</div><div style="font-size:11px; color:var(--ink-400);">SCG · 5.1 km</div></div><div style="text-align:right;"><div style="font-family:var(--font-display); font-weight:800; font-size:16px; color:var(--ink-900);">$36.00</div><div style="font-size:9px; color:var(--ink-400);">/hr</div></div></div>
+                </div>
+                <div style="background:#fff; border:1px solid var(--ink-100); border-left:4px solid #B8E2FF; border-radius:var(--r-md); padding:12px; box-shadow:var(--sh-1);">
+                  <div style="display:flex; gap:5px; margin-bottom:6px;"><span style="padding:2px 7px; border-radius:var(--r-pill); background:#B8E2FF; font-size:9px; font-weight:700; color:var(--ink-900);">Warehousing</span><span style="padding:2px 7px; border-radius:var(--r-pill); background:var(--ink-50); color:var(--ink-400); font-size:9px; font-weight:700;">External</span></div>
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start;"><div><div style="font-family:var(--font-display); font-weight:700; font-size:14px; color:var(--ink-900);">Pick &amp; Pack</div><div style="font-size:11px; color:var(--ink-400);">Toll · 8.1 km</div></div><div style="text-align:right;"><div style="font-family:var(--font-display); font-weight:800; font-size:16px; color:var(--ink-900);">$34.50</div><div style="font-size:9px; color:var(--ink-400);">/hr</div></div></div>
+                </div>
+              </div>
+              <div style="display:flex; padding:9px 0 22px; background:#fff; border-top:1px solid var(--ink-100);">
+                <div style="flex:1; text-align:center; font-size:9px; font-weight:700; color:var(--ink-900);">◎<div>Browse</div></div>
+                <div style="flex:1; text-align:center; font-size:9px; font-weight:600; color:var(--ink-300);">♡<div>Saved</div></div>
+                <div style="flex:1; text-align:center; font-size:9px; font-weight:600; color:var(--ink-300);">$<div>Wallet</div></div>
+                <div style="flex:1; text-align:center; font-size:9px; font-weight:600; color:var(--ink-300);">◉<div>Profile</div></div>
+              </div>
+            </div>
+          </div>
+          <div style="text-align:center; margin-top:14px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-500);">01 — Browse</div>
+        </div>
+
+        <!-- PHONE 2 — Job detail -->
+        <div>
+          <div style="width:300px; height:620px; background:var(--ink-900); border-radius:42px; padding:11px; box-shadow:0 30px 70px rgba(14,13,11,.2);">
+            <div style="width:100%; height:100%; background:var(--ink-0); border-radius:31px; overflow:hidden; position:relative; display:flex; flex-direction:column;">
+              <div style="position:absolute; top:8px; left:50%; transform:translateX(-50%); width:84px; height:24px; background:var(--ink-900); border-radius:13px; z-index:10;"></div>
+              <div style="background:var(--ink-900); color:#fff; padding:14px 18px 18px;">
+                <div style="display:flex; justify-content:space-between; padding-bottom:14px; font-weight:700; font-size:12px;"><span>9:41</span><span>● ● ▮</span></div>
+                <div style="font-size:12px; color:rgba(255,255,255,.6); margin-bottom:10px;">← Back</div>
+                <div style="display:flex; gap:5px; margin-bottom:10px;"><span style="padding:3px 9px; border-radius:var(--r-pill); background:#FFD6A8; font-size:10px; font-weight:700; color:var(--ink-900);">Hospitality</span><span style="padding:3px 9px; border-radius:var(--r-pill); background:var(--brand-500); color:#fff; font-size:10px; font-weight:800;">✦ MyGig Shift</span></div>
+                <div style="font-family:var(--font-display); font-weight:800; font-size:21px;">Barista</div>
+                <div style="font-size:12px; color:rgba(255,255,255,.7);">Single O, Surry Hills</div>
+                <div style="display:flex; align-items:baseline; gap:6px; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,.14);"><span style="font-family:var(--font-display); font-weight:800; font-size:26px; color:var(--brand-300);">$31.19</span><span style="font-size:11px; color:rgba(255,255,255,.6);">/hr · Hospitality Award</span></div>
+              </div>
+              <div style="flex:1; padding:14px 18px; overflow:hidden;">
+                <div style="font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); margin-bottom:8px;">When &amp; where</div>
+                <div style="font-size:12.5px; color:var(--ink-900); font-weight:600; margin-bottom:4px;">Tomorrow · 6:30am–2:00pm</div>
+                <div style="font-size:12px; color:var(--ink-400); margin-bottom:14px;">60 Reservoir St, Surry Hills NSW</div>
+                <div style="font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); margin-bottom:8px;">About</div>
+                <div style="font-size:12.5px; color:var(--ink-500); line-height:1.5;">Espresso bar service through the morning rush. La Marzocco GB5. Black tee, closed-toe shoes.</div>
+                <div style="background:var(--brand-50); border:1px solid var(--brand-200); border-radius:var(--r-md); padding:11px; margin-top:14px; display:flex; gap:8px; align-items:flex-start;"><img src="assets/amy-avatar.png" alt="Amy" style="width:22px; height:22px; border-radius:50%; flex-shrink:0; display:block;"><span style="font-size:11px; color:var(--ink-500); line-height:1.4;">✦ Amy: pay follows the award. We handle payroll &amp; super.</span></div>
+              </div>
+              <div style="padding:12px 18px 22px; background:#fff; border-top:1px solid var(--ink-100);">
+                <div style="background:var(--brand-500); color:#fff; border:2px solid var(--ink-900); box-shadow:2px 2px 0 var(--ink-900); border-radius:var(--r-md); padding:12px; text-align:center; font-weight:800; font-size:14px;">Apply now</div>
+              </div>
+            </div>
+          </div>
+          <div style="text-align:center; margin-top:14px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-500);">02 — Job detail</div>
+        </div>
+
+        <!-- PHONE 3 — Applied / in the pool -->
+        <div>
+          <div style="width:300px; height:620px; background:var(--ink-900); border-radius:42px; padding:11px; box-shadow:0 30px 70px rgba(14,13,11,.2);">
+            <div style="width:100%; height:100%; background:var(--ink-0); border-radius:31px; overflow:hidden; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:28px;">
+              <div style="position:absolute; top:8px; left:50%; transform:translateX(-50%); width:84px; height:24px; background:var(--ink-900); border-radius:13px; z-index:10;"></div>
+              <div style="display:inline-block; background:var(--brand-500); color:#fff; border:3px solid var(--ink-900); box-shadow:var(--sh-stamp); border-radius:var(--r-md); padding:10px 16px; transform:rotate(-3deg); font-family:var(--font-display); font-weight:800; font-size:13px; letter-spacing:.05em; margin-bottom:22px;">✓ YOU'RE IN THE POOL</div>
+              <div style="font-family:var(--font-display); font-weight:800; font-size:22px; color:var(--ink-900); margin-bottom:8px;">Application sent 🎉</div>
+              <div style="font-size:12.5px; color:var(--ink-500); line-height:1.5; margin-bottom:20px;">Single O can hire you on the spot. We'll text you the moment you're confirmed.</div>
+              <div style="background:var(--success-50); border-radius:var(--r-md); padding:12px; display:flex; gap:8px; align-items:center; text-align:left; margin-bottom:20px;"><span style="color:var(--success-500);">⚡</span><span style="font-size:11.5px; color:var(--success-700); font-weight:600;">Work the shift → paid the next day, straight to your bank.</span></div>
+              <div style="width:100%; background:var(--ink-900); color:#fff; border-radius:var(--r-md); padding:12px; font-weight:800; font-size:14px;">Get the MyGig app</div>
+            </div>
+          </div>
+          <div style="text-align:center; margin-top:14px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-500);">03 — In the pool</div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ============ APPLY MODAL ============ -->
+  <sc-if value="{{ applyOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed; inset:0; z-index:80; background:rgba(14,13,11,.55); display:flex; align-items:center; justify-content:center; padding:24px; animation:mgfade .2s ease;">
+    <div style="width:100%; max-width:460px; background:var(--surface-0); border-radius:var(--r-xl); box-shadow:var(--sh-4); overflow:hidden; animation:mgpop .3s var(--ease-out-quint);">
+      <sc-if value="{{ applyStepForm }}">
+        <div style="background:var(--ink-900); padding:20px 24px; color:#fff;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <span style="font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--brand-300);">Apply via MyGig</span>
+            <button onClick="{{ closeApply }}" style="background:none; border:none; color:rgba(255,255,255,.6); cursor:pointer; font-size:20px; line-height:1;">×</button>
+          </div>
+          <div style="font-family:var(--font-display); font-weight:700; font-size:20px; margin-top:8px;">{{ applyJob.title }}</div>
+          <div style="font-size:13px; color:rgba(255,255,255,.6);">{{ applyJob.business }} · {{ applyJob.payDisplay }}/hr</div>
+        </div>
+        <div style="padding:22px 24px;">
+          <div style="font-size:13.5px; color:var(--ink-500); margin-bottom:16px; line-height:1.5;">{{ applyJob.applyIntro }}</div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <input placeholder="Full name" style="padding:12px 14px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none;" style-focus="border-color:var(--brand-500);">
+            <input placeholder="Mobile number" style="padding:12px 14px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none;" style-focus="border-color:var(--brand-500);">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <input placeholder="Your suburb" style="padding:12px 14px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none;" style-focus="border-color:var(--brand-500);">
+              <select style="padding:12px 14px; border-radius:var(--r-sm); border:1.5px solid var(--ink-100); font-size:14px; outline:none; background:#fff; color:var(--ink-500);"><option>Right to work…</option><option>Citizen / PR</option><option>Working holiday visa</option><option>Student visa</option></select>
+            </div>
+          </div>
+          <label style="display:flex; align-items:center; gap:10px; margin-top:16px; padding:12px 14px; background:var(--brand-50); border:1.5px solid var(--brand-200); border-radius:var(--r-sm); cursor:pointer;">
+            <span style="width:18px; height:18px; border-radius:5px; background:var(--brand-500); display:flex; align-items:center; justify-content:center; color:#fff; flex-shrink:0;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+            <span style="font-size:13px; color:var(--ink-700); font-weight:600;">Join the MyGig pool — get matched to more shifts &amp; Instant Pay</span>
+          </label>
+          <button onClick="{{ submitApply }}" style="width:100%; margin-top:16px; padding:14px; border-radius:var(--r-md); background:var(--brand-500); color:#fff; border:none; cursor:pointer; font-weight:800; font-size:15px;">Submit application</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ applyStepDone }}">
+        <div style="padding:36px 28px; text-align:center;">
+          <div style="display:inline-block; background:var(--brand-500); color:#fff; border:3px solid var(--ink-900); box-shadow:var(--sh-stamp); border-radius:var(--r-md); padding:10px 18px; transform:rotate(-3deg); font-family:var(--font-display); font-weight:800; font-size:15px; letter-spacing:.05em; margin-bottom:22px;">✓ YOU'RE IN THE POOL</div>
+          <h2 style="font-family:var(--font-display); font-weight:800; font-size:26px; color:var(--ink-900); margin:0 0 10px;">Application sent 🎉</h2>
+          <p style="font-size:14.5px; color:var(--ink-500); line-height:1.55; margin:0 0 22px;">{{ applyJob.doneNote }}</p>
+          <div style="background:var(--success-50); border-radius:var(--r-md); padding:14px; display:flex; align-items:center; gap:10px; text-align:left; margin-bottom:20px;">
+            <span style="color:var(--success-500); flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"></path></svg></span>
+            <div style="font-size:13px; color:var(--success-700); font-weight:600;">Once you work a MyGig Shift, you're paid the day after — straight to your bank.</div>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button onClick="{{ closeApply }}" style="flex:1; padding:13px; border-radius:var(--r-md); background:var(--ink-900); color:#fff; border:none; cursor:pointer; font-weight:800; font-size:14px;">Get the app</button>
+            <button onClick="{{ closeApplyBrowse }}" style="flex:1; padding:13px; border-radius:var(--r-md); background:#fff; color:var(--ink-900); border:1.5px solid var(--ink-100); cursor:pointer; font-weight:700; font-size:14px;">Browse more</button>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ PROTOTYPE SWITCHER ============ -->
+  <nav style="position:fixed; bottom:18px; left:50%; transform:translateX(-50%); z-index:70; display:flex; gap:4px; background:var(--ink-900); padding:5px; border-radius:var(--r-pill); box-shadow:var(--sh-4);">
+    <sc-for list="{{ protoTabs }}" as="t" hint-placeholder-count="5">
+      <button onClick="{{ t.go }}" style="padding:8px 15px; border-radius:var(--r-pill); border:none; cursor:pointer; font-weight:700; font-size:12.5px; background:{{ t.bg }}; color:{{ t.fg }};">{{ t.label }}</button>
+    </sc-for>
+  </nav>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const INDUSTRIES = {
+  hospo:        { label: 'Hospitality',  color: '#FFD6A8', initial: 'H' },
+  events:       { label: 'Events',       color: '#F2C9FF', initial: 'E' },
+  warehouse:    { label: 'Warehousing',  color: '#B8E2FF', initial: 'W' },
+  construction: { label: 'Construction', color: '#FFDF6B', initial: 'C' },
+  retail:       { label: 'Retail',       color: '#F6B8C8', initial: 'R' },
+  mining:       { label: 'Mining',       color: '#C3D3A6', initial: 'M' },
+  agriculture:  { label: 'Agriculture',  color: '#C9E8C2', initial: 'A' },
+};
+const SOURCES = {
+  mygig:      { label: 'MyGig Shift', isMyGig: true },
+  seek:       { label: 'External' },
+  gumtree:    { label: 'External' },
+  backpacker: { label: 'External' },
+  facebook:   { label: 'External' },
+};
+const JOBTYPES = { shift: 'One-off shift', ongoing: 'Ongoing casual', gig: 'Gig / piece-rate' };
+const AWARDS = {
+  hospitality:  { label: 'Hospitality (HIGA)',     levels: { 'Level 1': 30.49, 'Level 2': 31.19, 'Level 3': 32.21, 'Level 4': 33.93 } },
+  retail:       { label: 'General Retail (GRIA)',  levels: { 'Level 1': 30.84, 'Level 2': 31.55, 'Level 3': 32.03 } },
+  storage:      { label: 'Storage Services',       levels: { 'Grade 1': 31.73, 'Grade 2': 32.78, 'Grade 3': 33.66 } },
+  building:     { label: 'Building & Construction', levels: { 'CW1': 33.65, 'CW2': 35.10, 'CW3': 36.20 } },
+  events:       { label: 'Amusement & Events',     levels: { 'Level 1': 30.49, 'Level 2': 31.40 } },
+  horticulture: { label: 'Horticulture',           levels: { 'Level 1': 30.26, 'Level 2': 31.07 } },
+};
+const RAW = [
+  { id:'mg1', title:'Barista', business:'Single O, Surry Hills', industry:'hospo', source:'mygig', jobType:'shift', location:'Surry Hills NSW', distanceKm:2.4, rate:31.19, when:'Tomorrow · 6:30am–2:00pm', timing:['today','week'], noExp:false, visa:true, instantPay:true, positions:2, desc:'Espresso bar service through the morning rush. La Marzocco GB5, two grinders. Black tee, closed-toe shoes. Ask for Lily at the counter.', reqs:['RSA preferred','Latte art a plus','Black attire'] },
+  { id:'mg2', title:'Event Steward', business:'SCG, Moore Park', industry:'events', source:'mygig', jobType:'shift', location:'Moore Park NSW', distanceKm:5.1, rate:36.00, when:'Sat · 4:00pm–11:00pm', timing:['week','weekends','nights'], noExp:true, visa:true, instantPay:true, positions:12, desc:'Crowd direction and gate scanning for a sold-out fixture. Hi-vis and lanyard supplied on arrival. Great first shift — full briefing provided.', reqs:['No experience needed','On your feet','Hi-vis supplied'] },
+  { id:'sk1', title:'Pick & Pack', business:'Toll, Yennora DC', industry:'warehouse', source:'seek', jobType:'ongoing', location:'Yennora NSW', distanceKm:8.1, rate:34.50, when:'Ongoing · Mon–Fri AM', timing:['week'], noExp:true, visa:false, instantPay:false, positions:5, desc:'Order picking with RF scanners in an ambient DC. Steady ongoing roster, room to pick up extra days.', reqs:['Steel-cap boots','Reliable AM starts'] },
+  { id:'gt1', title:'Kitchen Hand', business:'The Grounds, Alexandria', industry:'hospo', source:'gumtree', jobType:'shift', location:'Alexandria NSW', distanceKm:3.6, rate:30.00, when:'This week · nights', timing:['week','nights'], noExp:true, visa:true, instantPay:false, positions:1, desc:'Dishwashing and prep support across a busy weekend service. Fast-paced, friendly kitchen.', reqs:['No experience needed','Weekend availability'] },
+  { id:'bp1', title:'Fruit Picker', business:'Costa Group', industry:'agriculture', source:'backpacker', jobType:'gig', location:'Coffs Harbour NSW', distanceKm:45, rate:28.50, when:'Seasonal · daylight', timing:['week'], noExp:true, visa:true, instantPay:false, positions:20, desc:'Berry picking paid on a piece + hourly basis. Regional work that counts toward your second-year visa.', reqs:['88-day visa work','Accommodation nearby'] },
+  { id:'mg3', title:'General Labourer', business:'Mirvac, Olympic Park', industry:'construction', source:'mygig', jobType:'shift', location:'Sydney Olympic Park NSW', distanceKm:11, rate:42.00, when:'Tomorrow · 7:00am–3:00pm', timing:['today','week'], noExp:false, visa:false, instantPay:true, positions:4, desc:'Site clean, material movement and traffic spotting on a commercial build. White Card required, PPE supplied.', reqs:['White Card required','PPE supplied'] },
+  { id:'sk2', title:'Retail Assistant', business:'Coles, Bondi Junction', industry:'retail', source:'seek', jobType:'ongoing', location:'Bondi Junction NSW', distanceKm:4.2, rate:29.00, when:'Ongoing · weekends', timing:['week','weekends'], noExp:true, visa:true, instantPay:false, positions:3, desc:'Shelf-fill and checkout across the weekend peak. Friendly team, flexible hours.', reqs:['No experience needed','Weekend shifts'] },
+  { id:'fb1', title:'Bartender', business:'The Imperial, Erskineville', industry:'hospo', source:'facebook', jobType:'shift', location:'Erskineville NSW', distanceKm:3.0, rate:33.00, when:'Fri–Sat · nights', timing:['week','weekends','nights'], noExp:false, visa:true, instantPay:false, positions:2, desc:'Cocktail and tap service across a big weekend. Must hold a current RSA.', reqs:['RSA required','Cocktail experience'] },
+  { id:'mg4', title:'Forklift Operator', business:'Cargill, Botany', industry:'warehouse', source:'mygig', jobType:'ongoing', location:'Botany NSW', distanceKm:9.5, rate:38.00, when:'Ongoing · Mon–Fri', timing:['week'], noExp:false, visa:false, instantPay:true, positions:2, desc:'High-reach forklift in a temperature-controlled food DC. Current LF licence essential.', reqs:['LF licence required','Cold environment'] },
+  { id:'gt2', title:'Event Cleaner', business:'Quayclean, Sydney CBD', industry:'events', source:'gumtree', jobType:'shift', location:'Sydney CBD NSW', distanceKm:1.2, rate:31.00, when:'Tonight · 11:00pm–3:00am', timing:['today','nights'], noExp:true, visa:true, instantPay:false, positions:8, desc:'Post-event bowl clean at a major venue. Late-night work, transport provided to the gate.', reqs:['No experience needed','Late nights'] },
+  { id:'mg5', title:'Promo Staff', business:'Activate, Darling Harbour', industry:'events', source:'mygig', jobType:'gig', location:'Darling Harbour NSW', distanceKm:2.0, rate:35.00, when:'Sat–Sun · daytime', timing:['week','weekends'], noExp:true, visa:true, instantPay:true, positions:6, desc:'Brand sampling at a weekend expo. Outgoing, confident and happy on your feet all day.', reqs:['No experience needed','Outgoing'] },
+  { id:'mg6', title:'Waitstaff', business:'Merivale, Sydney CBD', industry:'hospo', source:'mygig', jobType:'shift', location:'Sydney CBD NSW', distanceKm:1.5, rate:32.50, when:'Fri · 5:00pm–11:00pm', timing:['week','nights','weekends'], noExp:false, visa:true, instantPay:true, positions:5, desc:'Floor service for a corporate function in the CBD. Black attire, polished service.', reqs:['Service experience','Black attire'] },
+  { id:'sk3', title:'Trades Assistant', business:'Downer, Newcastle', industry:'mining', source:'seek', jobType:'ongoing', location:'Newcastle NSW', distanceKm:45, rate:45.00, when:'Roster · 2&1 DIDO', timing:['week'], noExp:false, visa:false, instantPay:false, positions:4, desc:'Offsider on rail maintenance crew. Construction induction (White Card) and own transport required.', reqs:['White Card required','Own transport'] },
+  { id:'bp2', title:'Farm Hand', business:'Mudgee Estate', industry:'agriculture', source:'backpacker', jobType:'gig', location:'Mudgee NSW', distanceKm:45, rate:30.00, when:'Seasonal · daylight', timing:['week'], noExp:true, visa:true, instantPay:false, positions:10, desc:'Vineyard pruning and general farm duties. On-site accommodation available at a weekly rate.', reqs:['88-day visa work','Accommodation available'] },
+];
+
+class Component extends DCLogic {
+  state = {
+    screen: 'landing',
+    selectedJobId: null,
+    search: '',
+    location: '',
+    sort: 'relevance',
+    filters: { industry: [], jobType: [], timing: [], source: [], noExp: false, visa: false, payMin: 0 },
+    applyOpen: false,
+    applyJobId: null,
+    applyStep: 0,
+    listSubmitted: false,
+    listEmpType: 'casual',
+    listCasualType: 'oneoff',
+    awardKey: 'hospitality',
+    classKey: 'Level 2',
+    listFlags: [],
+  };
+
+  jobs = RAW.map((j, i) => ({
+    ...j,
+    o: i,
+    industryLabel: INDUSTRIES[j.industry].label,
+    tagColor: INDUSTRIES[j.industry].color,
+    sourceLabel: SOURCES[j.source].label,
+    isMyGig: !!SOURCES[j.source].isMyGig,
+    isExternal: !SOURCES[j.source].isMyGig,
+    jobTypeLabel: JOBTYPES[j.jobType],
+    payDisplay: '$' + j.rate.toFixed(2),
+    distance: j.distanceKm >= 40 ? 'Regional' : j.distanceKm.toFixed(1) + ' km',
+    applyLabel: SOURCES[j.source].isMyGig ? 'Apply now' : 'Apply via MyGig',
+  }));
+
+  go(screen) { this.setState({ screen }); if (typeof window !== 'undefined') window.scrollTo(0, 0); }
+  openJob(id) { this.setState({ screen: 'detail', selectedJobId: id }); if (typeof window !== 'undefined') window.scrollTo(0, 0); }
+  openApply(id) { this.setState({ applyOpen: true, applyJobId: id, applyStep: 0 }); }
+  closeApply() { this.setState({ applyOpen: false }); }
+
+  toggle(group, key) {
+    this.setState(s => {
+      const arr = s.filters[group];
+      const next = arr.includes(key) ? arr.filter(k => k !== key) : [...arr, key];
+      return { filters: { ...s.filters, [group]: next } };
+    });
+  }
+  toggleBool(key) { this.setState(s => ({ filters: { ...s.filters, [key]: !s.filters[key] } })); }
+  clearFilters() { this.setState({ filters: { industry: [], jobType: [], timing: [], source: [], noExp: false, visa: false, payMin: 0 }, search: '', location: '' }); }
+
+  filtered() {
+    const f = this.state.filters;
+    const q = this.state.search.trim().toLowerCase();
+    const loc = this.state.location.trim().toLowerCase();
+    let list = this.jobs.filter(j => {
+      if (q && !(`${j.title} ${j.business} ${j.industryLabel}`.toLowerCase().includes(q))) return false;
+      if (loc && !j.location.toLowerCase().includes(loc)) return false;
+      if (f.industry.length && !f.industry.includes(j.industry)) return false;
+      if (f.jobType.length && !f.jobType.includes(j.jobType)) return false;
+      if (f.source.length) {
+        const isMy = SOURCES[j.source].isMyGig;
+        if (!((f.source.includes('mygig') && isMy) || (f.source.includes('external') && !isMy))) return false;
+      }
+      if (f.timing.length && !f.timing.some(t => j.timing.includes(t))) return false;
+      if (f.noExp && !j.noExp) return false;
+      if (f.visa && !j.visa) return false;
+      if (j.rate < f.payMin) return false;
+      return true;
+    });
+    const s = this.state.sort;
+    if (s === 'pay') list = [...list].sort((a, b) => b.rate - a.rate);
+    else if (s === 'close') list = [...list].sort((a, b) => a.distanceKm - b.distanceKm);
+    else if (s === 'new') list = [...list].sort((a, b) => a.o - b.o);
+    return list;
+  }
+
+  chipStyle(active, color) {
+    return active
+      ? { border: 'var(--ink-900)', bg: color || 'var(--brand-100)', fg: 'var(--ink-900)', box: 'var(--brand-500)', boxbg: 'var(--brand-500)', check: '✓' }
+      : { border: 'var(--ink-100)', bg: '#fff', fg: 'var(--ink-500)', box: 'var(--ink-200)', boxbg: 'transparent', check: '' };
+  }
+
+  renderVals() {
+    const f = this.state.filters;
+    const list = this.filtered().map(j => ({
+      ...j,
+      open: () => this.openJob(j.id),
+      apply: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.openApply(j.id); },
+    }));
+
+    const detail = this.jobs.find(j => j.id === this.state.selectedJobId) || this.jobs[0];
+    const applyJ = this.jobs.find(j => j.id === this.state.applyJobId) || this.jobs[0];
+
+    const countByIndustry = (k) => this.jobs.filter(j => j.industry === k).length;
+    const navColor = (s) => this.state.screen === s ? 'var(--ink-900)' : 'var(--ink-500)';
+
+    const industryChips = Object.keys(INDUSTRIES).map(k => {
+      const active = f.industry.includes(k);
+      return { key: k, label: INDUSTRIES[k].label, color: INDUSTRIES[k].color,
+        border: active ? 'var(--ink-900)' : 'var(--ink-100)', bg: active ? INDUSTRIES[k].color : '#fff',
+        toggle: () => this.toggle('industry', k) };
+    });
+    const jobTypeChips = Object.keys(JOBTYPES).map(k => {
+      const active = f.jobType.includes(k);
+      return { label: JOBTYPES[k], border: active ? 'var(--brand-500)' : 'var(--ink-100)', bg: active ? 'var(--brand-50)' : '#fff',
+        box: active ? 'var(--brand-500)' : 'var(--ink-200)', boxbg: active ? 'var(--brand-500)' : 'transparent', check: active ? '✓' : '',
+        toggle: () => this.toggle('jobType', k) };
+    });
+    const timingDefs = [['today','Today'],['week','This week'],['nights','Nights'],['weekends','Weekends']];
+    const timingChips = timingDefs.map(([k, label]) => {
+      const active = f.timing.includes(k);
+      return { label, border: active ? 'var(--ink-900)' : 'var(--ink-100)', bg: active ? 'var(--ink-900)' : '#fff', fg: active ? '#fff' : 'var(--ink-500)',
+        toggle: () => this.toggle('timing', k) };
+    });
+    const sourceDefs = [['mygig','✦ MyGig Shifts'],['external','External listings']];
+    const sourceChips = sourceDefs.map(([k, label]) => {
+      const active = f.source.includes(k);
+      return { label, border: active ? 'var(--brand-500)' : 'var(--ink-100)', bg: active ? 'var(--brand-50)' : '#fff', fg: active ? 'var(--brand-900)' : 'var(--ink-500)',
+        toggle: () => this.toggle('source', k) };
+    });
+
+    const boolStyle = (on) => ({ border: on ? 'var(--brand-500)' : 'var(--ink-100)', bg: on ? 'var(--brand-50)' : '#fff', box: on ? 'var(--brand-500)' : 'var(--ink-200)', boxbg: on ? 'var(--brand-500)' : 'transparent', check: on ? '✓' : '' });
+    const ne = boolStyle(f.noExp); const vi = boolStyle(f.visa);
+
+    const heroChips = [
+      { label: 'Hospitality', go: () => { this.toggle('industry','hospo'); this.go('browse'); } },
+      { label: 'No experience needed', go: () => { this.toggleBool('noExp'); this.go('browse'); } },
+      { label: 'Visa friendly', go: () => { this.toggleBool('visa'); this.go('browse'); } },
+      { label: 'Paid next day', go: () => this.go('browse') },
+    ];
+    const amyChips = [
+      { label: 'Weekend barista, Surry Hills', go: () => { this.setState({ search: 'barista', filters: { ...f, timing: ['weekends'] } }); } },
+      { label: 'No-exp warehouse', go: () => { this.setState({ filters: { ...f, industry: ['warehouse'], noExp: true } }); } },
+      { label: 'Visa-friendly, regional', go: () => { this.setState({ filters: { ...f, visa: true } }); } },
+    ];
+    const valueProps = [
+      { icon: '◎', title: 'One search, every source', body: "Job boards, classifieds, social groups and MyGig Shifts — all in one feed." },
+      { icon: '⚡', title: 'Instant Pay', body: 'Work a MyGig Shift and get paid the day after — straight to your bank.' },
+      { icon: '✓', title: 'Apply once', body: 'No CVs. Join the MyGig pool and get fast-tracked to more shifts.' },
+      { icon: '$', title: 'Always free', body: 'Free to browse, free to apply, free for businesses to list.' },
+    ];
+    const categories = Object.keys(INDUSTRIES).map(k => ({
+      label: INDUSTRIES[k].label, color: INDUSTRIES[k].color, initial: INDUSTRIES[k].initial, count: countByIndustry(k),
+      go: () => { this.setState({ filters: { ...this.state.filters, industry: [k] } }); this.go('browse'); },
+    }));
+
+    const detailReqs = detail.reqs;
+    const provenance = detail.isMyGig
+      ? 'Posted directly on MyGig Shifts — apply and get hired in-app.'
+      : `Aggregated from an external listing. Apply through MyGig — we forward your details and fast-track you for similar shifts.`;
+    const amyHeading = detail.isMyGig ? '✦ Amy checked the pay' : '✦ Amy is on it';
+    const amyBody = detail.isMyGig
+      ? `This rate follows the ${detail.industryLabel} Modern Award for casual loading. As your Employer of Record, MyGig handles payroll, super and workers comp — you just turn up and work.`
+      : `This listing came from an external source. When you apply, Amy submits your details and lines up matching MyGig Shifts so you've always got backup work.`;
+    const perks = detail.isMyGig
+      ? [{ t: 'Instant Pay', d: 'Paid the day after your shift.' }, { t: 'Award-correct pay', d: 'Casual loading, penalties, super — all handled.' }, { t: 'Join the pool', d: 'Get first dibs on future shifts.' }]
+      : [{ t: 'One application', d: 'We forward you to the lister.' }, { t: 'Backup shifts', d: 'Get matched to MyGig Shifts too.' }, { t: 'No fees', d: 'Free to apply, always.' }];
+
+    const EMP = [['fulltime','Full time'],['parttime','Part time'],['casual','Casual']];
+    const empTypeChips = EMP.map(([k, label]) => {
+      const on = this.state.listEmpType === k;
+      return { label, border: on ? 'var(--ink-900)' : 'var(--ink-100)', bg: on ? 'var(--ink-900)' : '#fff', fg: on ? '#fff' : 'var(--ink-500)',
+        pick: () => this.setState({ listEmpType: k }) };
+    });
+    const CASUAL = [['oneoff','One-off'],['ongoing','Ongoing']];
+    const casualSubChips = CASUAL.map(([k, label]) => {
+      const on = this.state.listCasualType === k;
+      return { label, border: on ? 'var(--brand-500)' : 'var(--ink-100)', bg: on ? 'var(--brand-500)' : '#fff', fg: on ? '#fff' : 'var(--ink-500)',
+        pick: () => this.setState({ listCasualType: k }) };
+    });
+    const showCasualSub = this.state.listEmpType === 'casual';
+    const award = AWARDS[this.state.awardKey] || AWARDS.hospitality;
+    const awardOptions = Object.keys(AWARDS).map(k => ({ value: k, label: AWARDS[k].label }));
+    const classKeys = Object.keys(award.levels);
+    const curClass = award.levels[this.state.classKey] != null ? this.state.classKey : classKeys[0];
+    const classOptions = classKeys.map(k => ({ value: k, label: k }));
+    const awardRateNum = award.levels[curClass].toFixed(2);
+    const awardRateDisplay = '$' + awardRateNum;
+    const flagDefs = [['noexp','No experience needed'],['visa','Visa friendly'],['transport','Own transport']];
+    const listFlags = flagDefs.map(([k, label]) => {
+      const on = this.state.listFlags.includes(k);
+      return { label, border: on ? 'var(--brand-500)' : 'var(--ink-100)', bg: on ? 'var(--brand-50)' : '#fff', box: on ? 'var(--brand-500)' : 'var(--ink-200)', boxbg: on ? 'var(--brand-500)' : 'transparent', check: on ? '✓' : '',
+        toggle: () => this.setState(s => ({ listFlags: s.listFlags.includes(k) ? s.listFlags.filter(x => x !== k) : [...s.listFlags, k] })) };
+    });
+    const listPerks = ['Seen by every worker browsing the board', 'Applications land in your inbox instantly', 'Upgrade any job to a fully-managed MyGig Shift', 'Genuinely free — no card, no expiry'];
+
+    const protoDefs = [['landing','Landing'],['browse','Browse'],['detail','Job detail'],['list','List a job'],['mobile','Mobile']];
+    const protoTabs = protoDefs.map(([k, label]) => ({
+      label, bg: this.state.screen === k ? 'var(--brand-500)' : 'transparent', fg: this.state.screen === k ? '#fff' : 'rgba(255,255,255,.7)',
+      go: () => { if (k === 'detail') this.openJob(this.state.selectedJobId || this.jobs[0].id); else this.go(k); },
+    }));
+
+    const resultCount = list.length;
+    const mygigCount = list.filter(j => j.isMyGig).length;
+
+    return {
+      goLanding: () => this.go('landing'), goBrowse: () => this.go('browse'), goList: () => this.go('list'), goMobile: () => this.go('mobile'),
+      browseLink: navColor('browse'), listLink: navColor('list'), mobileLink: navColor('mobile'),
+      isLanding: this.state.screen === 'landing', isBrowse: this.state.screen === 'browse', isDetail: this.state.screen === 'detail', isList: this.state.screen === 'list', isMobile: this.state.screen === 'mobile',
+      search: this.state.search, location: this.state.location,
+      setSearch: (e) => this.setState({ search: e.target.value }), setLocation: (e) => this.setState({ location: e.target.value }),
+      sort: this.state.sort, setSort: (e) => this.setState({ sort: e.target.value }),
+      industryChips, jobTypeChips, timingChips, sourceChips,
+      payMin: f.payMin, payMinLabel: f.payMin === 0 ? 'Any' : '$' + f.payMin + '/hr+', setPayMin: (e) => this.setState({ filters: { ...this.state.filters, payMin: Number(e.target.value) } }),
+      noExpBorder: ne.border, noExpBg: ne.bg, noExpBox: ne.box, noExpBoxbg: ne.boxbg, noExpCheck: ne.check, toggleNoExp: () => this.toggleBool('noExp'),
+      visaBorder: vi.border, visaBg: vi.bg, visaBox: vi.box, visaBoxbg: vi.boxbg, visaCheck: vi.check, toggleVisa: () => this.toggleBool('visa'),
+      clearFilters: () => this.clearFilters(),
+      jobs: list, resultCount, noResults: resultCount === 0,
+      mixNote: resultCount === 0 ? 'Nothing here yet' : `${mygigCount} MyGig Shifts · ${resultCount - mygigCount} aggregated from across the web`,
+      amyChips,
+      heroChips, valueProps, categories,
+      detailJob: {
+        ...detail, reqs: detailReqs, provenance, amyHeading, amyBody, perks,
+        awardNote: detail.isMyGig ? detail.industryLabel + ' Award · casual' : 'Aggregated listing',
+        apply: () => this.openApply(detail.id),
+      },
+      applyOpen: this.state.applyOpen, applyStepForm: this.state.applyStep === 0, applyStepDone: this.state.applyStep === 1,
+      applyJob: {
+        ...applyJ,
+        applyIntro: applyJ.isMyGig
+          ? 'Quick profile and you can be hired straight away. No CV needed.'
+          : `This shift is listed externally. We'll forward your application and fast-track you for matching MyGig Shifts.`,
+        doneNote: applyJ.isMyGig
+          ? "The business will see your profile and can hire you on the spot. We'll text you the moment you're confirmed."
+          : `We've sent your details to the lister and added you to the MyGig pool, so we can line up backup shifts too.`,
+      },
+      submitApply: () => this.setState({ applyStep: 1 }), closeApply: () => this.closeApply(),
+      closeApplyBrowse: () => { this.closeApply(); this.go('browse'); },
+      listForm: !this.state.listSubmitted, listSubmitted: this.state.listSubmitted,
+      empTypeChips, casualSubChips, showCasualSub, awardOptions, classOptions, awardKey: this.state.awardKey, classKey: curClass, awardRateDisplay, awardRateNum,
+      setAward: (e) => this.setState({ awardKey: e.target.value, classKey: Object.keys(AWARDS[e.target.value].levels)[0] }),
+      setClass: (e) => this.setState({ classKey: e.target.value }),
+      listFlags, listPerks,
+      submitList: () => { this.setState({ listSubmitted: true }); if (typeof window !== 'undefined') window.scrollTo(0, 0); },
+      resetList: () => { this.setState({ listSubmitted: false }); if (typeof window !== 'undefined') window.scrollTo(0, 0); },
+      protoTabs,
+    };
+  }
+}
+</script>
+</body>
+</html>

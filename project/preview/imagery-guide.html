@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Imagery — The MyGig look" subtitle="Library, signature patterns, treatments, do/don't — with real brand imagery" viewport="1200x3200" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--ink-0); }
+  body { padding: 32px; font-family: var(--font-body); color: var(--ink-700); }
+
+  .lead { max-width: 920px; }
+  .lead h1 { font-family: var(--font-display); font-weight: 800; font-size: 40px; line-height: 1.05; letter-spacing: -0.02em; color: var(--ink-900); margin: 0 0 12px; }
+  .lead p { font-size: 16px; line-height: 1.55; color: var(--ink-500); margin: 0; max-width: 760px; }
+
+  .section-title { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--ink-900); margin: 40px 0 16px; display: flex; align-items: center; gap: 12px; }
+  .section-title .num { font-family: var(--font-mono); color: var(--brand-700); font-size: 13px; font-weight: 700; }
+  .section-sub { font-size: 14px; color: var(--ink-500); margin: 0 0 14px; max-width: 720px; line-height: 1.55; }
+
+  .grid { display: grid; gap: 16px; }
+  .g6 { grid-template-columns: repeat(6, 1fr); }
+  .g4 { grid-template-columns: repeat(4, 1fr); }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .g2 { grid-template-columns: repeat(2, 1fr); }
+
+  .img-card { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md); overflow: hidden; display: flex; flex-direction: column; }
+  .img-card .pic { background: var(--ink-100); position: relative; overflow: hidden; }
+  .img-card .pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-card .body { padding: 14px 16px; }
+  .img-card .lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 4px; }
+  .img-card .h { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--ink-900); line-height: 1.25; }
+  .img-card .d { font-size: 12px; color: var(--ink-400); margin-top: 4px; }
+
+  /* Aspect ratios */
+  .ar-1-1 { aspect-ratio: 1 / 1; }
+  .ar-4-5 { aspect-ratio: 4 / 5; }
+  .ar-3-4 { aspect-ratio: 3 / 4; }
+  .ar-9-16 { aspect-ratio: 9 / 16; }
+  .ar-16-9 { aspect-ratio: 16 / 9; }
+  .ar-3-2 { aspect-ratio: 3 / 2; }
+  .ar-21-9 { aspect-ratio: 21 / 9; }
+
+  .crop-r-md { border-radius: var(--r-md); }
+  .crop-r-lg { border-radius: var(--r-lg); }
+  .crop-r-xl { border-radius: var(--r-xl); }
+  .crop-circle { border-radius: 50%; }
+
+  .stamp-border { border: 2px solid var(--ink-900); box-shadow: 6px 6px 0 var(--ink-900); }
+  .tint-overlay { position: relative; }
+  .tint-overlay::after {
+    content: ''; position: absolute; inset: 0;
+    background: var(--brand-500); mix-blend-mode: multiply; opacity: 0.22;
+  }
+
+  .ghost-corner {
+    position: absolute; bottom: 12px; left: 12px;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--ink-900); color: var(--brand-300);
+    padding: 5px 10px; border-radius: var(--r-pill);
+    font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .ghost-corner .dot { width: 6px; height: 6px; background: var(--brand-300); border-radius: 50%; }
+
+  .placeholder {
+    background: var(--ink-900); display:flex; flex-direction: column; justify-content: space-between; padding: 16px; color: white; position: relative;
+  }
+  .placeholder .eyebrow { font-size: 9px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brand-300); }
+  .placeholder .hint { font-family: var(--font-display); font-weight: 700; font-size: 13px; line-height: 1.2; color: rgba(255,255,255,0.85); }
+
+  /* Do/Don't */
+  .vc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .vc { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md); padding: 16px; display: flex; gap: 12px; align-items: flex-start; }
+  .vc .ic { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; }
+  .vc.do .ic { background: var(--success-500); color: white; }
+  .vc.dont .ic { background: var(--danger-500); color: white; }
+  .vc .text { font-size: 13px; line-height: 1.5; color: var(--ink-700); }
+  .vc .text b { color: var(--ink-900); }
+
+  .specs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
+  .spec { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-sm); padding: 12px; }
+  .spec .lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 4px; }
+  .spec .val { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--ink-900); }
+
+  /* The signature hero row — vertical portrait cards in a line, matching mygig.com.au homepage */
+  .hero-row {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;
+    padding: 24px; background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md);
+  }
+  .hero-row .pic { aspect-ratio: 9 / 19; border-radius: var(--r-lg); overflow: hidden; background: var(--ink-100); }
+  .hero-row .pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* 2-col split — photo + text, matching mygig.com.au "Struggling to find" block */
+  .split-block { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md); padding: 24px; align-items: center; }
+  .split-block .pic { aspect-ratio: 5 / 4; border-radius: var(--r-md); overflow: hidden; background: var(--ink-100); }
+  .split-block .pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .split-block .copy h3 { font-family: var(--font-display); font-weight: 800; font-size: 28px; line-height: 1.15; color: var(--ink-900); margin: 0 0 14px; letter-spacing: -0.015em; }
+  .split-block .copy p { font-size: 14px; line-height: 1.55; color: var(--ink-500); margin: 0; }
+
+  /* Full-bleed warm hero block — matching mygig.com.au story image */
+  .full-bleed-hero { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md); padding: 24px; }
+  .full-bleed-hero .pic { aspect-ratio: 21 / 9; border-radius: var(--r-md); overflow: hidden; background: var(--ink-100); }
+  .full-bleed-hero .pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .label-pair { display: flex; gap: 16px; margin-top: 14px; font-size: 12px; color: var(--ink-400); }
+  .label-pair > div { display: flex; gap: 6px; }
+  .label-pair b { color: var(--ink-900); font-weight: 700; }
+
+  /* annotated examples */
+  .annotated { display: grid; grid-template-columns: 200px 1fr; gap: 20px; background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md); padding: 20px; align-items: center; }
+  .annotated .pic { aspect-ratio: 9 / 16; border-radius: var(--r-md); overflow: hidden; background: var(--ink-100); }
+  .annotated .pic img { width: 100%; height: 100%; object-fit: cover; }
+  .annotated dl { margin: 0; display: grid; grid-template-columns: 130px 1fr; gap: 10px 18px; }
+  .annotated dt { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-400); align-self: center; }
+  .annotated dd { margin: 0; font-size: 14px; color: var(--ink-900); font-weight: 500; align-self: center; }
+  .annotated dd code { font-family: var(--font-mono); background: var(--ink-50); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="lead">
+  <h1>Imagery — the MyGig look</h1>
+  <p>
+    Real workers. Real worksites. Documentary, not stock. Imagery is the most important non-typographic carrier of the brand — it tells the trust story the copy keeps repeating. This page captures the system already in use on mygig.com.au and codifies how to extend it.
+  </p>
+</div>
+
+<!-- 1. THE LIBRARY -->
+<div class="section-title"><span class="num">01</span>The library — by industry</div>
+<p class="section-sub">
+  MyGig serves a wide range of industries, and the photo library reflects that. Every shoot covers a worker in their environment — never against a blank backdrop. Solo subjects, mid-action or warmly direct.
+</p>
+<div class="grid g6">
+  <div class="img-card">
+    <div class="pic ar-9-16"><img src="../assets/imagery/worker-hero-1-construction.webp" alt=""></div>
+    <div class="body"><div class="lbl">Construction</div><div class="h">Hard hat · hi-vis</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-9-16"><img src="../assets/imagery/worker-hero-2-retail.webp" alt=""></div>
+    <div class="body"><div class="lbl">Retail</div><div class="h">Floor staff · tablet</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-9-16"><img src="../assets/imagery/worker-hero-3-hospo.webp" alt=""></div>
+    <div class="body"><div class="lbl">Hospitality</div><div class="h">Barista · apron</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-9-16"><img src="../assets/imagery/worker-hero-4-mining.webp" alt=""></div>
+    <div class="body"><div class="lbl">Mining · logistics</div><div class="h">Forklift · red dirt</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-9-16"><img src="../assets/imagery/worker-hero-5-portrait.webp" alt=""></div>
+    <div class="body"><div class="lbl">Hospitality · FOH</div><div class="h">Portrait · natural</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-9-16"><img src="../assets/imagery/worker-hero-6-agriculture.webp" alt=""></div>
+    <div class="body"><div class="lbl">Agriculture</div><div class="h">Vineyard · golden hour</div></div>
+  </div>
+</div>
+
+<!-- 2. SIGNATURE PATTERN — HERO ROW -->
+<div class="section-title"><span class="num">02</span>Signature pattern · the hero portrait row</div>
+<p class="section-sub">
+  The hero photo row on mygig.com.au — six (or four–six) vertical portrait cards lined up under the headline. This is the brand's most recognisable imagery moment. Use it on home pages, section openers, "who we serve" blocks. Always with rounded corners (<code style="font-family:var(--font-mono); font-size:12px;">--r-lg / 18px</code>) and a strict 9:19 (or ~9:16) aspect.
+</p>
+<div class="hero-row">
+  <div class="pic"><img src="../assets/imagery/worker-hero-1-construction.webp" alt=""></div>
+  <div class="pic"><img src="../assets/imagery/worker-hero-2-retail.webp" alt=""></div>
+  <div class="pic"><img src="../assets/imagery/worker-hero-3-hospo.webp" alt=""></div>
+  <div class="pic"><img src="../assets/imagery/worker-hero-4-mining.webp" alt=""></div>
+  <div class="pic"><img src="../assets/imagery/worker-hero-5-portrait.webp" alt=""></div>
+  <div class="pic"><img src="../assets/imagery/worker-hero-6-agriculture.webp" alt=""></div>
+</div>
+<div class="specs">
+  <div class="spec"><div class="lbl">Aspect</div><div class="val">9 : 19 (portrait)</div></div>
+  <div class="spec"><div class="lbl">Radius</div><div class="val">18 px · --r-lg</div></div>
+  <div class="spec"><div class="lbl">Count</div><div class="val">4–6 cards</div></div>
+  <div class="spec"><div class="lbl">Gap</div><div class="val">14–16 px</div></div>
+</div>
+
+<!-- 3. SIGNATURE PATTERN — FULL-BLEED -->
+<div class="section-title"><span class="num">03</span>Signature pattern · full-bleed warm hero</div>
+<p class="section-sub">
+  Wide, full-bleed photography for storytelling blocks — golden-hour light, single subject, generous negative space on one side for headline overlay. Aspect 21:9 or wider. This is where the brand leans most cinematic.
+</p>
+<div class="full-bleed-hero">
+  <div class="pic"><img src="../assets/imagery/worker-story-hivis.webp" alt=""></div>
+</div>
+<div class="specs">
+  <div class="spec"><div class="lbl">Aspect</div><div class="val">21 : 9 · wider</div></div>
+  <div class="spec"><div class="lbl">Light</div><div class="val">golden hour</div></div>
+  <div class="spec"><div class="lbl">Subject</div><div class="val">solo, mid-moment</div></div>
+  <div class="spec"><div class="lbl">Negative space</div><div class="val">~40% one side</div></div>
+</div>
+
+<!-- 4. SIGNATURE PATTERN — SPLIT -->
+<div class="section-title"><span class="num">04</span>Signature pattern · the 2-up split</div>
+<p class="section-sub">
+  The bread-and-butter layout for product/service blocks. Photo on one side (square-ish ratio, ~5:4), copy + CTA on the other. Photo carries the emotional weight; copy carries the proof.
+</p>
+<div class="split-block">
+  <div class="pic"><img src="../assets/imagery/worker-retail-bananas.avif" alt=""></div>
+  <div class="copy">
+    <h3>Struggling to find reliable workers?</h3>
+    <p>It's getting harder to find hourly workers that are a fit for your business through traditional agencies. MyGig Business's platform makes it easy to find, hire, and pay the qualified and reliable workers you need.</p>
+  </div>
+</div>
+<div class="specs">
+  <div class="spec"><div class="lbl">Photo aspect</div><div class="val">5 : 4 or 4 : 5</div></div>
+  <div class="spec"><div class="lbl">Radius</div><div class="val">12 px · --r-md</div></div>
+  <div class="spec"><div class="lbl">Order</div><div class="val">alternate L/R per row</div></div>
+  <div class="spec"><div class="lbl">Background</div><div class="val">white or ink-0</div></div>
+</div>
+
+<!-- 5. CROPS + RATIOS -->
+<div class="section-title"><span class="num">05</span>Crops &amp; aspect ratios</div>
+<div class="grid g4">
+  <div class="img-card">
+    <div class="pic ar-9-16"><img src="../assets/imagery/worker-hero-3-hospo.webp" alt=""></div>
+    <div class="body"><div class="lbl">9 : 16 · portrait</div><div class="h">Hero row, mobile feed</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-4-5"><img src="../assets/imagery/worker-hero-5-portrait.webp" alt=""></div>
+    <div class="body"><div class="lbl">4 : 5 · stacked card</div><div class="h">Marketing hero stack</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-1-1"><img src="../assets/imagery/worker-retail-bananas.avif" alt=""></div>
+    <div class="body"><div class="lbl">1 : 1 · square</div><div class="h">Social, avatar, app icon</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-21-9"><img src="../assets/imagery/worker-story-hivis.webp" alt=""></div>
+    <div class="body"><div class="lbl">21 : 9 · cinematic</div><div class="h">Story banner, video poster</div></div>
+  </div>
+</div>
+
+<!-- 6. SHAPES -->
+<div class="section-title"><span class="num">06</span>Shapes &amp; corners</div>
+<div class="grid g4">
+  <div class="img-card">
+    <div class="pic ar-1-1" style="padding:14px;"><div class="ar-1-1 crop-r-md" style="background:url(../assets/imagery/worker-hero-3-hospo.webp) center/cover; width:100%; height:100%;"></div></div>
+    <div class="body"><div class="lbl">12 px · --r-md</div><div class="h">Default · cards, tiles, split blocks</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-1-1" style="padding:14px;"><div class="ar-1-1 crop-r-lg" style="background:url(../assets/imagery/worker-hero-2-retail.webp) center/cover; width:100%; height:100%;"></div></div>
+    <div class="body"><div class="lbl">18 px · --r-lg</div><div class="h">Hero row portraits</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-1-1" style="padding:14px;"><div class="ar-1-1 crop-r-xl" style="background:url(../assets/imagery/worker-hero-6-agriculture.webp) center/cover; width:100%; height:100%;"></div></div>
+    <div class="body"><div class="lbl">28 px · --r-xl</div><div class="h">Hero feature cards, mobile sheets</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-1-1" style="padding:14px;"><div class="ar-1-1 crop-circle" style="background:url(../assets/imagery/worker-hero-5-portrait.webp) center/cover; width:100%; height:100%;"></div></div>
+    <div class="body"><div class="lbl">Circle</div><div class="h">Avatars only</div></div>
+  </div>
+</div>
+
+<!-- 7. BRAND TREATMENTS -->
+<div class="section-title"><span class="num">07</span>Brand treatments</div>
+<p class="section-sub">Use the natural photograph by default — trust the photography. Reach for treatments sparingly, when a section needs to signal "brand moment" instead of "story".</p>
+<div class="grid g3">
+  <div class="img-card">
+    <div class="pic ar-3-2"><img src="../assets/imagery/worker-hero-1-construction.webp" alt="" style="object-position: center 30%;"></div>
+    <div class="body"><div class="lbl">Natural · default</div><div class="h">No treatment</div><div class="d">90% of the time. Let the photography breathe.</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-3-2 tint-overlay"><img src="../assets/imagery/worker-hero-1-construction.webp" alt="" style="object-position: center 30%;"></div>
+    <div class="body"><div class="lbl">Brand tint · 22% multiply</div><div class="h">Section dividers, story breaks</div><div class="d">Never twice on the same page.</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-3-2" style="position:relative;">
+      <img src="../assets/imagery/worker-hero-1-construction.webp" alt="" style="object-position: center 30%;">
+      <div class="ghost-corner"><span class="dot"></span>Photo · worker on shift</div>
+    </div>
+    <div class="body"><div class="lbl">Corner label</div><div class="h">When a photo is missing</div><div class="d">Marks a placeholder until real imagery lands.</div></div>
+  </div>
+</div>
+
+<!-- 8. DO / DON'T -->
+<div class="section-title"><span class="num">08</span>Do &amp; don't</div>
+<div class="vc-grid">
+  <div class="vc do"><span class="ic">✓</span><div class="text"><b>Do</b> show real workers in their environment — vineyard, kitchen, supermarket floor, construction site, forklift cab.</div></div>
+  <div class="vc dont"><span class="ic">✕</span><div class="text"><b>Don't</b> use blank-backdrop studio portraits or stock-photo handshakes.</div></div>
+  <div class="vc do"><span class="ic">✓</span><div class="text"><b>Do</b> keep faces visible and the moment honest — direct portraits ok, mid-task ok. A genuine smile beats a posed one.</div></div>
+  <div class="vc dont"><span class="ic">✕</span><div class="text"><b>Don't</b> hide faces with motion blur, heavy crops, or stylised cropping that removes the human.</div></div>
+  <div class="vc do"><span class="ic">✓</span><div class="text"><b>Do</b> chase warm, natural light — golden hour outdoors, daylight through windows, warm tungsten in hospo settings.</div></div>
+  <div class="vc dont"><span class="ic">✕</span><div class="text"><b>Don't</b> use cold blue tech lighting, neon glow, or sci-fi "future of work" aesthetics.</div></div>
+  <div class="vc do"><span class="ic">✓</span><div class="text"><b>Do</b> include genuine industry uniforms — aprons, hi-vis, hard hats, chef whites. The wardrobe tells the story.</div></div>
+  <div class="vc dont"><span class="ic">✕</span><div class="text"><b>Don't</b> generate AI worker photography. We don't fake the workforce; that's the brand promise.</div></div>
+  <div class="vc do"><span class="ic">✓</span><div class="text"><b>Do</b> represent the breadth of Australia's casual workforce — age, gender, ethnicity, ability — all real, all on the floor.</div></div>
+  <div class="vc dont"><span class="ic">✕</span><div class="text"><b>Don't</b> mono-cast a row of similar-looking faces. The hero row should look like a crew, not a clone set.</div></div>
+  <div class="vc do"><span class="ic">✓</span><div class="text"><b>Do</b> shoot vertical (9:16 / 4:5) by default — most uses are portrait or stacked card.</div></div>
+  <div class="vc dont"><span class="ic">✕</span><div class="text"><b>Don't</b> crop a landscape frame into a square if it loses the worker's context.</div></div>
+</div>
+
+<!-- 9. PLACEHOLDER -->
+<div class="section-title"><span class="num">09</span>When you don't have a photo yet</div>
+<p class="section-sub">
+  Don't reach for stock or AI. Use a solid ink-900 block at the photo's intended dimensions, with a brand-300 corner label naming exactly what the shot will be (subject, role, location). This is the only sanctioned placeholder.
+</p>
+<div class="grid g4">
+  <div class="img-card">
+    <div class="pic ar-9-16 placeholder">
+      <span class="eyebrow">Hospitality · Barista</span>
+      <span class="hint">Sarah, espresso pull,<br>Single O Surry Hills</span>
+    </div>
+    <div class="body"><div class="lbl">Placeholder · 9:16</div><div class="h">Hero row card</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-4-5 placeholder">
+      <span class="eyebrow">Construction · Labourer</span>
+      <span class="hint">James, hard hat,<br>Mascot site at 6 am</span>
+    </div>
+    <div class="body"><div class="lbl">Placeholder · 4:5</div><div class="h">Stacked marketing card</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-1-1 placeholder">
+      <span class="eyebrow">Warehouse · Forklift</span>
+      <span class="hint">Aimee,<br>Toll Yennora DC</span>
+    </div>
+    <div class="body"><div class="lbl">Placeholder · 1:1</div><div class="h">Avatar · social</div></div>
+  </div>
+  <div class="img-card">
+    <div class="pic ar-21-9 placeholder">
+      <span class="eyebrow">Events · Steward</span>
+      <span class="hint">Ravi, gate check at the SCG</span>
+    </div>
+    <div class="body"><div class="lbl">Placeholder · 21:9</div><div class="h">Story banner</div></div>
+  </div>
+</div>
+
+<!-- 10. ANNOTATED EXAMPLE -->
+<div class="section-title"><span class="num">10</span>An image, dissected</div>
+<div class="annotated">
+  <div class="pic"><img src="../assets/imagery/worker-hero-6-agriculture.webp" alt=""></div>
+  <dl>
+    <dt>Industry</dt><dd>Agriculture · viticulture</dd>
+    <dt>Subject</dt><dd>Single worker, mid-task, eyes on the vines — not the camera</dd>
+    <dt>Light</dt><dd>Golden-hour back-light, warm. Halo on the hair.</dd>
+    <dt>Wardrobe</dt><dd>Natural — a black tee. No uniform, no logo. Subject is the focus.</dd>
+    <dt>Context</dt><dd>Vineyard rows recede out of frame — landscape made implicit.</dd>
+    <dt>Crop</dt><dd>9:16 portrait. Subject occupies the right two-thirds. Negative space on left ready for an overlay.</dd>
+    <dt>Treatment</dt><dd>Natural · no overlay or tint. Subtle natural grain. Saturation <code>~0.95</code>.</dd>
+    <dt>Token in use</dt><dd>Corners <code>--r-lg (18px)</code> in the hero row. Container <code>--surface-0</code> behind.</dd>
+  </dl>
+</div>
+
+</body>
+</html>

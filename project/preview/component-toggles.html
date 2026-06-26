@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Components — Toggles, segmented, checkbox" subtitle="Form selection controls" viewport="700x360" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--ink-0); }
+  body { padding: 20px; box-sizing: border-box; min-height: 360px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  
+</style>
+</head>
+<body>
+
+  <div style="display:flex; flex-direction:column; gap:18px;">
+    <div class="mg-eyebrow" style="color:var(--ink-400);">Toggle · Segmented · Checkbox</div>
+    <div style="display:flex; align-items:center; gap:24px;">
+      <!-- Toggle ON -->
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="width:44px; height:26px; background:var(--ink-900); border-radius:var(--r-pill); position:relative;">
+          <div style="position:absolute; right:3px; top:3px; width:20px; height:20px; background:var(--brand-500); border-radius:50%;"></div>
+        </div>
+        <span class="mg-body-sm" style="color:var(--ink-700);">Auto-accept top workers</span>
+      </div>
+      <!-- Toggle OFF -->
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="width:44px; height:26px; background:var(--ink-100); border-radius:var(--r-pill); position:relative;">
+          <div style="position:absolute; left:3px; top:3px; width:20px; height:20px; background:white; border-radius:50%; box-shadow:var(--sh-1);"></div>
+        </div>
+        <span class="mg-body-sm" style="color:var(--ink-400);">Notify SMS</span>
+      </div>
+    </div>
+    <!-- Segmented -->
+    <div style="display:inline-flex; padding:4px; background:var(--ink-50); border-radius:var(--r-pill); width:fit-content;">
+      <button style="padding:8px 18px; border-radius:var(--r-pill); background:var(--ink-900); color:white; border:none; font-family:var(--font-body); font-weight:700; font-size:13px; cursor:pointer;">Open shifts</button>
+      <button style="padding:8px 18px; border-radius:var(--r-pill); background:transparent; color:var(--ink-500); border:none; font-family:var(--font-body); font-weight:600; font-size:13px; cursor:pointer;">My pool</button>
+      <button style="padding:8px 18px; border-radius:var(--r-pill); background:transparent; color:var(--ink-500); border:none; font-family:var(--font-body); font-weight:600; font-size:13px; cursor:pointer;">Completed</button>
+    </div>
+    <!-- Checkbox -->
+    <div style="display:flex; align-items:center; gap:18px;">
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <span style="width:20px; height:20px; background:var(--brand-500); border:2px solid var(--ink-900); border-radius:var(--r-xs); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--ink-900); font-weight:900;">✓</span>
+        <span class="mg-body-sm" style="color:var(--ink-700);">Workers compensation included</span>
+      </label>
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <span style="width:20px; height:20px; background:white; border:1.5px solid var(--ink-200); border-radius:var(--r-xs);"></span>
+        <span class="mg-body-sm" style="color:var(--ink-700);">Repeat weekly</span>
+      </label>
+    </div>
+  </div>
+
+</body>
+</html>

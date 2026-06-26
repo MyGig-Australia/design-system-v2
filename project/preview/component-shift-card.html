@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Components — Shift card" subtitle="Worker-app shift listing" viewport="700x280" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--ink-0); }
+  body { padding: 20px; box-sizing: border-box; min-height: 280px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  
+</style>
+</head>
+<body>
+
+  <div style="display:flex; flex-direction:column; gap:14px;">
+    <div class="mg-eyebrow" style="color:var(--ink-400);">Shift card</div>
+    <div style="background:white; border:1px solid var(--ink-100); border-radius:var(--r-lg); padding:18px; box-shadow:var(--sh-2); max-width:480px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <span style="display:inline-flex; align-items:center; gap:6px; padding:4px 10px; background:#FFD6A8; border-radius:var(--r-pill); width:fit-content;" class="mg-caption">
+            <span style="width:6px; height:6px; background:var(--ink-900); border-radius:50%;"></span>Hospitality · Barista
+          </span>
+          <div class="mg-h3" style="color:var(--ink-900); margin-top:4px;">Single O Surry Hills</div>
+          <div class="mg-body-sm" style="color:var(--ink-400); display:flex; align-items:center; gap:10px;">
+            <span>📍 Reservoir St, Surry Hills</span>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="mg-display" style="font-size:32px; color:var(--ink-900); line-height:1;">$234</div>
+          <div class="mg-caption" style="color:var(--ink-400);">est. earnings</div>
+        </div>
+      </div>
+      <div style="height:1px; background:var(--ink-50); margin:14px 0;"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="mg-mono" style="color:var(--ink-700); font-size:14px; font-weight:600;">Tue 26 May · 6:30am–2:00pm</div>
+        <button style="background: var(--brand-500); color: white; border:2.5px solid var(--ink-900); padding:8px 16px; border-radius:var(--r-md); font-family:var(--font-body); font-weight:700; font-size:13px; box-shadow:3px 3px 0 var(--ink-900); cursor:pointer;">Secure shift</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Components — Worker chip + avatars" subtitle="Photo when available, coloured initials as fallback" viewport="700x280" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--ink-0); }
+  body { padding: 20px; box-sizing: border-box; min-height: 280px; }
+  .av { display:flex; align-items:center; justify-content:center; border:1.5px solid var(--ink-900); border-radius:50%; overflow:hidden; font-family:var(--font-display); font-weight:700; color:var(--ink-900); flex-shrink:0; }
+  .av img { width:100%; height:100%; object-fit:cover; display:block; }
+  
+</style>
+</head>
+<body>
+
+  <div style="display:flex; flex-direction:column; gap:14px;">
+    <div class="mg-eyebrow" style="color:var(--ink-400);">Worker chip + avatars</div>
+
+    <!-- Avatar row: photo first, then initials fallbacks -->
+    <div style="display:flex; gap:14px; align-items:center;">
+      <div class="av" style="width:44px; height:44px;">
+        <img src="../assets/worker-sarah-m.jpg" alt="Sarah M.">
+      </div>
+      <div class="av" style="width:44px; height:44px; background:#B8E2FF;">JK</div>
+      <div class="av" style="width:44px; height:44px; background:#C9E8C2;">RP</div>
+      <div class="av" style="width:44px; height:44px; background:#F2C9FF;">AC</div>
+      <div class="mg-caption" style="color:var(--ink-400); margin-left:6px;">Photo when available · coloured initials as fallback</div>
+    </div>
+
+    <!-- Worker chip with photo -->
+    <div style="display:flex; align-items:center; gap:12px; padding:10px 14px; background:white; border:1px solid var(--ink-100); border-radius:var(--r-md); max-width:380px;">
+      <div class="av" style="width:44px; height:44px;">
+        <img src="../assets/worker-sarah-m.jpg" alt="Sarah M.">
+      </div>
+      <div style="display:flex; flex-direction:column; gap:2px; flex:1;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span class="mg-h4" style="color:var(--ink-900);">Sarah M.</span>
+          <span style="display:inline-flex; align-items:center; gap:3px; padding:2px 7px; background:var(--ink-900); color:white; border-radius:var(--r-pill); font-size:10px; font-weight:700;">★ TOP</span>
+        </div>
+        <div class="mg-caption" style="color:var(--ink-400);">4.9 · 127 shifts · 98% on-time</div>
+      </div>
+      <span class="mg-mono" style="font-size:13px; color:var(--ink-700); font-weight:600;">$31.19/hr</span>
+    </div>
+
+    <!-- Worker chip with initials fallback -->
+    <div style="display:flex; align-items:center; gap:12px; padding:10px 14px; background:white; border:1px solid var(--ink-100); border-radius:var(--r-md); max-width:380px;">
+      <div class="av" style="width:44px; height:44px; background:#FFDF6B;">JK</div>
+      <div style="display:flex; flex-direction:column; gap:2px; flex:1;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span class="mg-h4" style="color:var(--ink-900);">James K.</span>
+        </div>
+        <div class="mg-caption" style="color:var(--ink-400);">4.8 · 89 shifts · 96% on-time</div>
+      </div>
+      <span class="mg-mono" style="font-size:13px; color:var(--ink-700); font-weight:600;">$34.50/hr</span>
+    </div>
+  </div>
+
+</body>
+</html>

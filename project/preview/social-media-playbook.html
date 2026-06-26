@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Marketing — Social media playbook" subtitle="LinkedIn, Instagram, TikTok, Facebook — formats, voice, ads" viewport="1200x3800" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--ink-0); }
+  body { padding: 32px; font-family: var(--font-body); color: var(--ink-700); }
+
+  .lead { max-width: 920px; }
+  .lead h1 { font-family: var(--font-display); font-weight: 800; font-size: 40px; line-height: 1.05; letter-spacing: -0.02em; color: var(--ink-900); margin: 0 0 12px; }
+  .lead p { font-size: 16px; line-height: 1.55; color: var(--ink-500); margin: 0; max-width: 760px; }
+
+  .section-title { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--ink-900); margin: 44px 0 14px; display: flex; align-items: center; gap: 12px; }
+  .section-title .num { font-family: var(--font-mono); color: var(--brand-700); font-size: 13px; font-weight: 700; }
+  .section-sub { font-size: 14px; color: var(--ink-500); margin: 0 0 18px; max-width: 760px; line-height: 1.55; }
+
+  .platform-pill { display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:999px; font-size:12px; font-weight:700; margin-bottom:14px; }
+  .pl-li { background:#0A66C2; color:white; }
+  .pl-ig { background: linear-gradient(135deg, #F58529, #DD2A7B, #8134AF); color:white; }
+  .pl-fb { background:#1877F2; color:white; }
+  .pl-tt { background:var(--ink-900); color:white; }
+  .pl-tt::before { content:'♪'; color:#FE2C55; }
+
+  .frame-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+  .frame { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md); overflow: hidden; }
+  .frame-label { padding: 10px 14px 12px; border-top: 1px solid var(--ink-50); }
+  .frame-label .name { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--ink-900); }
+  .frame-label .dims { font-family: var(--font-mono); font-size: 11px; color: var(--ink-400); margin-top: 2px; }
+
+  /* LINKEDIN cover banner — 1584x396 (4:1) */
+  .li-cover { width: 720px; height: 180px; background: var(--ink-900); position: relative; overflow: hidden; }
+  .li-cover img { position: absolute; right: 0; top: 0; height: 100%; width: 60%; object-fit: cover; opacity: 0.85; mask-image: linear-gradient(to right, transparent 0%, black 30%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 30%); }
+  .li-cover .copy { position: absolute; left: 36px; top: 50%; transform: translateY(-50%); color: white; max-width: 380px; }
+  .li-cover .eb { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brand-300); }
+  .li-cover h3 { font-family: var(--font-display); font-weight: 800; font-size: 28px; line-height: 1.05; margin: 8px 0 6px; letter-spacing: -0.015em; }
+  .li-cover p { font-size: 13px; color: rgba(255,255,255,0.7); margin: 0; }
+
+  /* LINKEDIN post — 1:1 1200x1200 */
+  .li-post { width: 360px; height: 360px; background: white; position: relative; overflow: hidden; }
+  .li-post .head { padding: 14px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--ink-50); }
+  .li-post .head .av { width: 36px; height: 36px; border-radius: var(--r-sm); background: var(--ink-900); display:flex; align-items:center; justify-content:center; color:white; font-family:var(--font-display); font-weight:800; font-size:14px; overflow:hidden; }
+  .li-post .head .av img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+  .li-post .head .meta .n { font-weight: 700; font-size: 13px; color: var(--ink-900); }
+  .li-post .head .meta .s { font-size: 11px; color: var(--ink-400); }
+  .li-post .canvas { position: relative; height: calc(100% - 64px); padding: 22px; background: var(--brand-100); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+  .li-post .canvas .stat-num { font-family: var(--font-display); font-weight: 800; font-size: 100px; line-height: 0.9; color: var(--ink-900); letter-spacing: -0.03em; }
+  .li-post .canvas .stat-label { font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 1.15; color: var(--ink-900); max-width: 240px; margin-top: 8px; }
+  .li-post .canvas .footer { display: flex; justify-content: space-between; align-items: flex-end; }
+  .li-post .canvas .footer .lg { height: 22px; }
+  .li-post .canvas .footer .lg img { height: 100%; }
+  .li-post .canvas .footer .tag { font-size: 11px; font-weight: 700; color: var(--ink-700); }
+
+  /* LINKEDIN single ad — 1200x627 */
+  .li-ad { width: 480px; height: 251px; background: var(--ink-900); position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; }
+  .li-ad .left { padding: 24px; display: flex; flex-direction: column; justify-content: space-between; color: white; }
+  .li-ad .left .eb { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brand-300); }
+  .li-ad .left h4 { font-family: var(--font-display); font-weight: 800; font-size: 22px; line-height: 1.05; margin: 8px 0 0; letter-spacing: -0.015em; }
+  .li-ad .left .cta { display: inline-flex; padding: 8px 14px; background: var(--brand-500); color: white; border: 2px solid white; border-radius: var(--r-md); font-weight: 700; font-size: 12px; box-shadow: 3px 3px 0 white; width:fit-content; }
+  .li-ad .right { background: var(--ink-100); position: relative; }
+  .li-ad .right img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* INSTAGRAM feed 1:1 */
+  .ig-feed { width: 320px; height: 320px; position: relative; overflow: hidden; background: var(--ink-900); }
+  .ig-feed img { width: 100%; height: 100%; object-fit: cover; }
+  .ig-feed .overlay { position:absolute; inset:0; background: linear-gradient(180deg, transparent 50%, rgba(14,13,11,0.75) 100%); padding: 18px; display: flex; flex-direction: column; justify-content: flex-end; color: white; }
+  .ig-feed h4 { font-family: var(--font-display); font-weight: 800; font-size: 22px; line-height: 1.1; letter-spacing: -0.015em; margin: 0 0 4px; }
+  .ig-feed .small { font-size: 12px; color: rgba(255,255,255,0.78); }
+  .ig-feed .pin { position:absolute; top:14px; left:14px; padding:4px 10px; background:var(--brand-500); color:white; border-radius:999px; font-size:11px; font-weight:800; }
+
+  /* INSTAGRAM Story — 9:16 */
+  .ig-story { width: 200px; height: 356px; position: relative; overflow: hidden; background: var(--ink-900); border-radius: 14px; }
+  .ig-story img { width: 100%; height: 100%; object-fit: cover; }
+  .ig-story .overlay { position:absolute; inset:0; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; color: white; background: linear-gradient(180deg, rgba(14,13,11,0.3) 0%, transparent 30%, transparent 70%, rgba(14,13,11,0.8) 100%); }
+  .ig-story .top { display:flex; align-items:center; gap:6px; }
+  .ig-story .top img { width:24px; height:24px; padding:3px; background:white; border-radius:6px; }
+  .ig-story .top span { font-size: 11px; font-weight: 700; }
+  .ig-story .bottom { display: flex; flex-direction: column; gap: 10px; }
+  .ig-story h4 { font-family: var(--font-display); font-weight: 800; font-size: 22px; line-height: 1.05; margin: 0; }
+  .ig-story .cta { display:inline-flex; padding: 8px 14px; background:var(--brand-500); color:white; border-radius:var(--r-md); font-weight:700; font-size:12px; border:2px solid white; width:fit-content; }
+
+  /* IG GRID — profile 3-up mosaic */
+  .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; width: 360px; }
+  .ig-grid > div { aspect-ratio: 1; background: var(--ink-100); overflow: hidden; position: relative; }
+  .ig-grid > div img { width: 100%; height: 100%; object-fit: cover; }
+  .ig-grid > div.brand { background: var(--brand-500); display: flex; align-items: flex-end; padding: 10px; color: white; }
+  .ig-grid > div.brand .lbl { font-family: var(--font-display); font-weight: 800; font-size: 14px; line-height: 1.05; }
+  .ig-grid > div.ink { background: var(--ink-900); display:flex; align-items:center; justify-content:center; }
+  .ig-grid > div.ink img { width: 55%; height: 55%; object-fit: contain; }
+
+  /* TIKTOK 9:16 */
+  .tt { width: 200px; height: 356px; position: relative; overflow: hidden; background: var(--ink-900); border-radius: 14px; }
+  .tt img { width: 100%; height: 100%; object-fit: cover; }
+  .tt .ui { position:absolute; inset:0; padding: 18px 16px; display: flex; flex-direction: column; justify-content: flex-end; color: white; background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7) 100%); }
+  .tt .top-strip { position: absolute; top: 14px; left: 14px; right: 14px; display: flex; justify-content: space-between; align-items: center; }
+  .tt .top-strip .acct { display:flex; align-items:center; gap:6px; font-size: 11px; font-weight:700; }
+  .tt .top-strip .acct .av { width:22px; height:22px; border-radius:50%; background: white; padding: 3px; }
+  .tt .top-strip .acct .av img { width:100%; height:100%; object-fit:contain; }
+  .tt .caption { font-size: 13px; line-height: 1.3; }
+  .tt .caption b { font-weight: 800; }
+  .tt .caption .hash { color: var(--brand-300); font-weight:700; }
+  .tt .hook {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: rgba(14,13,11,0.85); padding: 12px 16px; border-radius: 8px;
+    font-family: var(--font-display); font-weight: 800; font-size: 22px; color: white;
+    text-align: center; line-height: 1.1; max-width: 75%;
+  }
+
+  /* FACEBOOK feed 1.91:1 */
+  .fb { width: 460px; background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md); overflow: hidden; }
+  .fb .head { padding: 12px 14px; display: flex; gap: 10px; align-items: center; }
+  .fb .head .av { width: 36px; height: 36px; border-radius: 50%; background: var(--ink-900); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .fb .head .av img { width:100%; height:100%; object-fit:contain; padding: 5px; }
+  .fb .head .meta .n { font-weight: 700; font-size: 13px; color: var(--ink-900); }
+  .fb .head .meta .s { font-size: 11px; color: var(--ink-400); }
+  .fb .body-text { padding: 0 14px 12px; font-size: 13px; line-height: 1.45; color: var(--ink-700); }
+  .fb .pic { aspect-ratio: 1.91/1; background: var(--ink-100); overflow: hidden; }
+  .fb .pic img { width:100%; height:100%; object-fit:cover; }
+  .fb .cta-strip { padding: 12px 14px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--ink-50); }
+  .fb .cta-strip .l { font-size: 11px; color: var(--ink-400); }
+  .fb .cta-strip .l b { font-weight: 700; color: var(--ink-900); }
+  .fb .cta-strip .btn { padding: 6px 12px; background: var(--brand-500); color: white; border-radius: var(--r-sm); font-size: 12px; font-weight: 700; }
+
+  /* Voice/playbook table */
+  .playbook { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md); overflow: hidden; }
+  .playbook table { width: 100%; border-collapse: collapse; }
+  .playbook th { text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-400); background: var(--ink-0); border-bottom: 1px solid var(--ink-100); }
+  .playbook td { padding: 12px 16px; font-size: 13px; line-height: 1.5; color: var(--ink-700); border-bottom: 1px solid var(--ink-50); vertical-align: top; }
+  .playbook tr:last-child td { border-bottom: none; }
+  .playbook td b { color: var(--ink-900); }
+  .playbook .pl-cell { display:flex; gap:8px; align-items:center; }
+  .playbook .pl-dot { width:10px; height:10px; border-radius:3px; }
+
+  /* Spec table */
+  .specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .spec { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-sm); padding: 12px; }
+  .spec .lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 4px; }
+  .spec .val { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--ink-900); }
+
+  .vc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+  .vc { background: white; border: 1px solid var(--ink-100); border-radius: var(--r-md); padding: 14px; display: flex; gap: 10px; align-items: flex-start; }
+  .vc .ic { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0; }
+  .vc.do .ic { background: var(--success-500); color: white; }
+  .vc.dont .ic { background: var(--danger-500); color: white; }
+  .vc .text { font-size: 13px; line-height: 1.5; color: var(--ink-700); }
+  .vc .text b { color: var(--ink-900); }
+</style>
+</head>
+<body>
+
+<div class="lead">
+  <h1>Marketing &amp; Social Media — playbook</h1>
+  <p>
+    Two audiences, one brand. <b>LinkedIn</b> is where we talk to <b>businesses</b> — credible, evidence-led, operational. <b>Instagram, TikTok and Facebook</b> are where we talk to <b>workers</b> — empowering, friendly, money-forward. The voice shifts by surface; the visual system never wavers.
+  </p>
+</div>
+
+<!-- AUDIENCE MATRIX -->
+<div class="section-title"><span class="num">01</span>Audience &amp; channel matrix</div>
+<div class="playbook">
+  <table>
+    <thead><tr><th>Channel</th><th>Audience</th><th>Voice</th><th>Cadence</th><th>Primary CTA</th></tr></thead>
+    <tbody>
+      <tr><td><div class="pl-cell"><span class="pl-dot" style="background:#0A66C2;"></span><b>LinkedIn</b></div></td><td>Business — HR, ops, GMs, founders</td><td>Confident, evidence-led, numbers, case studies</td><td>3–5×/week</td><td>"Book a demo" / "Read the case study"</td></tr>
+      <tr><td><div class="pl-cell"><span class="pl-dot" style="background:#DD2A7B;"></span><b>Instagram</b></div></td><td>Worker — 18–34, casuals + students + backpackers</td><td>Friendly, motivating, money + freedom forward</td><td>4–6×/week + daily Stories</td><td>"Download the app" / "Find shifts"</td></tr>
+      <tr><td><div class="pl-cell"><span class="pl-dot" style="background:#FE2C55;"></span><b>TikTok</b></div></td><td>Worker — 18–28, students, day-of-shift</td><td>Casual Aussie, hook-fast, real workers on camera</td><td>3–4×/week</td><td>"Link in bio" → app store</td></tr>
+      <tr><td><div class="pl-cell"><span class="pl-dot" style="background:#1877F2;"></span><b>Facebook</b></div></td><td>Worker — 25–55, regional, side-income</td><td>Plain-spoken, trust signals, pay-on-time emphasis</td><td>2–3×/week + ads</td><td>"Get the app" / "Sign up free"</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- LINKEDIN -->
+<div class="section-title"><span class="num">02</span>LinkedIn — for business</div>
+<p class="section-sub">
+  The flagship business channel. Lead with proof: a number, a client logo, a Modern Award explainer. Posts read like an ops manager sharing a hard-won insight, not a billboard. Cover banner should always feature workers, never a graphic-only treatment.
+</p>
+
+<span class="platform-pill pl-li">in  LinkedIn</span>
+<div class="frame-row">
+
+  <div class="frame">
+    <div class="li-cover">
+      <img src="../assets/imagery/worker-hero-2-retail.webp" alt="">
+      <div class="copy">
+        <div class="eb">Workforce-as-a-Service</div>
+        <h3>The casual workforce, fully managed.</h3>
+        <p>Post a shift. We're the Employer of Record.</p>
+      </div>
+    </div>
+    <div class="frame-label">
+      <div class="name">Page cover banner</div>
+      <div class="dims">1584 × 396 · 4 : 1 · ink-900 + photo cutout</div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="li-post">
+      <div class="head">
+        <div class="av"><img src="../assets/logo-mark-black.png"></div>
+        <div class="meta"><div class="n">MyGig</div><div class="s">2,847 followers · 2h</div></div>
+      </div>
+      <div class="canvas">
+        <div>
+          <div style="font-family:var(--font-body); font-weight:700; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-700); margin-bottom:8px;">Fill rate · this quarter</div>
+          <div class="stat-num">94%</div>
+          <div class="stat-label">across hospo, warehouse and events — vs industry avg of 65%.</div>
+        </div>
+        <div class="footer">
+          <div class="lg"><img src="../assets/logo-wordmark-black.png"></div>
+          <div class="tag">mygig.com.au</div>
+        </div>
+      </div>
+    </div>
+    <div class="frame-label">
+      <div class="name">Single-image post · stat hero</div>
+      <div class="dims">1200 × 1200 · 1 : 1 · brand-100 + ink-900 type</div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="li-ad">
+      <div class="left">
+        <div>
+          <div class="eb">Sponsored</div>
+          <h4>Hire vetted casuals.<br>Cover the legal.</h4>
+        </div>
+        <div class="cta">Book a demo →</div>
+      </div>
+      <div class="right"><img src="../assets/imagery/worker-hero-1-construction.webp" alt=""></div>
+    </div>
+    <div class="frame-label">
+      <div class="name">Single-image ad</div>
+      <div class="dims">1200 × 627 · 1.91 : 1 · ink-900 left + photo right</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="specs" style="margin-top:14px;">
+  <div class="spec"><div class="lbl">Profile picture</div><div class="val">400 × 400 · square mark</div></div>
+  <div class="spec"><div class="lbl">Cover banner</div><div class="val">1584 × 396 · 4 : 1</div></div>
+  <div class="spec"><div class="lbl">Feed post</div><div class="val">1200 × 1200 · 1 : 1</div></div>
+  <div class="spec"><div class="lbl">Document post</div><div class="val">1200 × 1500 · 4 : 5</div></div>
+  <div class="spec"><div class="lbl">Single-image ad</div><div class="val">1200 × 627 · 1.91 : 1</div></div>
+  <div class="spec"><div class="lbl">Carousel card</div><div class="val">1080 × 1080 · 1 : 1</div></div>
+</div>
+
+<!-- INSTAGRAM -->
+<div class="section-title"><span class="num">03</span>Instagram — for workers</div>
+<p class="section-sub">
+  The recruiting workhorse. Feed posts lean on photography from the hero library; Stories are utility (this week's open shifts, payday reminders, app updates); Reels show real workers talking about real shifts. Grid should look like a job-site mood board, not a stock catalogue.
+</p>
+
+<span class="platform-pill pl-ig">📷 Instagram</span>
+
+<div class="frame-row">
+
+  <div class="frame">
+    <div class="ig-feed">
+      <img src="../assets/imagery/worker-hero-3-hospo.webp" alt="">
+      <div class="pin">$31.19/HR</div>
+      <div class="overlay">
+        <h4>Pick your shift. Walk in. Get paid the next day.</h4>
+        <div class="small">@mygig · #workyourway</div>
+      </div>
+    </div>
+    <div class="frame-label">
+      <div class="name">Feed post · photo + caption</div>
+      <div class="dims">1080 × 1080 · 1 : 1 · brand-500 pay pin top-left</div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="ig-story">
+      <img src="../assets/imagery/worker-hero-4-mining.webp" alt="">
+      <div class="overlay">
+        <div class="top">
+          <img src="../assets/logo-mark-black.png">
+          <span>mygig</span>
+        </div>
+        <div class="bottom">
+          <h4>Open shifts<br>today.</h4>
+          <div class="cta">Swipe up →</div>
+        </div>
+      </div>
+    </div>
+    <div class="frame-label">
+      <div class="name">Story · daily shift drop</div>
+      <div class="dims">1080 × 1920 · 9 : 16 · keep type in safe zone (top 250 / bottom 350 px)</div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="ig-story">
+      <img src="../assets/imagery/worker-hero-5-portrait.webp" alt="">
+      <div class="overlay" style="background: linear-gradient(180deg, rgba(0,0,0,0.5), transparent 35%, transparent 65%, rgba(0,0,0,0.85));">
+        <div class="top">
+          <img src="../assets/logo-mark-black.png">
+          <span>mygig</span>
+        </div>
+        <div class="bottom">
+          <div style="display:inline-flex; padding:4px 10px; background:var(--brand-500); color:white; border-radius:999px; font-size:10px; font-weight:800; width:fit-content;">REEL · WORKER STORY</div>
+          <h4>"I picked up<br>4 shifts last<br>week."</h4>
+          <div style="font-size:11px; color:rgba(255,255,255,0.7);">— Lena, barista · Sydney</div>
+        </div>
+      </div>
+    </div>
+    <div class="frame-label">
+      <div class="name">Reel cover · worker story</div>
+      <div class="dims">1080 × 1920 · 9 : 16 · talking-head reel cover</div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:16px;">
+  <div style="font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-400); margin-bottom:10px;">Profile grid · 9-tile mosaic</div>
+  <div class="ig-grid">
+    <div><img src="../assets/imagery/worker-hero-1-construction.webp" alt=""></div>
+    <div class="brand"><div class="lbl">90%+<br>fill rate</div></div>
+    <div><img src="../assets/imagery/worker-hero-2-retail.webp" alt=""></div>
+    <div class="ink"><img src="../assets/logo-wordmark-white.png"></div>
+    <div><img src="../assets/imagery/worker-hero-3-hospo.webp" alt=""></div>
+    <div><img src="../assets/imagery/worker-hero-4-mining.webp" alt=""></div>
+    <div><img src="../assets/imagery/worker-hero-5-portrait.webp" alt=""></div>
+    <div class="brand" style="background:var(--ink-900); color:var(--brand-300);"><div class="lbl" style="color:white;">Work<br>your Way.</div></div>
+    <div><img src="../assets/imagery/worker-hero-6-agriculture.webp" alt=""></div>
+  </div>
+  <div style="font-size:12px; color:var(--ink-400); margin-top:10px; max-width:680px; line-height:1.5;">
+    Plan the grid in 9-tile blocks. Pattern: 6 photos · 1 brand stat tile · 1 ink logo tile · 1 tagline tile. Never two non-photo tiles touching.
+  </div>
+</div>
+
+<div class="specs" style="margin-top:18px;">
+  <div class="spec"><div class="lbl">Feed post</div><div class="val">1080 × 1080 · 1 : 1</div></div>
+  <div class="spec"><div class="lbl">Portrait post</div><div class="val">1080 × 1350 · 4 : 5</div></div>
+  <div class="spec"><div class="lbl">Story / Reel cover</div><div class="val">1080 × 1920 · 9 : 16</div></div>
+  <div class="spec"><div class="lbl">Profile picture</div><div class="val">320 × 320 · square mark</div></div>
+  <div class="spec"><div class="lbl">Reel safe zone</div><div class="val">top 250 / bottom 350 px clear</div></div>
+  <div class="spec"><div class="lbl">Carousel max</div><div class="val">10 cards · same template</div></div>
+</div>
+
+<!-- TIKTOK -->
+<div class="section-title"><span class="num">04</span>TikTok — for workers</div>
+<p class="section-sub">
+  Vertical-first, hook-first. Three formats: <b>worker stories</b> (real casual on camera telling their story), <b>day-of-shift</b> POV (what it's like to walk into a shift), and <b>"Did you know?"</b> award/pay explainers. Big bold type, brand-500 hooks, no text in the bottom 350 px (TikTok UI covers it).
+</p>
+
+<span class="platform-pill pl-tt">TikTok</span>
+
+<div class="frame-row">
+  <div class="frame">
+    <div class="tt">
+      <img src="../assets/imagery/worker-hero-3-hospo.webp" alt="">
+      <div class="top-strip">
+        <div class="acct">
+          <span class="av"><img src="../assets/logo-mark-black.png"></span>
+          <span>@mygig</span>
+        </div>
+      </div>
+      <div class="hook">I made $847<br>last week.</div>
+      <div class="ui">
+        <div class="caption"><b>@mygig</b> · POV: Friday payday hit different<br><span class="hash">#workyourway</span> <span class="hash">#casualjobs</span> <span class="hash">#aussiejobs</span></div>
+      </div>
+    </div>
+    <div class="frame-label">
+      <div class="name">In-feed hook · earnings</div>
+      <div class="dims">1080 × 1920 · 9 : 16 · centred hook, brand-300 hashtags</div>
+    </div>
+  </div>
+  <div class="frame">
+    <div class="tt">
+      <img src="../assets/imagery/worker-hero-1-construction.webp" alt="">
+      <div class="top-strip">
+        <div class="acct">
+          <span class="av"><img src="../assets/logo-mark-black.png"></span>
+          <span>@mygig</span>
+        </div>
+      </div>
+      <div class="hook" style="background:var(--brand-500); top:30%;">Casual loading is<br>25%, not 15%.</div>
+      <div class="ui">
+        <div class="caption"><b>Did you know?</b> · Modern Award basics<br><span class="hash">#fairwork</span> <span class="hash">#workrights</span></div>
+      </div>
+    </div>
+    <div class="frame-label">
+      <div class="name">In-feed hook · explainer</div>
+      <div class="dims">1080 × 1920 · 9 : 16 · brand-500 hook block</div>
+    </div>
+  </div>
+  <div class="frame">
+    <div class="tt">
+      <img src="../assets/imagery/worker-hero-5-portrait.webp" alt="">
+      <div class="top-strip">
+        <div class="acct">
+          <span class="av"><img src="../assets/logo-mark-black.png"></span>
+          <span>@mygig</span>
+        </div>
+      </div>
+      <div class="ui">
+        <div class="caption" style="text-align:center; padding-bottom:8px;"><div style="font-family:var(--font-display); font-weight:800; font-size:18px; margin-bottom:6px;">"It changed my week."</div>— Lena · barista · Sydney<br><span class="hash" style="font-size:11px;">#workerstory</span></div>
+      </div>
+    </div>
+    <div class="frame-label">
+      <div class="name">Worker story · talking head</div>
+      <div class="dims">1080 × 1920 · 9 : 16 · subject mid-screen, type bottom</div>
+    </div>
+  </div>
+</div>
+
+<!-- FACEBOOK -->
+<div class="section-title"><span class="num">05</span>Facebook — for workers (regional reach)</div>
+<p class="section-sub">
+  Heavier reach in regional + 35–55 demographic. Same imagery library, slightly more functional copy. Lean on the "paid the day after" promise and visible work imagery. Always pair the ad with a single-line trust statement (ABN, EOR states, app rating).
+</p>
+
+<span class="platform-pill pl-fb">f  Facebook</span>
+
+<div class="frame-row">
+  <div class="frame">
+    <div class="fb">
+      <div class="head">
+        <div class="av"><img src="../assets/logo-mark-black.png"></div>
+        <div class="meta"><div class="n">MyGig</div><div class="s">Sponsored · ⊕</div></div>
+      </div>
+      <div class="body-text">Pick the shifts you want, get paid the day after. Real shifts across hospo, retail, warehousing &amp; construction — vetted businesses, no agency middleman. ✅</div>
+      <div class="pic"><img src="../assets/imagery/worker-story-hivis.webp" alt=""></div>
+      <div class="cta-strip">
+        <div class="l"><b>mygig.com.au</b><br>Download the MyGig Worker app</div>
+        <div class="btn">Get the app</div>
+      </div>
+    </div>
+    <div class="frame-label">
+      <div class="name">Feed ad · 1.91 : 1</div>
+      <div class="dims">1200 × 628 · concise copy, real-photo, app CTA</div>
+    </div>
+  </div>
+</div>
+
+<div class="specs" style="margin-top:14px;">
+  <div class="spec"><div class="lbl">Profile</div><div class="val">170 × 170 · square mark</div></div>
+  <div class="spec"><div class="lbl">Cover</div><div class="val">820 × 312 · banner</div></div>
+  <div class="spec"><div class="lbl">Feed image</div><div class="val">1200 × 628 · 1.91 : 1</div></div>
+  <div class="spec"><div class="lbl">Story / Reel</div><div class="val">1080 × 1920 · 9 : 16</div></div>
+</div>
+
+<!-- VOICE PER PLATFORM -->
+<div class="section-title"><span class="num">06</span>Voice — by platform</div>
+<div class="vc-grid">
+  <div class="vc do"><span class="ic">✓</span><div class="text"><b>LinkedIn · Do</b> "Our fill rate hit 94% in Q3 — up from 88% last quarter. Here's what changed." Numbers, specifics, what was learned.</div></div>
+  <div class="vc dont"><span class="ic">✕</span><div class="text"><b>LinkedIn · Don't</b> "🚀 Excited to announce!! 🔥" — no manager hires from emoji-thirsty posts.</div></div>
+
+  <div class="vc do"><span class="ic">✓</span><div class="text"><b>Instagram · Do</b> "Sarah picked up 3 shifts this week. Paid Tuesday. ☕💪" Worker name, shift count, payday, light emoji ok.</div></div>
+  <div class="vc dont"><span class="ic">✕</span><div class="text"><b>Instagram · Don't</b> Lifestyle stock photography unrelated to actual work — coffee cup flat-lays are not the brand.</div></div>
+
+  <div class="vc do"><span class="ic">✓</span><div class="text"><b>TikTok · Do</b> Open on the hook in the first 1.2 seconds — "I made $847 last week" — then show how. Subtitles always.</div></div>
+  <div class="vc dont"><span class="ic">✕</span><div class="text"><b>TikTok · Don't</b> Use a 3-second logo intro. Algorithm punishes slow starts.</div></div>
+
+  <div class="vc do"><span class="ic">✓</span><div class="text"><b>Facebook · Do</b> Plain explainers and trust signals: "Authorised EOR in NSW, WA, TAS and NT. ABN 35 673 219 737. ⭐ 4.7 on the app stores."</div></div>
+  <div class="vc dont"><span class="ic">✕</span><div class="text"><b>Facebook · Don't</b> Crypto-style hype copy or "limited time" pressure tactics. Wrong audience, wrong brand.</div></div>
+</div>
+
+<!-- ADS GENERAL RULES -->
+<div class="section-title"><span class="num">07</span>Ads — universal rules</div>
+<div class="playbook">
+  <table>
+    <thead><tr><th>Rule</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><b>One CTA per asset.</b> Either "Book a demo" (business) or "Get the app" (worker) — never both.</td><td>Mixed CTAs drop CTR by ~30%. Audience picks the channel; the channel picks the CTA.</td></tr>
+      <tr><td><b>The logo always appears.</b> Wordmark for landscape, square mark for square/portrait. Bottom-left or bottom-right.</td><td>Brand recall over a 6-second scroll. The wordmark is recognisable; the mark is small but unmistakable.</td></tr>
+      <tr><td><b>Use one (1) photo per asset.</b> No collages, no overlapping crops.</td><td>The MyGig look is documentary, not magazine. Stacked photo-cards belong on the marketing site, not in feed ads.</td></tr>
+      <tr><td><b>Type max 30% of the canvas.</b> Let the photo carry the emotional weight.</td><td>Feed platforms downrank text-heavy creative. Photo > headline > body > CTA, in that visual order.</td></tr>
+      <tr><td><b>Brand colour appears once.</b> Pay pin, CTA button, or stat block — pick one. Never two purple objects in the same ad.</td><td>The brand-500 is loud by design. Two hits read as a coupon, not a brand.</td></tr>
+      <tr><td><b>Always include the proof.</b> ABN, EOR states, app rating — one trust line per ad.</td><td>We're an EOR; trust is the product. Compliance footers are a feature, not a footnote.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

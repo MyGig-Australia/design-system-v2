@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Components — Status pills" subtitle="Confirmed, open, expiring, no-show, top-worker" viewport="700x200" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--ink-0); }
+  body { padding: 20px; box-sizing: border-box; min-height: 200px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  
+</style>
+</head>
+<body>
+
+  <div style="display:flex; flex-direction:column; gap:14px;">
+    <div class="mg-eyebrow" style="color:var(--ink-400);">Status pills</div>
+    <div class="row">
+      <span style="display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:var(--r-pill); background:var(--success-50); color:var(--success-700);" class="mg-caption">
+        <span style="width:7px; height:7px; background:var(--success-500); border-radius:50%;"></span>Confirmed
+      </span>
+      <span style="display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:var(--r-pill); background:var(--brand-100); color:var(--ink-900); font-weight:700;" class="mg-caption">
+        <span style="width:7px; height:7px; background:var(--brand-700); border-radius:50%;"></span>Open shift
+      </span>
+      <span style="display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:var(--r-pill); background:var(--warn-50); color:var(--warn-700);" class="mg-caption">
+        <span style="width:7px; height:7px; background:var(--warn-500); border-radius:50%;"></span>Cert expiring
+      </span>
+      <span style="display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:var(--r-pill); background:var(--danger-50); color:var(--danger-700);" class="mg-caption">
+        <span style="width:7px; height:7px; background:var(--danger-500); border-radius:50%;"></span>No-show
+      </span>
+      <span style="display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:var(--r-pill); background:var(--info-50); color:var(--info-700);" class="mg-caption">
+        <span style="width:7px; height:7px; background:var(--info-500); border-radius:50%;"></span>Pending review
+      </span>
+      <span style="display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:var(--r-pill); background:var(--ink-900); color:white;" class="mg-caption">
+        ★ Top worker
+      </span>
+    </div>
+    <div class="mg-body-sm" style="color:var(--ink-400);">Pills are a signature — used heavily for shift state, certs, worker tier.</div>
+  </div>
+
+</body>
+</html>
