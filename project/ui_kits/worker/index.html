@@ -185,6 +185,28 @@
   .skill-row .verified { font-size: 10px; color: var(--success-700); background: var(--success-50); padding: 2px 8px; border-radius: var(--r-pill); font-weight: 700; }
 
   i { font-style: normal; }
+
+  /* ── Mobile responsive ──────────────────────────────── */
+  @media (max-width: 1400px) {
+    .phones { grid-template-columns: repeat(2, 320px); }
+  }
+  @media (max-width: 768px) {
+    body { padding: 24px 0; }
+    .stage { padding: 0 16px; overflow: hidden; }
+    .stage-head { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 20px; }
+    .stage-head h1 { font-size: 22px; }
+    .stage-head .sub { font-size: 12px; }
+    .phones {
+      display: flex;
+      grid-template-columns: unset;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+      gap: 16px;
+      padding: 0 16px 20px;
+    }
+    .phone { min-width: 320px; width: 320px; flex-shrink: 0; scroll-snap-align: start; }
+  }
 </style>
 <style>
   .back-to-guide {

@@ -391,6 +391,24 @@
   }
 
   .em { font-style: normal; width: 18px; height: 18px; display:inline-flex; align-items:center; justify-content:center; }
+
+  /* ── Mobile responsive ──────────────────────────────── */
+  @media (max-width: 900px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .amy-drawer { display: none; }
+    .kpis { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid-2 { grid-template-columns: 1fr; gap: 12px; }
+    .topbar { padding: 0 16px; }
+    .content { padding: 16px; }
+    .panel { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .ask-amy { display: none; }
+    .topbar-right { gap: 8px; }
+    .compliance { flex-wrap: wrap; }
+  }
+  @media (max-width: 480px) {
+    .kpis { grid-template-columns: 1fr; }
+  }
 </style>
 <style>
   .back-to-guide {
