@@ -5,6 +5,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
+<style>
+  .back-to-guide {
+    position: fixed; bottom: 18px; left: 18px; z-index: 9999;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #0E0D0B; color: white;
+    padding: 8px 14px; border-radius: 999px;
+    font-family: 'Manrope', system-ui, sans-serif;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.01em;
+    text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    transition: background 150ms, transform 150ms;
+  }
+  .back-to-guide:hover { background: #6C60FF; transform: translateY(-1px); }
+  .back-to-guide .arrow { font-size: 14px; line-height: 1; }
+</style>
 </head>
 <body>
 <x-dc>
