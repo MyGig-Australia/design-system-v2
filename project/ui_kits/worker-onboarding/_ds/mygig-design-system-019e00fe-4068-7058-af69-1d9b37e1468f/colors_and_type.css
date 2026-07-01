@@ -1,0 +1,221 @@
+/* ========================================================================
+   MyGig — Design Tokens
+   Source-of-truth CSS variables for color, type, spacing, radii, shadow.
+   Import once at the top of any HTML file in this design system.
+   ======================================================================== */
+
+/* ---- Fonts ---- */
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&family=Permanent+Marker&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+:root {
+  /* =====================================================================
+     COLORS
+     ---------------------------------------------------------------------
+     The MyGig palette is built around three commitments:
+     1.  INK    — deep, off-true black for primary surfaces, text, branding.
+                  Borrowed straight from the wordmark. Never pure #000.
+     2.  BRAND  — the signature MyGig violet. Used for primary CTAs,
+                  selection, key status, and brand moments. Pulled from
+                  mygig.com.au. Used confidently — not sparingly — because
+                  it IS the brand colour. White text reads on the 500.
+     3.  PAPER  — warm off-white background that lets ink + brand breathe.
+                  Cooler greys feel corporate; PAPER feels like a worksite
+                  notice / handwritten timesheet.
+     ===================================================================== */
+
+  /* Core scale — INK (neutrals) */
+  --ink-0:    #FAF8F4;  /* paper, app background */
+  --ink-50:   #F2EFE8;  /* subtle surface, hover */
+  --ink-100:  #E5E1D7;  /* divider, input border */
+  --ink-200:  #CFC9BA;  /* disabled stroke */
+  --ink-300:  #A8A294;  /* placeholder text */
+  --ink-400:  #6F6A60;  /* secondary text */
+  --ink-500:  #3D3A33;  /* body text on paper */
+  --ink-700:  #1F1D19;  /* near-black */
+  --ink-900:  #0E0D0B;  /* the wordmark black — never #000 */
+
+  /* Core scale — BRAND (signature violet) */
+  --brand-50:  #F5F4FE;  /* hover-on-paper, faint tint */
+  --brand-100: #E8E6F9;  /* badge background, info chip (from mygig.com.au) */
+  --brand-200: #DBD8FA;  /* secondary fill (from mygig.com.au) */
+  --brand-300: #B8B1F7;  /* tertiary fill, links-on-tint */
+  --brand-500: #6C60FF;  /* THE brand violet (from mygig.com.au) */
+  --brand-700: #4B3FD9;  /* pressed/active state */
+  --brand-900: #2D2580;  /* brand text on light bg */
+
+  /* Surface scale — PURE (white surfaces, cards) */
+  --surface-0:    #FFFFFF;  /* card, modal */
+  --surface-1:    #FAF8F4;  /* = ink-0 */
+  --surface-2:    #F2EFE8;
+  --surface-inverse: var(--ink-900);
+
+  /* Semantic — compliance + status */
+  --success-50:  #E8F6EE;
+  --success-500: #1F8A4C;  /* shift confirmed, paid, on-time */
+  --success-700: #135E33;
+
+  --warn-50:  #FFF3DC;
+  --warn-500: #E89B14;     /* expiring cert, unread shift */
+  --warn-700: #8A5A00;
+
+  --danger-50:  #FCE7E4;
+  --danger-500: #D03826;   /* no-show, cancellation, error */
+  --danger-700: #821F12;
+
+  --info-50:  #E4ECF7;
+  --info-500: #2563C8;     /* tooltips, compliance notes */
+  --info-700: #173E80;
+
+  /* Industry accent tints (used for category tagging — NEVER for chrome) */
+  --tag-hospo:        #FFD6A8;  /* hospitality */
+  --tag-events:       #F2C9FF;  /* events */
+  --tag-warehouse:    #B8E2FF;  /* warehousing / logistics */
+  --tag-construction: #FFDF6B;  /* construction */
+  --tag-retail:       #F6B8C8;  /* retail */
+  --tag-mining:       #C3D3A6;  /* mining */
+  --tag-agriculture:  #C9E8C2;  /* agriculture */
+
+  /* =====================================================================
+     TYPE
+     ---------------------------------------------------------------------
+     Three voices, matching the logo composition:
+     - DISPLAY (Sora 700-800) ........ the heavy "Gig" voice.
+                                       Headlines, big numbers, hero copy.
+     - BODY    (Manrope 400-600) ..... the utility voice.
+                                       UI, forms, paragraphs, data.
+     - SCRIPT  (Permanent Marker) .... the brushed "my" voice.
+                                       Used SPARINGLY — pull-quotes,
+                                       campaign callouts, easter eggs.
+                                       NOT for navigation or buttons.
+     - MONO    (JetBrains Mono) ...... timestamps, IDs, payslips, shift
+                                       codes — anything monospaced.
+     ===================================================================== */
+
+  --font-display: "Sora", system-ui, sans-serif;
+  --font-body:    "Manrope", system-ui, sans-serif;
+  --font-script:  "Permanent Marker", "Caveat Brush", cursive;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  /* Size scale — fluid-ish but discrete */
+  --fs-display-xl: 88px;   --lh-display-xl: 0.95; /* @kind font */
+  --fs-display-l:  64px;   --lh-display-l:  1.00; /* @kind font */
+  --fs-display:    44px;   --lh-display:    1.05; /* @kind font */
+  --fs-h1:         36px;   --lh-h1:         1.10; /* @kind font */
+  --fs-h2:         28px;   --lh-h2:         1.15; /* @kind font */
+  --fs-h3:         22px;   --lh-h3:         1.25; /* @kind font */
+  --fs-h4:         18px;   --lh-h4:         1.30; /* @kind font */
+  --fs-body:       16px;   --lh-body:       1.50; /* @kind font */
+  --fs-body-sm:    14px;   --lh-body-sm:    1.45; /* @kind font */
+  --fs-caption:    12px;   --lh-caption:    1.40; /* @kind font */
+  --fs-micro:      11px;   --lh-micro:      1.30; /* @kind font */
+
+  /* Tracking */
+  --tr-tight:  -0.02em; /* @kind font */
+  --tr-snug:   -0.01em; /* @kind font */
+  --tr-normal:  0; /* @kind font */
+  --tr-wide:    0.04em; /* @kind font */
+  --tr-eyebrow: 0.12em;  /* @kind font */ /* uppercase eyebrows */
+
+  /* =====================================================================
+     SPACING — 4pt grid
+     ===================================================================== */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-20: 80px;
+  --sp-24: 96px;
+
+  /* =====================================================================
+     RADII — friendly, but not pillowy.
+     Pills used heavily for shift status / category tags.
+     ===================================================================== */
+  --r-xs:    4px;
+  --r-sm:    8px;
+  --r-md:   12px;   /* default for cards, inputs, buttons */
+  --r-lg:   18px;
+  --r-xl:   28px;   /* large hero cards, mobile sheets */
+  --r-pill: 999px;  /* status pills, tags, segmented control */
+
+  /* =====================================================================
+     SHADOW + ELEVATION
+     Inky, soft, low-spread. We don't do bluish elevation.
+     ===================================================================== */
+  --sh-1:  0 1px 2px rgba(14, 13, 11, 0.06),
+           0 1px 1px rgba(14, 13, 11, 0.04);
+  --sh-2:  0 2px 6px rgba(14, 13, 11, 0.08),
+           0 1px 2px rgba(14, 13, 11, 0.05);
+  --sh-3:  0 8px 24px rgba(14, 13, 11, 0.10),
+           0 2px 6px rgba(14, 13, 11, 0.06);
+  --sh-4:  0 20px 48px rgba(14, 13, 11, 0.14),
+           0 6px 14px rgba(14, 13, 11, 0.08);
+
+  /* Hard inky shadow used as a deliberate brand motif on stamps + CTAs */
+  --sh-stamp: 4px 4px 0 var(--ink-900);
+  --sh-stamp-brand: 4px 4px 0 var(--brand-500);
+
+  /* Inner shadow for inset fields */
+  --sh-inset: inset 0 1px 2px rgba(14, 13, 11, 0.06);
+
+  /* =====================================================================
+     MOTION
+     ===================================================================== */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1); /* @kind other */
+  --ease-in-out:    cubic-bezier(0.65, 0, 0.35, 1); /* @kind other */
+  --dur-fast:   120ms; /* @kind other */
+  --dur-base:   200ms; /* @kind other */
+  --dur-slow:   400ms; /* @kind other */
+
+  /* =====================================================================
+     LAYOUT
+     ===================================================================== */
+  --container-narrow: 720px;
+  --container:       1140px;
+  --container-wide:  1320px;
+  --gutter:           24px;
+
+  /* Borders */
+  --bw-hair: 1px;
+  --bw-rule: 1.5px;
+  --bw-heavy: 2px;
+  --bw-stamp: 3px;
+}
+
+/* ========================================================================
+   SEMANTIC ELEMENT STYLES — drop these in via class on any project
+   ======================================================================== */
+
+html, body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--ink-700);
+  background: var(--ink-0);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.mg-display-xl { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-display-xl); line-height: var(--lh-display-xl); letter-spacing: var(--tr-tight); }
+.mg-display-l  { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-display-l);  line-height: var(--lh-display-l);  letter-spacing: var(--tr-tight); }
+.mg-display    { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-display);    line-height: var(--lh-display);    letter-spacing: var(--tr-snug);  }
+.mg-h1         { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h1);         line-height: var(--lh-h1);         letter-spacing: var(--tr-snug);  }
+.mg-h2         { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h2);         line-height: var(--lh-h2);         letter-spacing: var(--tr-snug);  }
+.mg-h3         { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-h3);         line-height: var(--lh-h3); }
+.mg-h4         { font-family: var(--font-body);    font-weight: 700; font-size: var(--fs-h4);         line-height: var(--lh-h4); }
+.mg-body       { font-family: var(--font-body);    font-weight: 400; font-size: var(--fs-body);       line-height: var(--lh-body); }
+.mg-body-sm    { font-family: var(--font-body);    font-weight: 400; font-size: var(--fs-body-sm);    line-height: var(--lh-body-sm); }
+.mg-caption    { font-family: var(--font-body);    font-weight: 500; font-size: var(--fs-caption);    line-height: var(--lh-caption); }
+.mg-eyebrow    { font-family: var(--font-body);    font-weight: 700; font-size: var(--fs-caption);    line-height: 1; letter-spacing: var(--tr-eyebrow); text-transform: uppercase; }
+.mg-mono       { font-family: var(--font-mono);    font-weight: 500; font-size: var(--fs-body-sm); }
+.mg-script     { font-family: var(--font-script);  font-weight: 400; font-size: var(--fs-display);    letter-spacing: var(--tr-normal); }
+
+/* Helpful primitives */
+.mg-stamp-shadow { box-shadow: var(--sh-stamp); border: var(--bw-stamp) solid var(--ink-900); }
+.mg-card         { background: var(--surface-0); border: 1px solid var(--ink-100); border-radius: var(--r-md); box-shadow: var(--sh-1); }
+.mg-card--raised { background: var(--surface-0); border: 1px solid var(--ink-100); border-radius: var(--r-lg); box-shadow: var(--sh-3); }
