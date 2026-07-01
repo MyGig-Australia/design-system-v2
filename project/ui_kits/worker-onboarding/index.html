@@ -4,6 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
+<link rel="stylesheet" href="_ds/mygig-design-system-019e00fe-4068-7058-af69-1d9b37e1468f/colors_and_type.css">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--ink-0);color:var(--ink-700);}
+  input,select,textarea{font-family:var(--font-body);}
+  input:focus,select:focus,textarea:focus{border-color:var(--brand-500)!important;box-shadow:0 0 0 4px rgba(108,96,255,.16);}
+  ::placeholder{color:var(--ink-300);}
+  @keyframes mgUp{from{transform:translateY(10px)}to{transform:none}}
+  @keyframes mgPop{0%{transform:scale(.85) rotate(-3deg)}60%{transform:scale(1.05) rotate(-3deg)}100%{transform:scale(1) rotate(-3deg)}}
+  @keyframes mgSpin{to{transform:rotate(360deg)}}
+</style>
 <style>
 .back-to-guide{position:fixed;bottom:20px;left:20px;z-index:9999;display:inline-flex;align-items:center;gap:7px;padding:9px 16px;background:#fff;border:1.5px solid #e5e3de;border-radius:999px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:#4a4741;text-decoration:none;box-shadow:0 2px 10px rgba(14,13,11,.1);transition:all .15s}
 .back-to-guide:hover{border-color:#6C60FF;color:#6C60FF;background:#f4f3ff}
