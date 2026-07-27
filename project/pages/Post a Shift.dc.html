@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="../_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; padding:0; background:var(--ink-0); }
+  * { box-sizing:border-box; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes popIn { from { transform:scale(0.97); } to { transform:scale(1); } }
+  input::placeholder, textarea::placeholder { color:var(--ink-300); }
+  .fld { width:100%; padding:11px 14px; border:1.5px solid var(--ink-100); border-radius:var(--r-md); font-family:var(--font-body); font-size:14.5px; background:#fff; color:var(--ink-900); outline:none; transition:border-color .15s, box-shadow .15s; }
+  .fld:focus { border-color:var(--brand-500); box-shadow:0 0 0 3px rgba(108,96,255,.12); }
+  textarea.fld { min-height:74px; resize:vertical; line-height:1.5; }
+  select.fld { -webkit-appearance:none; appearance:none; cursor:pointer; padding-right:40px; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' stroke='%236F6A60' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>"); background-repeat:no-repeat; background-position:right 12px center; }
+  .lbl { display:block; font-size:12px; font-weight:700; color:var(--ink-400); margin-bottom:7px; }
+  .lbl .opt { color:var(--ink-300); font-weight:500; }
+  .sect-h { font-family:var(--font-display); font-weight:800; font-size:18px; letter-spacing:-0.01em; color:var(--ink-900); margin:0 0 14px; }
+  .card { background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); box-shadow:var(--sh-1); }
+  .navitem { display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:10px; font-size:14px; font-weight:600; color:rgba(255,255,255,0.62); cursor:pointer; transition:all .15s; }
+  .navitem:hover { background:rgba(255,255,255,0.06); color:#fff; }
+  [data-scroll]::-webkit-scrollbar { width:9px; height:9px; }
+  [data-scroll]::-webkit-scrollbar-thumb { background:var(--ink-100); border-radius:99px; }
+  input[type=range].rng { -webkit-appearance:none; appearance:none; height:6px; border-radius:99px; background:var(--ink-100); outline:none; }
+  input[type=range].rng::-webkit-slider-thumb { -webkit-appearance:none; width:20px; height:20px; border-radius:50%; background:var(--brand-500); border:2px solid #fff; box-shadow:var(--sh-1); cursor:pointer; }
+  .psgrid { display:flex; flex-wrap:wrap; gap:28px; align-items:flex-start; }
+  .calcell:not(:disabled):hover { background:rgba(108,96,255,0.12) !important; }
+  .calcell:not(:disabled):hover::after { content:'+'; display:flex; align-items:center; justify-content:center; height:100%; color:var(--brand-700); font-weight:800; font-size:15px; }
+</style>
+</helmet>
+
+<div style="display:flex; width:100%; height:100vh; overflow:hidden; font-family:var(--font-body); color:var(--ink-700); background:var(--ink-0);">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside style="width:236px; flex-shrink:0; background:var(--ink-900); display:flex; flex-direction:column; padding:22px 16px 16px;">
+    <div style="display:flex; align-items:center; gap:9px; padding:0 6px 22px;">
+      <img src="../assets/logo-wordmark-white.png" alt="MyGig" style="height:24px;">
+      <span style="font-size:10px; font-weight:700; letter-spacing:0.04em; color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.2); padding:3px 7px; border-radius:99px;">Business</span>
+    </div>
+    <button style="display:flex; align-items:center; justify-content:center; gap:9px; width:100%; background:var(--brand-500); color:#fff; border:none; border-radius:var(--r-md); padding:12px; font-family:var(--font-body); font-weight:700; font-size:14.5px; cursor:pointer; box-shadow:var(--sh-1); margin-bottom:18px;" style-hover="background:var(--brand-700);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>Book workers</button>
+    <nav style="display:flex; flex-direction:column; gap:3px;">
+      <div class="navitem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Dashboard</div>
+      <div class="navitem" style="background:rgba(255,255,255,0.06); color:#fff;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Shifts</div>
+      <div class="navitem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>Timesheets</div>
+      <div class="navitem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Workers</div>
+      <div class="navitem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>Reports</div>
+    </nav>
+    <div style="margin-top:auto; display:flex; align-items:center; gap:10px; padding:10px 8px; border-top:1px solid rgba(255,255,255,0.1);">
+      <div style="width:30px; height:30px; border-radius:50%; background:var(--brand-100); color:var(--brand-700); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:12px;">EV</div>
+      <span style="font-size:13px; font-weight:600; color:rgba(255,255,255,0.8);">My account</span>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main data-scroll style="flex:1; min-width:0; overflow-y:auto; position:relative;">
+
+    <!-- topbar -->
+    <div style="position:sticky; top:0; z-index:20; height:64px; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:0 32px; background:rgba(250,248,244,0.88); backdrop-filter:blur(8px); border-bottom:1px solid var(--ink-100);">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <span style="font-family:var(--font-display); font-weight:800; font-size:17px; color:var(--ink-900);">Book workers</span>
+        <div style="display:flex; align-items:center; gap:9px; font-size:12.5px; font-weight:700;">
+          <span style="display:inline-flex; align-items:center; gap:6px; color:var(--ink-900);"><span style="width:18px; height:18px; border-radius:50%; background:var(--brand-500); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:10px;">1</span>Shift details</span>
+          <span style="width:22px; height:1.5px; background:var(--ink-100);"></span>
+          <span style="display:inline-flex; align-items:center; gap:6px; color:var(--ink-300);"><span style="width:18px; height:18px; border-radius:50%; border:1.5px solid var(--ink-200); color:var(--ink-300); display:inline-flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:10px;">2</span>Select workers</span>
+          <span style="width:22px; height:1.5px; background:var(--ink-100);"></span>
+          <span style="display:inline-flex; align-items:center; gap:6px; color:var(--ink-300);"><span style="width:18px; height:18px; border-radius:50%; border:1.5px solid var(--ink-200); color:var(--ink-300); display:inline-flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:10px;">3</span>Review &amp; post</span>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px;">
+        <button style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1.5px solid var(--ink-100); border-radius:99px; padding:7px 13px 7px 9px; font-family:var(--font-body); font-weight:700; font-size:13px; color:var(--ink-700); cursor:pointer;" style-hover="border-color:var(--brand-300);"><span style="width:20px; height:20px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #B8B1F7, #6C60FF 70%, #4B3FD9); display:inline-flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:800; font-size:9px;">Aa</span>Ask Amy<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-300); border:1px solid var(--ink-100); border-radius:5px; padding:1px 5px;">⌘K</span></button>
+        <label style="display:inline-flex; align-items:center; gap:10px; cursor:pointer; user-select:none;">
+          <span style="font-size:13px; font-weight:600; color:var(--ink-500);">Advanced settings</span>
+          <button onClick="{{ toggleAdvanced }}" style="{{ advTrackStyle }}"><span style="{{ advKnobStyle }}"></span></button>
+        </label>
+      </div>
+    </div>
+
+    <!-- content grid -->
+    <div class="psgrid" style="max-width:1160px; margin:0 auto; padding:28px 32px 80px; display:flex; flex-wrap:wrap; gap:28px; align-items:flex-start;">
+
+      <!-- ============ LEFT — FORM ============ -->
+      <div style="display:flex; flex-direction:column; gap:24px; min-width:0; flex:1 1 480px;">
+
+        <!-- LOCATION -->
+        <section>
+          <h2 class="sect-h">Select location</h2>
+          <div class="card" style="overflow:hidden;">
+            <div style="padding:16px 16px 0;">
+              <select value="{{ location }}" onChange="{{ onLocation }}" class="fld"><sc-for list="{{ locationOptions }}" as="loc" hint-placeholder-count="3"><option value="{{ loc }}">{{ loc }}</option></sc-for></select>
+            </div>
+            <div style="margin:14px 16px 0; height:180px; border-radius:var(--r-md); overflow:hidden; position:relative; background:linear-gradient(0deg, #E8EDE4 0%, #ECE8DF 100%);">
+              <div style="position:absolute; inset:0; background-image:linear-gradient(90deg, rgba(255,255,255,0.6) 2px, transparent 2px), linear-gradient(0deg, rgba(255,255,255,0.6) 2px, transparent 2px); background-size:54px 54px; opacity:0.7;"></div>
+              <div style="position:absolute; left:-5%; top:30%; width:120%; height:16px; background:#fff; opacity:0.85; transform:rotate(-7deg);"></div>
+              <div style="position:absolute; left:8%; top:-10%; width:14px; height:120%; background:#fff; opacity:0.85; transform:rotate(9deg);"></div>
+              <div style="position:absolute; left:14%; bottom:10%; width:90px; height:70px; background:#D9E6CF; border-radius:8px; opacity:0.9;"></div>
+              <div style="position:absolute; left:46%; top:40%; transform:translate(-50%,-100%);"><svg width="34" height="34" viewBox="0 0 24 24" fill="var(--brand-500)" stroke="#fff" stroke-width="1.5"><path d="M20 10c0 4.4-5.6 8.9-7.4 10.2a1 1 0 0 1-1.2 0C9.6 18.9 4 14.4 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.5" fill="#fff" stroke="none"/></svg></div>
+              <div style="position:absolute; right:16px; top:14px; display:flex; align-items:center; gap:6px; background:#fff; border-radius:99px; padding:5px 11px 5px 6px; box-shadow:var(--sh-1);"><span style="width:18px; height:18px; border-radius:50%; background:#E8662A; display:flex; align-items:center; justify-content:center;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h0a2 2 0 0 0 2-2V2M5 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></span><span style="font-size:11px; font-weight:700; color:var(--ink-900);">{{ venueName }}</span></div>
+            </div>
+            <div style="display:flex; align-items:center; gap:0; margin:14px 0 16px; padding:0 4px;">
+              <div style="flex:1; padding:0 12px;"><span style="font-size:12px; color:var(--ink-400);">Address</span><div style="font-size:13px; font-weight:600; color:var(--ink-700); margin-top:2px;">{{ address }}</div></div>
+              <div style="width:1px; align-self:stretch; background:var(--ink-100);"></div>
+              <div style="padding:0 12px;"><span style="font-size:12px; color:var(--ink-400);">State</span><div style="font-size:13px; font-weight:600; color:var(--ink-700); margin-top:2px;">{{ state }}</div></div>
+              <div style="width:1px; align-self:stretch; background:var(--ink-100);"></div>
+              <div style="padding:0 12px;"><span style="font-size:12px; color:var(--ink-400);">Country</span><div style="font-size:13px; font-weight:600; color:var(--ink-700); margin-top:2px;">Australia</div></div>
+            </div>
+            <sc-if value="{{ advancedOn }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:4px 16px 16px; animation:fadeUp .25s var(--ease-out-quint);">
+                <div style="display:flex; gap:20px;">
+                  <button onClick="{{ toggleRemote }}" style="{{ remoteStyle }}"><span style="{{ remoteBox }}"><sc-if value="{{ remote }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if></span>Remote</button>
+                  <button onClick="{{ toggleOnTheGo }}" style="{{ ottStyle }}"><span style="{{ ottBox }}"><sc-if value="{{ onTheGo }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if></span>On-the-go</button>
+                </div>
+                <sc-if value="{{ remote }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:14px; animation:fadeUp .2s var(--ease-out-quint);">
+                    <label class="lbl">Remote work address</label>
+                    <input value="{{ remoteAddress }}" onInput="{{ onRemoteAddress }}" placeholder="Where will workers be based?" class="fld">
+                    <div style="font-size:12px; color:var(--ink-400); margin-top:7px;">Shown to workers as the base location for this remote shift.</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ onTheGo }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:14px; display:flex; align-items:flex-end; gap:10px; animation:fadeUp .2s var(--ease-out-quint);">
+                    <div style="flex:1; min-width:0;"><label class="lbl">From</label><input value="{{ ottFrom }}" onInput="{{ onOttFrom }}" placeholder="Start address" class="fld"></div>
+                    <div style="flex-shrink:0; height:44px; display:flex; align-items:center; color:var(--ink-300);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div style="flex:1; min-width:0;"><label class="lbl">To</label><input value="{{ ottTo }}" onInput="{{ onOttTo }}" placeholder="End address" class="fld"></div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+          </div>
+        </section>
+
+        <!-- ON-SITE CONTACTS -->
+        <section>
+          <div class="card" style="padding:18px;">
+            <div style="font-size:14px; font-weight:700; color:var(--ink-900);">On-site contacts</div>
+            <div style="font-size:12.5px; color:var(--ink-400); margin:3px 0 13px; line-height:1.5;">We'll text you and the on-site contacts (per location) with details related to this shift.</div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <div class="fld" style="flex:1; display:flex; align-items:center; gap:9px; cursor:default;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-300)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span style="font-size:14px; color:var(--ink-700);">{{ contacts }}</span></div>
+              <button style="flex-shrink:0; background:var(--brand-500); color:#fff; border:none; border-radius:var(--r-md); padding:11px 20px; font-family:var(--font-body); font-weight:700; font-size:13.5px; cursor:pointer;" style-hover="background:var(--brand-700);">Edit</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- POSITION -->
+        <section>
+          <h2 class="sect-h">Select position</h2>
+          <div class="card" style="padding:16px;">
+            <select value="{{ role }}" onChange="{{ onRole }}" class="fld"><sc-for list="{{ roleOptions }}" as="r" hint-placeholder-count="5"><option value="{{ r }}">{{ r }}</option></sc-for></select>
+            <div style="display:flex; margin-top:14px; border:1px solid var(--ink-100); border-radius:var(--r-md); overflow:hidden;">
+              <div style="flex:1; padding:12px 16px;"><div style="font-size:11px; color:var(--ink-400);">Award</div><div style="font-size:13.5px; font-weight:600; color:var(--ink-900); margin-top:3px;">{{ award }}</div></div>
+              <div style="width:1px; background:var(--ink-100);"></div>
+              <div style="flex:0 0 200px; padding:12px 16px;"><div style="font-size:11px; color:var(--ink-400);">Classification</div><div style="font-size:13.5px; font-weight:600; color:var(--ink-900); margin-top:3px;">{{ classification }}</div></div>
+            </div>
+            <div style="display:inline-flex; align-items:center; gap:6px; margin-top:12px; font-size:11.5px; font-weight:700; color:var(--success-700); background:var(--success-50); padding:5px 10px; border-radius:99px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Award &amp; rate applied automatically</div>
+          </div>
+        </section>
+
+        <!-- ADD SHIFTS -->
+        <section>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+            <h2 class="sect-h" style="margin:0;">Add shift(s)</h2>
+            <button onClick="{{ toggleRecurring }}" style="display:inline-flex; align-items:center; gap:9px; background:none; border:none; cursor:pointer; font-family:var(--font-body);">
+              <span style="font-size:13px; font-weight:700; color:var(--ink-700);">Recurring</span>
+              <span style="{{ recurTrackStyle }}"><span style="{{ recurKnobStyle }}"></span></span>
+            </button>
+          </div>
+
+          <div class="card" style="padding:16px;">
+            <!-- view toggle -->
+            <div style="display:inline-flex; background:var(--ink-50); border-radius:var(--r-md); padding:3px; margin-bottom:16px;">
+              <button onClick="{{ setList }}" style="{{ listTabStyle }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>List</button>
+              <button onClick="{{ setCalendar }}" style="{{ calTabStyle }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>Calendar</button>
+            </div>
+
+            <!-- recurring panel -->
+            <sc-if value="{{ recurring }}" hint-placeholder-val="{{ false }}">
+              <div style="background:var(--brand-50); border:1px solid var(--brand-200); border-radius:var(--r-md); padding:15px; margin-bottom:16px; animation:fadeUp .25s var(--ease-out-quint);">
+                <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end;">
+                  <div style="flex:0 0 150px;"><label class="lbl">Repeats</label><select value="{{ recurFreq }}" onChange="{{ onRecurFreq }}" class="fld"><option value="Daily">Daily</option><option value="Weekly">Weekly</option><option value="Fortnightly">Fortnightly</option></select></div>
+                  <div style="flex:1; min-width:180px;"><label class="lbl">On these days</label><div style="display:flex; gap:6px;"><sc-for list="{{ dowOptions }}" as="d" hint-placeholder-count="7"><button onClick="{{ d.onToggle }}" style="{{ d.style }}">{{ d.label }}</button></sc-for></div></div>
+                  <div style="flex:0 0 150px;"><label class="lbl">Ends after</label><div style="display:flex; align-items:center; gap:8px;"><input value="{{ recurCount }}" onInput="{{ onRecurCount }}" inputmode="numeric" class="fld" style="width:64px; text-align:center;"><span style="font-size:13px; color:var(--ink-400);">occurrences</span></div></div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- LIST VIEW -->
+            <sc-if value="{{ isListView }}" hint-placeholder-val="{{ true }}">
+              <div>
+                <div style="display:grid; grid-template-columns:84px 1fr 1fr 1fr 78px 32px; gap:10px; padding:0 2px 8px; font-size:11px; font-weight:700; color:var(--ink-400);">
+                  <div>Workers</div><div>Start date</div><div>Start time</div><div>End time</div><div>Duration</div><div></div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:9px;">
+                  <sc-for list="{{ shiftRows }}" as="sh" hint-placeholder-count="1">
+                    <div style="display:grid; grid-template-columns:84px 1fr 1fr 1fr 78px 32px; gap:10px; align-items:center;">
+                      <input value="{{ sh.workers }}" onInput="{{ sh.onWorkers }}" inputmode="numeric" class="fld" style="text-align:center; padding-left:8px; padding-right:8px; min-width:0;">
+                      <input value="{{ sh.date }}" onInput="{{ sh.onDate }}" type="date" class="fld" style="font-family:var(--font-mono); font-size:13px; min-width:0;">
+                      <input value="{{ sh.start }}" onInput="{{ sh.onStart }}" type="time" class="fld" style="font-family:var(--font-mono); font-size:13px; min-width:0;">
+                      <input value="{{ sh.end }}" onInput="{{ sh.onEnd }}" type="time" class="fld" style="font-family:var(--font-mono); font-size:13px; min-width:0;">
+                      <div style="font-family:var(--font-display); font-weight:800; font-size:15px; color:var(--ink-900); text-align:center;">{{ sh.durLabel }}</div>
+                      <sc-if value="{{ sh.canRemove }}" hint-placeholder-val="{{ false }}"><button onClick="{{ sh.onRemove }}" style="width:32px; height:32px; border-radius:8px; background:none; border:none; color:var(--ink-300); cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:var(--danger-50); color:var(--danger-500);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></sc-if>
+                      <sc-if value="{{ sh.cantRemove }}" hint-placeholder-val="{{ true }}"><span></span></sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+                <button onClick="{{ addShift }}" style="display:inline-flex; align-items:center; gap:7px; margin-top:14px; background:none; border:none; color:var(--brand-700); font-family:var(--font-body); font-weight:700; font-size:13.5px; cursor:pointer; padding:4px 2px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>Add shift</button>
+              </div>
+            </sc-if>
+
+            <!-- CALENDAR VIEW -->
+            <sc-if value="{{ isCalendarView }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+                  <button onClick="{{ goToday }}" style="background:#fff; border:1.5px solid var(--ink-100); border-radius:8px; padding:7px 13px; font-family:var(--font-body); font-weight:700; font-size:12.5px; color:var(--ink-700); cursor:pointer;" style-hover="background:var(--ink-50);">Today</button>
+                  <div style="display:flex; gap:2px;"><button onClick="{{ prevWeek }}" style="width:30px; height:30px; border-radius:8px; background:none; border:1.5px solid var(--ink-100); color:var(--ink-700); cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:var(--ink-50);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><button onClick="{{ nextWeek }}" style="width:30px; height:30px; border-radius:8px; background:none; border:1.5px solid var(--ink-100); color:var(--ink-700); cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:var(--ink-50);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button></div>
+                  <div style="font-family:var(--font-display); font-weight:800; font-size:15px; color:var(--ink-900);">{{ weekLabel }}</div>
+                  <button onClick="{{ addWeekShift }}" style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; background:var(--brand-500); color:#fff; border:none; border-radius:8px; padding:8px 13px; font-family:var(--font-body); font-weight:700; font-size:12.5px; cursor:pointer;" style-hover="background:var(--brand-700);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>Add shift</button>
+                </div>
+                <!-- header row -->
+                <div style="display:flex; border:1px solid var(--ink-100); border-radius:var(--r-md) var(--r-md) 0 0; overflow:hidden;">
+                  <div style="width:52px; flex-shrink:0; border-right:1px solid var(--ink-100);"></div>
+                  <sc-for list="{{ calCols }}" as="col" hint-placeholder-count="7">
+                    <div style="{{ col.headStyle }}"><div style="font-size:10.5px; color:var(--ink-400); font-weight:600;">{{ col.dayName }}</div><div style="{{ col.dayNumStyle }}">{{ col.dayNum }}</div></div>
+                  </sc-for>
+                </div>
+                <!-- scroll body -->
+                <div data-scroll style="display:flex; max-height:340px; overflow-y:auto; border:1px solid var(--ink-100); border-top:none; border-radius:0 0 var(--r-md) var(--r-md);">
+                  <!-- hour gutter -->
+                  <div style="width:52px; flex-shrink:0; border-right:1px solid var(--ink-100);">
+                    <sc-for list="{{ hourLabels }}" as="h" hint-placeholder-count="24"><div style="height:38px; font-size:10px; color:var(--ink-300); text-align:right; padding:2px 7px 0 0; font-family:var(--font-mono);">{{ h }}</div></sc-for>
+                  </div>
+                  <!-- day columns -->
+                  <sc-for list="{{ calCols }}" as="col" hint-placeholder-count="7">
+                    <div style="flex:1; min-width:0; position:relative; border-right:1px solid var(--ink-50);">
+                      <sc-for list="{{ col.cells }}" as="cell" hint-placeholder-count="24"><button onClick="{{ cell.onAdd }}" disabled="{{ cell.disabled }}" class="calcell" style="{{ cell.style }}"></button></sc-for>
+                      <sc-for list="{{ col.blocks }}" as="blk" hint-placeholder-count="0"><div style="{{ blk.style }}"><div style="font-weight:700; font-size:11px; line-height:1.15;">{{ blk.label }}</div><div style="font-size:10px; opacity:0.85; font-family:var(--font-mono);">{{ blk.sub }}</div></div></sc-for>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="font-size:12px; color:var(--ink-400); margin-top:10px;">Hover a future slot and click the <strong style="color:var(--ink-700); font-weight:700;">+</strong> to drop a shift — or use <strong style="color:var(--ink-700); font-weight:700;">Add shift</strong>. New shifts appear here and in the list. Past slots are disabled (timezone {{ tz }}).</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ advancedOn }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--ink-50); animation:fadeUp .25s var(--ease-out-quint);">
+                <button onClick="{{ toggleGrouped }}" style="display:flex; align-items:center; gap:11px; width:100%; text-align:left; background:none; border:none; padding:0; cursor:pointer; font-family:var(--font-body);"><span style="{{ groupedBox }}"><sc-if value="{{ grouped }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if></span><span><span style="display:block; font-size:13.5px; font-weight:700; color:var(--ink-900);">Grouped shifts</span><span style="display:block; font-size:12.5px; color:var(--ink-400); margin-top:1px;">Workers must agree to work all shifts in this booking.</span></span></button>
+              </div>
+            </sc-if>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ============ RIGHT — STICKY COST RAIL ============ -->
+      <div class="psrail" style="flex:1 1 330px; min-width:0; max-width:520px; position:sticky; top:88px; align-self:flex-start; display:flex; flex-direction:column; gap:20px;">
+        <div class="card" style="overflow:hidden;">
+          <div style="padding:18px 20px 16px; background:var(--ink-900); color:#fff;">
+            <div style="font-size:11px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-300);">Cost estimate</div>
+            <div style="display:flex; align-items:flex-end; gap:8px; margin-top:8px;"><span style="font-family:var(--font-display); font-weight:800; font-size:34px; line-height:1; letter-spacing:-0.01em;">{{ totalStr }}</span><span style="font-size:12px; color:rgba(255,255,255,0.55); margin-bottom:4px;">excl. GST</span></div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.6); margin-top:8px;">{{ summaryLine }}</div>
+          </div>
+
+          <div style="padding:16px 20px;">
+            <div style="display:flex; justify-content:space-between; gap:10px; padding:7px 0; font-size:13px;"><span style="color:var(--ink-500); white-space:nowrap;">Gross pay <span style="color:var(--ink-300);">incl. PAYG</span></span><span style="font-weight:600; color:var(--ink-900); font-family:var(--font-mono);">{{ grossStr }}</span></div>
+            <div style="display:flex; justify-content:space-between; gap:10px; padding:7px 0; font-size:13px;"><span style="color:var(--ink-500); white-space:nowrap;">On-costs <span style="color:var(--ink-300);">incl. super</span></span><span style="font-weight:600; color:var(--ink-900); font-family:var(--font-mono);">{{ oncostStr }}</span></div>
+            <div style="display:flex; justify-content:space-between; gap:10px; padding:7px 0; font-size:13px;"><span style="color:var(--ink-500); white-space:nowrap;">Service fee</span><span style="font-weight:600; color:var(--ink-900); font-family:var(--font-mono);">{{ feeStr }}</span></div>
+
+            <sc-if value="{{ detailOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="margin:8px 0 4px; padding:12px 14px; background:var(--ink-0); border-radius:var(--r-md); animation:fadeUp .2s var(--ease-out-quint);">
+                <div style="font-size:10.5px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400); margin-bottom:9px;">On-costs breakdown</div>
+                <div style="display:flex; justify-content:space-between; padding:4px 0; font-size:12.5px;"><span style="color:var(--ink-500);">Superannuation (12%)</span><span style="font-family:var(--font-mono); color:var(--ink-700);">{{ superStr }}</span></div>
+                <div style="display:flex; justify-content:space-between; padding:4px 0; font-size:12.5px;"><span style="color:var(--ink-500);">Workers comp ({{ state }})</span><span style="font-family:var(--font-mono); color:var(--ink-700);">{{ wcStr }}</span></div>
+                <div style="display:flex; justify-content:space-between; padding:4px 0; font-size:12.5px;"><span style="color:var(--ink-500);">Payroll tax ({{ state }})</span><span style="font-family:var(--font-mono); color:var(--ink-700);">{{ ptStr }}</span></div>
+                <div style="height:1px; background:var(--ink-100); margin:8px 0;"></div>
+                <div style="display:flex; justify-content:space-between; padding:4px 0; font-size:12.5px;"><span style="color:var(--ink-500);">Hours total</span><span style="font-family:var(--font-mono); color:var(--ink-700);">{{ hoursStr }}</span></div>
+                <div style="display:flex; justify-content:space-between; padding:4px 0; font-size:12.5px;"><span style="color:var(--ink-500);">Pay rate</span><span style="font-family:var(--font-mono); color:var(--ink-700);">{{ effRateLabel }}/hr</span></div>
+              </div>
+            </sc-if>
+
+            <button onClick="{{ toggleDetail }}" style="background:none; border:none; color:var(--brand-700); font-family:var(--font-body); font-weight:700; font-size:12.5px; cursor:pointer; padding:6px 0;">{{ detailToggleLabel }}</button>
+
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:6px; padding-top:14px; border-top:1.5px solid var(--ink-100);"><span style="font-size:14px; font-weight:700; color:var(--ink-900);">Total <span style="font-size:11px; font-weight:500; color:var(--ink-400);">excl. GST</span></span><span style="font-family:var(--font-display); font-weight:800; font-size:20px; color:var(--ink-900);">{{ totalStr }}</span></div>
+
+            <sc-if value="{{ posted }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; align-items:center; gap:12px; margin-top:16px; padding:14px; background:var(--ink-900); border-radius:var(--r-md); animation:popIn .35s var(--ease-out-quint);">
+                <div style="background:var(--brand-500); color:#fff; padding:8px 10px; border-radius:9px; border:2px solid #fff; box-shadow:2px 2px 0 var(--brand-700); transform:rotate(-3deg); font-family:var(--font-display); font-weight:800; font-size:10px; line-height:1.1; text-align:center; flex-shrink:0;">ON THE<br>JOB</div>
+                <div><div style="font-family:var(--font-display); font-weight:700; font-size:14px; color:#fff;">Shift posted.</div><div style="font-size:11.5px; color:rgba(255,255,255,0.6); margin-top:2px;">Notifying matched workers now.</div></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ notPosted }}" hint-placeholder-val="{{ true }}">
+              <a href="Select Workers.dc.html" style="display:flex; align-items:center; justify-content:center; gap:9px; width:100%; margin-top:16px; background:var(--brand-500); color:#fff; border:2.5px solid var(--ink-900); box-shadow:4px 4px 0 var(--ink-900); border-radius:var(--r-md); padding:14px; font-family:var(--font-body); font-weight:700; font-size:15px; cursor:pointer; text-decoration:none; transition:all 120ms var(--ease-out-quint);" style-hover="transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--ink-900);" style-active="transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink-900);">Continue — select workers<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+              <div style="text-align:center; margin-top:10px; font-size:12px; color:var(--ink-400);">or <button onClick="{{ postShift }}" style="background:none; border:none; color:var(--brand-700); font-family:var(--font-body); font-weight:700; font-size:12px; cursor:pointer; padding:0;">ask Amy to post it</button></div>
+            </sc-if>
+          </div>
+
+          <div style="padding:0 20px 18px;">
+            <div style="display:flex; gap:8px; padding:12px 14px; background:var(--brand-50); border-radius:var(--r-md); font-size:11.5px; line-height:1.5; color:var(--brand-900);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--brand-700)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Final invoice is calculated after the shift, on actual hours worked. Free cancellation up to 24h before — or any time it's unfilled.</span></div>
+          </div>
+        </div>
+
+        <!-- RATE — moved below the cost estimate -->
+        <div class="card" style="padding:18px;">
+          <div style="display:flex; align-items:center; gap:13px;">
+            <span style="width:38px; height:38px; border-radius:10px; background:var(--brand-50); color:var(--brand-700); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5a2.5 2.5 0 0 0-2.5-1.5c-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.9 2.5 2-1 2-2.5 2a2.5 2.5 0 0 1-2.5-1.5M12 6.5v11"/></svg></span>
+            <div style="flex:1; min-width:0;"><div style="font-size:14px; font-weight:700; color:var(--ink-900);">Increase the base rate</div><div style="font-size:12px; color:var(--ink-400); margin-top:2px;">Optional — a higher rate attracts more workers.</div></div>
+            <button onClick="{{ toggleIncrease }}" style="{{ incTrackStyle }}"><span style="{{ incKnobStyle }}"></span></button>
+          </div>
+
+          <sc-if value="{{ increaseOn }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--ink-50); animation:fadeUp .25s var(--ease-out-quint);">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px;">
+                <div style="display:inline-flex; background:var(--ink-900); border-radius:9px; padding:3px;">
+                  <button onClick="{{ setPct }}" style="{{ typePctStyle }}">%</button>
+                  <button onClick="{{ setFixed }}" style="{{ typeFixedStyle }}">$ Fixed</button>
+                </div>
+                <div style="background:var(--ink-50); border-radius:var(--r-md); padding:8px 12px; font-family:var(--font-display); font-weight:800; font-size:14px; color:var(--ink-900); white-space:nowrap;">{{ effRateLabel }}<span style="font-size:10px; font-weight:600; color:var(--ink-400);">/hr</span></div>
+              </div>
+              <div style="display:flex; align-items:center; gap:7px; flex-wrap:wrap;">
+                <sc-for list="{{ presetOptions }}" as="p" hint-placeholder-count="5"><button onClick="{{ p.onPick }}" style="{{ p.style }}">{{ p.label }}</button></sc-for>
+              </div>
+              <sc-if value="{{ showCustom }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:12px; display:flex; align-items:center; gap:10px;">
+                  <span style="font-size:12px; font-weight:700; color:var(--ink-400);">{{ customLabel }}</span>
+                  <input value="{{ customVal }}" onInput="{{ onCustom }}" inputmode="decimal" class="fld" style="width:110px; font-family:var(--font-mono);">
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <div style="display:flex; flex-wrap:wrap; gap:10px 16px; margin-top:16px; padding-top:14px; border-top:1px solid var(--ink-50);">
+            <div style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--ink-500);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--success-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></svg>Competitive rate</div>
+            <div style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--ink-500);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--success-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></svg>Good fill rate</div>
+            <div style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--ink-500);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--success-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>Fair Work compliant</div>
+          </div>
+        </div>
+
+        <!-- ADVANCED: PO + extra details (below the rate block) -->
+        <sc-if value="{{ advancedOn }}" hint-placeholder-val="{{ false }}">
+          <div class="card" style="padding:18px; animation:fadeUp .25s var(--ease-out-quint);">
+            <label class="lbl">Purchase order ID <span class="opt">· optional</span></label>
+            <input value="{{ poId }}" onInput="{{ onPoId }}" placeholder="Add a purchase order ID" class="fld" style="font-family:var(--font-mono);">
+            <label class="lbl" style="margin-top:16px;">Extra details <span class="opt">· shown to workers</span></label>
+            <textarea value="{{ extraDetails }}" onInput="{{ onExtra }}" placeholder="Enter shift instructions — parking, uniform, who to ask for…" class="fld"></textarea>
+          </div>
+        </sc-if>
+      </div>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:960}}">
+class Component extends DCLogic {
+  state = {
+    advanced: false,
+    location: 'MyGig New Office',
+    remote: false, onTheGo: false, remoteAddress: '', ottFrom: '', ottTo: '',
+    poId: '', extraDetails: '', grouped: false,
+    role: 'Usher / Ticketing Assistant',
+    recurring: false, recurFreq: 'Weekly', recurDays: ['Tue','Thu'], recurCount: '4',
+    view: 'list',
+    shifts: [{ workers: '1', date: '2026-07-02', start: '09:00', end: '15:30' }],
+    increaseOn: false, incType: '%', incPreset: 0, incCustom: '10',
+    weekOffset: 0,
+    detailOpen: false, posted: false,
+  };
+
+  LOCATIONS = {
+    'MyGig New Office': { address: '441 Elizabeth St, Surry Hills NSW 2010', state: 'NSW', venue: 'Porteño' },
+    'Surry Hills café':  { address: '12 Foster St, Surry Hills NSW 2010', state: 'NSW', venue: 'The Shop' },
+    'Yennora DC':        { address: '8 Newton Rd, Yennora NSW 2161', state: 'NSW', venue: 'Dock 4' },
+  };
+  ROLES = {
+    'Usher / Ticketing Assistant': { award: 'Passenger Vehicle Transportation Award 2020', cls: 'Grade 2', rate: 33.38 },
+    'Bartender':                   { award: 'Hospitality Industry (General) Award 2020', cls: 'Level 2 — Food & beverage', rate: 32.30 },
+    'Restaurant server':           { award: 'Hospitality Industry (General) Award 2020', cls: 'Level 2 — Food & beverage', rate: 31.19 },
+    'Warehouse picker':            { award: 'Storage Services & Wholesale Award 2020', cls: 'Storeworker grade 1', rate: 30.74 },
+    'Event steward':               { award: 'Amusement, Events & Recreation Award 2020', cls: 'Level 2 — Steward', rate: 32.40 },
+  };
+  RATES = { super: 0.12, wc: 0.025, pt: 0.0545, fee: 0.18 };
+  PRESETS = [0, 5, 15, 30, 'custom'];
+  DOW = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  TODAY = new Date(2026, 5, 28);
+  NOW_MIN = 12 * 60;
+  HOURPX = 38;
+
+  field = (k) => (e) => this.setState({ [k]: e.target.value });
+  toggle = (k) => () => this.setState(s => ({ [k]: !s[k] }));
+  toggleRemote = () => this.setState(s => { const remote = !s.remote; return { remote, onTheGo: remote ? false : s.onTheGo }; });
+  toggleOnTheGo = () => this.setState(s => { const onTheGo = !s.onTheGo; return { onTheGo, remote: onTheGo ? false : s.remote }; });
+  setView = (v) => () => this.setState({ view: v });
+  setIncType = (t) => () => this.setState({ incType: t, incPreset: t === '$' ? 'custom' : 0 });
+  setPreset = (p) => () => this.setState({ incPreset: p });
+  toggleDow = (d) => () => this.setState(s => ({ recurDays: s.recurDays.includes(d) ? s.recurDays.filter(x => x !== d) : [...s.recurDays, d] }));
+  shiftField = (i, k) => (e) => this.setState(s => { const a = s.shifts.map(x => ({ ...x })); a[i][k] = e.target.value; return { shifts: a }; });
+  addShift = () => this.setState(s => ({ shifts: [...s.shifts, { workers: '1', date: '2026-07-02', start: '09:00', end: '17:00' }] }));
+  removeShift = (i) => () => this.setState(s => ({ shifts: s.shifts.filter((_, j) => j !== i) }));
+  postShift = () => this.setState({ posted: true });
+  weekStep = (n) => () => this.setState(s => ({ weekOffset: s.weekOffset + n }));
+  goToday = () => this.setState({ weekOffset: 0 });
+  addCalShift = (dateStr, hour) => () => this.setState(s => { const e = (hour + 4) % 24; return { shifts: [...s.shifts, { workers: '1', date: dateStr, start: this.pad(hour) + ':00', end: this.pad(e) + ':00' }] }; });
+  addWeekShift = () => this.setState(s => {
+    const ws = this.weekStart(); const we = new Date(ws); we.setDate(ws.getDate() + 6);
+    let target = ws < this.TODAY ? new Date(this.TODAY) : ws; if (target > we) target = ws;
+    const startH = this.toISO(target) === this.toISO(this.TODAY) ? 14 : 9;
+    return { shifts: [...s.shifts, { workers: '1', date: this.toISO(target), start: this.pad(startH) + ':00', end: this.pad(startH + 4) + ':00' }] };
+  });
+
+  pad = (n) => String(n).padStart(2, '0');
+  parseT(t) { if (!t || t.indexOf(':') < 0) return null; const [h, m] = t.split(':').map(Number); return h * 60 + m; }
+  durMin(sh) { const a = this.parseT(sh.start), b = this.parseT(sh.end); if (a == null || b == null) return 0; return ((b - a) + 1440) % 1440; }
+  fmtDur(min) { return Math.floor(min / 60) + 'h' + this.pad(min % 60); }
+  money(n) { return '$' + (n || 0).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  toISO(d) { return d.getFullYear() + '-' + this.pad(d.getMonth() + 1) + '-' + this.pad(d.getDate()); }
+
+  weekStart() {
+    const d = new Date(this.TODAY);
+    const dow = (d.getDay() + 6) % 7; // Mon=0
+    d.setDate(d.getDate() - dow + this.state.weekOffset * 7);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  effRate() {
+    const base = (this.ROLES[this.state.role] || {}).rate || 0;
+    if (!this.state.increaseOn) return base;
+    const v = this.state.incPreset === 'custom' ? (parseFloat(this.state.incCustom) || 0) : this.state.incPreset;
+    return this.state.incType === '$' ? base + v : base * (1 + v / 100);
+  }
+
+  renderVals() {
+    const s = this.state;
+    const loc = this.LOCATIONS[s.location] || {};
+    const role = this.ROLES[s.role] || {};
+    const rate = this.effRate();
+
+    // cost
+    let hours = 0;
+    s.shifts.forEach(sh => { hours += (this.durMin(sh) / 60) * (parseInt(sh.workers) || 0); });
+    const gross = rate * hours;
+    const sup = gross * this.RATES.super, wc = gross * this.RATES.wc, pt = gross * this.RATES.pt;
+    const oncost = sup + wc + pt, fee = gross * this.RATES.fee;
+    const total = gross + oncost + fee;
+
+    // toggles UI
+    const trk = (on, w) => `position:relative; display:inline-block; width:${w || 42}px; height:24px; border-radius:99px; flex-shrink:0; border:none; cursor:pointer; padding:0; transition:background .2s; background:${on ? 'var(--brand-500)' : 'var(--ink-200)'};`;
+    const knob = (on, w) => `position:absolute; top:3px; left:${on ? ((w || 42) - 21) : 3}px; width:18px; height:18px; border-radius:50%; background:#fff; box-shadow:var(--sh-1); transition:left .2s;`;
+    const chkBox = (on) => `width:20px; height:20px; border-radius:6px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:${on ? 'var(--brand-500)' : '#fff'}; border:${on ? 'none' : '1.5px solid var(--ink-200)'};`;
+    const chkBtn = (on) => `display:inline-flex; align-items:center; gap:9px; background:none; border:none; cursor:pointer; font-family:var(--font-body); font-size:13.5px; font-weight:600; color:var(--ink-700); padding:0;`;
+    const tab = (on) => `display:inline-flex; align-items:center; gap:7px; padding:8px 16px; border-radius:9px; border:none; font-family:var(--font-body); font-weight:700; font-size:13px; cursor:pointer; transition:all .15s; background:${on ? '#fff' : 'transparent'}; color:${on ? 'var(--ink-900)' : 'var(--ink-400)'}; box-shadow:${on ? 'var(--sh-1)' : 'none'};`;
+
+    // shift rows
+    const shiftRows = s.shifts.map((sh, i) => ({
+      workers: sh.workers, date: sh.date, start: sh.start, end: sh.end,
+      durLabel: this.fmtDur(this.durMin(sh)),
+      onWorkers: this.shiftField(i, 'workers'), onDate: this.shiftField(i, 'date'),
+      onStart: this.shiftField(i, 'start'), onEnd: this.shiftField(i, 'end'),
+      canRemove: s.shifts.length > 1, cantRemove: s.shifts.length <= 1, onRemove: this.removeShift(i),
+    }));
+
+    // increase presets
+    const presetOptions = this.PRESETS.map(p => {
+      const on = s.incPreset === p;
+      const label = p === 'custom' ? 'Custom' : (s.incType === '$' ? '$' + p : p + '%');
+      return { label, onPick: this.setPreset(p),
+        style: `padding:7px 14px; border-radius:99px; font-family:var(--font-body); font-weight:700; font-size:12.5px; cursor:pointer; transition:all .15s; background:${on ? 'var(--ink-900)' : '#fff'}; color:${on ? '#fff' : 'var(--ink-700)'}; border:1.5px solid ${on ? 'var(--ink-900)' : 'var(--ink-100)'};` };
+    });
+
+    // recurring dow
+    const dowOptions = this.DOW.map(d => {
+      const on = s.recurDays.includes(d);
+      return { label: d[0], onToggle: this.toggleDow(d),
+        style: `width:30px; height:30px; border-radius:8px; font-family:var(--font-body); font-weight:700; font-size:12px; cursor:pointer; transition:all .15s; background:${on ? 'var(--brand-500)' : '#fff'}; color:${on ? '#fff' : 'var(--ink-500)'}; border:1.5px solid ${on ? 'var(--brand-500)' : 'var(--ink-100)'};` };
+    });
+
+    // calendar
+    const ws = this.weekStart();
+    const todayISO = this.toISO(this.TODAY);
+    const hourLabels = Array.from({ length: 24 }, (_, h) => h === 0 ? '12a' : h < 12 ? h + 'a' : h === 12 ? '12p' : (h - 12) + 'p');
+    const calCols = Array.from({ length: 7 }, (_, di) => {
+      const d = new Date(ws); d.setDate(ws.getDate() + di);
+      const iso = this.toISO(d); const isToday = iso === todayISO;
+      const isPastDay = d < this.TODAY && !isToday;
+      const cells = Array.from({ length: 24 }, (_, h) => {
+        const disabled = isPastDay || (isToday && h * 60 < this.NOW_MIN);
+        return { disabled, onAdd: disabled ? (() => {}) : this.addCalShift(iso, h),
+          style: `display:block; width:100%; height:${this.HOURPX}px; padding:0; border:none; border-bottom:1px solid var(--ink-50); background:${disabled ? 'var(--ink-0)' : 'transparent'}; cursor:${disabled ? 'not-allowed' : 'pointer'}; transition:background .12s;` };
+      });
+      const blocks = s.shifts.filter(sh => sh.date === iso && this.durMin(sh) > 0).map(sh => {
+        const st = this.parseT(sh.start); const dm = this.durMin(sh);
+        const top = (st / 60) * this.HOURPX; const hgt = Math.max(20, (dm / 60) * this.HOURPX);
+        return { label: (parseInt(sh.workers) || 1) + '× ' + s.role.split(' / ')[0], sub: sh.start + '–' + sh.end,
+          style: `position:absolute; left:3px; right:3px; top:${top}px; height:${hgt}px; background:var(--brand-500); color:#fff; border-radius:6px; padding:4px 6px; overflow:hidden; box-shadow:var(--sh-1); pointer-events:none; z-index:2;` };
+      });
+      return { dayName: this.DOW[di], dayNum: d.getDate(),
+        headStyle: `flex:1; min-width:0; text-align:center; padding:8px 2px; border-right:1px solid var(--ink-100); background:${isToday ? 'var(--brand-50)' : '#fff'};`,
+        dayNumStyle: `font-family:var(--font-display); font-weight:800; font-size:15px; margin-top:1px; color:${isToday ? 'var(--brand-700)' : 'var(--ink-900)'};`,
+        cells, blocks };
+    });
+    const we = new Date(ws); we.setDate(ws.getDate() + 6);
+    const weekLabel = ws.getDate() + ' ' + this.MONTHS[ws.getMonth()] + ' – ' + we.getDate() + ' ' + this.MONTHS[we.getMonth()] + ' ' + we.getFullYear();
+
+    const nShifts = s.shifts.length;
+    const totalWorkers = s.shifts.reduce((a, sh) => a + (parseInt(sh.workers) || 0), 0);
+    const summaryLine = nShifts + (nShifts === 1 ? ' shift' : ' shifts') + ' · ' + totalWorkers + (totalWorkers === 1 ? ' worker' : ' workers') + ' · ' + this.fmtDur(Math.round(hours * 60)) + ' total';
+
+    return {
+      advancedOn: s.advanced, toggleAdvanced: this.toggle('advanced'),
+      advTrackStyle: trk(s.advanced), advKnobStyle: knob(s.advanced),
+
+      locationOptions: Object.keys(this.LOCATIONS), location: s.location, onLocation: this.field('location'),
+      address: loc.address, state: loc.state, venueName: loc.venue,
+      remote: s.remote, onTheGo: s.onTheGo, toggleRemote: this.toggleRemote, toggleOnTheGo: this.toggleOnTheGo,
+      remoteStyle: chkBtn(s.remote), remoteBox: chkBox(s.remote), ottStyle: chkBtn(s.onTheGo), ottBox: chkBox(s.onTheGo),
+      remoteAddress: s.remoteAddress, onRemoteAddress: this.field('remoteAddress'),
+      ottFrom: s.ottFrom, onOttFrom: this.field('ottFrom'), ottTo: s.ottTo, onOttTo: this.field('ottTo'),
+      poId: s.poId, onPoId: this.field('poId'), extraDetails: s.extraDetails, onExtra: this.field('extraDetails'),
+      grouped: s.grouped, toggleGrouped: this.toggle('grouped'), groupedBox: chkBox(s.grouped),
+      contacts: 'Jack Harber, Enguerrand Vidor',
+
+      roleOptions: Object.keys(this.ROLES), role: s.role, onRole: this.field('role'),
+      award: role.award, classification: role.cls,
+
+      recurring: s.recurring, toggleRecurring: this.toggle('recurring'),
+      recurTrackStyle: trk(s.recurring), recurKnobStyle: knob(s.recurring),
+      recurFreq: s.recurFreq, onRecurFreq: this.field('recurFreq'),
+      recurCount: s.recurCount, onRecurCount: this.field('recurCount'), dowOptions,
+
+      isListView: s.view === 'list', isCalendarView: s.view === 'calendar',
+      setList: this.setView('list'), setCalendar: this.setView('calendar'),
+      listTabStyle: tab(s.view === 'list'), calTabStyle: tab(s.view === 'calendar'),
+      shiftRows, addShift: this.addShift,
+      hourLabels, calCols, weekLabel, prevWeek: this.weekStep(-1), nextWeek: this.weekStep(1), goToday: this.goToday, addWeekShift: this.addWeekShift,
+      tz: 'Australia/Sydney',
+
+      increaseOn: s.increaseOn, toggleIncrease: this.toggle('increaseOn'),
+      incTrackStyle: trk(s.increaseOn), incKnobStyle: knob(s.increaseOn),
+      typePctStyle: `padding:6px 12px; border-radius:7px; border:none; font-family:var(--font-body); font-weight:700; font-size:12.5px; cursor:pointer; background:${s.incType === '%' ? '#fff' : 'transparent'}; color:${s.incType === '%' ? 'var(--ink-900)' : 'rgba(255,255,255,0.6)'};`,
+      typeFixedStyle: `padding:6px 12px; border-radius:7px; border:none; font-family:var(--font-body); font-weight:700; font-size:12.5px; cursor:pointer; background:${s.incType === '$' ? '#fff' : 'transparent'}; color:${s.incType === '$' ? 'var(--ink-900)' : 'rgba(255,255,255,0.6)'};`,
+      setPct: this.setIncType('%'), setFixed: this.setIncType('$'),
+      presetOptions, showCustom: s.incPreset === 'custom',
+      customLabel: s.incType === '$' ? 'Add $ per hour' : 'Custom % increase',
+      customVal: s.incCustom, onCustom: this.field('incCustom'),
+      effRateLabel: this.money(rate),
+
+      grossStr: this.money(gross), oncostStr: this.money(oncost), feeStr: this.money(fee),
+      superStr: this.money(sup), wcStr: this.money(wc), ptStr: this.money(pt),
+      totalStr: this.money(total), hoursStr: this.fmtDur(Math.round(hours * 60)),
+      summaryLine,
+      detailOpen: s.detailOpen, toggleDetail: this.toggle('detailOpen'),
+      detailToggleLabel: s.detailOpen ? 'Hide breakdown' : 'View breakdown',
+      posted: s.posted, notPosted: !s.posted, postShift: this.postShift,
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="../_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; padding:0; background:var(--ink-0); }
+  * { box-sizing:border-box; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes popIn { from { transform:scale(0.97); } to { transform:scale(1); } }
+  @keyframes scrimIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes drawerIn { from { transform:translateX(30px); opacity:0; } to { transform:translateX(0); opacity:1; } }
+  input::placeholder { color:var(--ink-300); }
+  .fld { width:100%; padding:11px 14px; border:1.5px solid var(--ink-100); border-radius:var(--r-md); font-family:var(--font-body); font-size:14.5px; background:#fff; color:var(--ink-900); outline:none; transition:border-color .15s, box-shadow .15s; }
+  .fld:focus { border-color:var(--brand-500); box-shadow:0 0 0 3px rgba(108,96,255,.12); }
+  .card { background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); box-shadow:var(--sh-1); }
+  .navitem { display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:10px; font-size:14px; font-weight:600; color:rgba(255,255,255,0.62); cursor:pointer; transition:all .15s; }
+  .navitem:hover { background:rgba(255,255,255,0.06); color:#fff; }
+  [data-scroll]::-webkit-scrollbar { width:9px; height:9px; }
+  [data-scroll]::-webkit-scrollbar-thumb { background:var(--ink-100); border-radius:99px; }
+  select.srt { -webkit-appearance:none; appearance:none; cursor:pointer; padding:9px 34px 9px 14px; border:1.5px solid var(--ink-100); border-radius:var(--r-md); font-family:var(--font-body); font-size:13px; font-weight:700; color:var(--ink-700); background:#fff; outline:none; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%236F6A60' stroke-width='1.85' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>"); background-repeat:no-repeat; background-position:right 10px center; }
+</style>
+</helmet>
+
+<div style="display:flex; width:100%; height:100vh; overflow:hidden; font-family:var(--font-body); color:var(--ink-700); background:var(--ink-0);">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside style="width:236px; flex-shrink:0; background:var(--ink-900); display:flex; flex-direction:column; padding:22px 16px 16px;">
+    <div style="display:flex; align-items:center; gap:9px; padding:0 6px 22px;">
+      <img src="../assets/logo-wordmark-white.png" alt="MyGig" style="height:24px;">
+      <span style="font-size:10px; font-weight:700; letter-spacing:0.04em; color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.2); padding:3px 7px; border-radius:99px;">Business</span>
+    </div>
+    <a href="Post a Shift.dc.html" style="display:flex; align-items:center; justify-content:center; gap:9px; width:100%; background:var(--brand-500); color:#fff; border:none; border-radius:var(--r-md); padding:12px; font-family:var(--font-body); font-weight:700; font-size:14.5px; cursor:pointer; box-shadow:var(--sh-1); margin-bottom:18px; text-decoration:none;" style-hover="background:var(--brand-700);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>Book workers</a>
+    <nav style="display:flex; flex-direction:column; gap:3px;">
+      <div class="navitem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Dashboard</div>
+      <div class="navitem" style="background:rgba(255,255,255,0.06); color:#fff;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Shifts</div>
+      <div class="navitem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>Timesheets</div>
+      <div class="navitem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Workers</div>
+      <div class="navitem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>Reports</div>
+    </nav>
+    <div style="margin-top:auto; display:flex; align-items:center; gap:10px; padding:10px 8px; border-top:1px solid rgba(255,255,255,0.1);">
+      <div style="width:30px; height:30px; border-radius:50%; background:var(--brand-100); color:var(--brand-700); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:12px;">EV</div>
+      <span style="font-size:13px; font-weight:600; color:rgba(255,255,255,0.8);">My account</span>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main data-scroll style="flex:1; min-width:0; overflow-y:auto; position:relative;">
+
+    <!-- topbar -->
+    <div style="position:sticky; top:0; z-index:20; height:64px; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:0 32px; background:rgba(250,248,244,0.88); backdrop-filter:blur(8px); border-bottom:1px solid var(--ink-100);">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <span style="font-family:var(--font-display); font-weight:800; font-size:17px; color:var(--ink-900);">Book workers</span>
+        <div style="display:flex; align-items:center; gap:9px; font-size:12.5px; font-weight:700;">
+          <span style="display:inline-flex; align-items:center; gap:6px; color:var(--ink-400);"><span style="width:18px; height:18px; border-radius:50%; background:var(--success-500); color:#fff; display:inline-flex; align-items:center; justify-content:center;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Shift details</span>
+          <span style="width:22px; height:1.5px; background:var(--ink-100);"></span>
+          <span style="display:inline-flex; align-items:center; gap:6px; color:var(--ink-900);"><span style="width:18px; height:18px; border-radius:50%; background:var(--brand-500); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:10px;">2</span>Select workers</span>
+          <span style="width:22px; height:1.5px; background:var(--ink-100);"></span>
+          <span style="display:inline-flex; align-items:center; gap:6px; color:var(--ink-300);"><span style="width:18px; height:18px; border-radius:50%; border:1.5px solid var(--ink-200); color:var(--ink-300); display:inline-flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:10px;">3</span>Review &amp; post</span>
+        </div>
+      </div>
+      <button style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1.5px solid var(--ink-100); border-radius:99px; padding:7px 13px 7px 9px; font-family:var(--font-body); font-weight:700; font-size:13px; color:var(--ink-700); cursor:pointer;" style-hover="border-color:var(--brand-300);"><span style="width:20px; height:20px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #B8B1F7, #6C60FF 70%, #4B3FD9); display:inline-flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:800; font-size:9px;">Aa</span>Ask Amy</button>
+    </div>
+
+    <div style="max-width:1180px; margin:0 auto; padding:28px 32px 130px;">
+
+      <!-- header -->
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:20px; margin-bottom:20px;">
+        <div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:28px; line-height:1.1; letter-spacing:-0.02em; color:var(--ink-900); margin:0 0 6px;">Select your workers</h1>
+          <p style="font-size:14.5px; line-height:1.5; color:var(--ink-400); margin:0;">Matched to your position and location. Search, filter, then pick on the cards or map.</p>
+        </div>
+        <label style="display:inline-flex; align-items:center; gap:10px; cursor:pointer; user-select:none; flex-shrink:0; padding-top:4px;">
+          <span style="font-size:13px; font-weight:700; color:var(--ink-500);">Scheduling options</span>
+          <button onClick="{{ toggleScheduling }}" style="{{ schedTrack }}"><span style="{{ schedKnob }}"></span></button>
+        </label>
+      </div>
+
+      <!-- toolbar -->
+      <div class="card" style="padding:14px 16px; margin-bottom:18px;">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:220px; position:relative;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-300)" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" style="position:absolute; left:13px; top:50%; transform:translateY(-50%);"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Search by name" class="fld" style="padding-left:40px;">
+          </div>
+          <button style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1.5px solid var(--ink-100); border-radius:var(--r-md); padding:10px 15px; font-family:var(--font-body); font-weight:700; font-size:13px; color:var(--ink-700); cursor:pointer;" style-hover="border-color:var(--brand-300);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54z"/></svg>Filters<sc-if value="{{ hasFilters }}" hint-placeholder-val="{{ true }}"><span style="background:var(--brand-500); color:#fff; font-size:10px; font-weight:800; border-radius:99px; min-width:16px; height:16px; padding:0 4px; display:inline-flex; align-items:center; justify-content:center;">2</span></sc-if></button>
+          <div style="display:inline-flex; background:var(--ink-900); border-radius:var(--r-md); padding:3px;">
+            <button onClick="{{ setCards }}" style="{{ cardsTabStyle }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>Cards</button>
+            <button onClick="{{ setMap }}" style="{{ mapTabStyle }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18 3 21V6l6-3 6 3 6-3v15l-6 3-6-3zM9 3v15M15 6v15"/></svg>Map</button>
+          </div>
+          <select value="{{ sort }}" onChange="{{ onSort }}" class="srt"><option value="relevancy">Relevancy</option><option value="rating">Top rated</option><option value="distance">Closest</option><option value="shifts">Most shifts</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:13px; padding-top:13px; border-top:1px solid var(--ink-50);">
+          <span style="font-size:10.5px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-400);">Shift match</span>
+          <span style="font-size:12px; font-weight:600; color:var(--brand-900); background:var(--brand-100); padding:4px 11px; border-radius:99px;">Position: Usher / Ticketing</span>
+          <span style="font-size:12px; font-weight:600; color:var(--brand-900); background:var(--brand-100); padding:4px 11px; border-radius:99px;">Award: Passenger Vehicle Transport</span>
+          <span style="font-size:12px; font-weight:600; color:var(--brand-900); background:var(--brand-100); padding:4px 11px; border-radius:99px;">Location: MyGig New Office</span>
+          <button style="font-size:12px; font-weight:700; color:var(--ink-500); background:none; border:none; cursor:pointer; padding:4px 4px;">+2 more</button>
+        </div>
+      </div>
+
+      <!-- result count -->
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+        <div style="font-size:13px; color:var(--ink-500);"><strong style="color:var(--ink-900); font-weight:700;">{{ matchCount }}</strong> workers match · showing top {{ shownCount }}</div>
+        <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}"><button onClick="{{ clearSel }}" style="font-size:12.5px; font-weight:700; color:var(--ink-500); background:none; border:none; cursor:pointer;">Clear selection</button></sc-if>
+      </div>
+
+      <!-- ===== CARDS VIEW ===== -->
+      <sc-if value="{{ isCards }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex; flex-wrap:wrap; gap:16px; animation:fadeUp .25s var(--ease-out-quint);">
+          <sc-for list="{{ workerCards }}" as="w" hint-placeholder-count="10">
+            <div onClick="{{ w.onToggle }}" style="{{ w.cardStyle }}">
+              <div style="position:relative; height:128px; background:{{ w.tintBg }}; display:flex; align-items:flex-end; justify-content:center; overflow:hidden;">
+                <sc-if value="{{ w.hasPhoto }}" hint-placeholder-val="{{ false }}"><div style="{{ w.photoStyle }}"></div></sc-if>
+                <sc-if value="{{ w.noPhoto }}" hint-placeholder-val="{{ true }}">
+                  <svg width="78" height="78" viewBox="0 0 24 24" fill="{{ w.tintFg }}" opacity="0.42" style="margin-bottom:-6px;"><path d="M12 12.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9z"/><path d="M3.5 21v-1c0-3.4 3.8-5.6 8.5-5.6s8.5 2.2 8.5 5.6v1z"/></svg>
+                  <span style="position:absolute; left:10px; bottom:10px; display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:24px; padding:0 7px; border-radius:7px; background:rgba(255,255,255,0.92); font-family:var(--font-display); font-weight:800; font-size:12px; color:{{ w.tintFg }};">{{ w.initials }}</span>
+                </sc-if>
+                <sc-if value="{{ w.hasPool }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; left:10px; top:10px; display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:800; color:#fff; background:var(--brand-500); padding:4px 9px; border-radius:99px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3"/></svg>{{ w.poolLabel }}</span></sc-if>
+                <span style="{{ w.checkStyle }}"><sc-if value="{{ w.selected }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if></span>
+              </div>
+              <div style="padding:13px 15px 15px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                  <span style="font-size:15px; font-weight:700; color:var(--ink-900);">{{ w.name }}</span>
+                  <span style="font-size:10.5px; font-weight:700; color:var(--brand-700); background:var(--brand-100); padding:2px 7px; border-radius:99px;">{{ w.match }}%</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:7px; margin-top:6px; font-size:12.5px; color:var(--ink-500);">
+                  <span style="display:inline-flex; align-items:center; gap:3px; font-weight:600;"><svg width="13" height="13" viewBox="0 0 24 24" fill="var(--brand-500)" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>{{ w.ratingLabel }}</span>
+                  <span style="color:var(--ink-200);">·</span>
+                  <span>{{ w.shifts }} shifts</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:5px; margin-top:7px; font-size:12.5px; color:var(--ink-400);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.4-5.6 8.9-7.4 10.2a1 1 0 0 1-1.2 0C9.6 18.9 4 14.4 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>{{ w.suburb }} · {{ w.dist }}km</div>
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-top:12px; padding-top:11px; border-top:1px solid var(--ink-50);">
+                  <button onClick="{{ w.onView }}" style="display:inline-flex; align-items:center; gap:5px; background:none; border:none; color:var(--brand-700); font-family:var(--font-body); font-weight:700; font-size:12.5px; cursor:pointer; padding:0;">View profile<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+                  <span style="{{ w.pickStyle }}">{{ w.pickLabel }}</span>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- pagination -->
+        <div style="display:flex; align-items:center; justify-content:center; gap:6px; margin-top:26px;">
+          <button style="display:inline-flex; align-items:center; gap:5px; background:none; border:none; color:var(--ink-300); font-family:var(--font-body); font-weight:700; font-size:13px; cursor:not-allowed; padding:7px 10px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Prev</button>
+          <sc-for list="{{ pages }}" as="p" hint-placeholder-count="4"><button style="{{ p.style }}">{{ p.n }}</button></sc-for>
+          <span style="font-size:13px; color:var(--ink-300); padding:0 4px;">…</span>
+          <button style="width:34px; height:34px; border-radius:9px; background:#fff; border:1.5px solid var(--ink-100); font-family:var(--font-body); font-weight:700; font-size:13px; color:var(--ink-700); cursor:pointer;">27</button>
+          <button style="display:inline-flex; align-items:center; gap:5px; background:none; border:none; color:var(--brand-700); font-family:var(--font-body); font-weight:700; font-size:13px; cursor:pointer; padding:7px 10px;">Next<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+        </div>
+      </sc-if>
+
+      <!-- ===== MAP VIEW ===== -->
+      <sc-if value="{{ isMap }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; animation:fadeUp .25s var(--ease-out-quint);">
+          <div class="card" style="flex:1 1 540px; min-width:0; overflow:hidden; position:relative;">
+            <!-- stylised map -->
+            <div style="position:relative; height:520px; background:linear-gradient(135deg, #E4EDE0 0%, #E9EEDF 55%, #D7E8F0 100%); overflow:hidden;">
+              <!-- water -->
+              <div style="position:absolute; right:0; top:0; bottom:0; width:30%; background:linear-gradient(90deg, transparent, #BFE0EA 60%);"></div>
+              <div style="position:absolute; right:8%; top:46%; width:60px; height:120px; background:#D7E8F0; border-radius:40% 50% 50% 40%; transform:rotate(20deg);"></div>
+              <!-- roads -->
+              <div style="position:absolute; left:0; top:38%; width:100%; height:5px; background:#fff; opacity:0.7; transform:rotate(-5deg);"></div>
+              <div style="position:absolute; left:0; top:62%; width:100%; height:4px; background:#fff; opacity:0.6; transform:rotate(3deg);"></div>
+              <div style="position:absolute; left:32%; top:0; width:5px; height:100%; background:#fff; opacity:0.6; transform:rotate(6deg);"></div>
+              <div style="position:absolute; left:58%; top:0; width:4px; height:100%; background:#fff; opacity:0.55; transform:rotate(-4deg);"></div>
+              <!-- motorway tags -->
+              <div style="position:absolute; left:20%; top:30%; font-size:9px; font-weight:800; color:#fff; background:#3FA34D; padding:1px 5px; border-radius:3px;">M4</div>
+              <div style="position:absolute; left:48%; top:70%; font-size:9px; font-weight:800; color:#fff; background:#3FA34D; padding:1px 5px; border-radius:3px;">M5</div>
+              <!-- city label -->
+              <div style="position:absolute; left:60%; top:50%; font-family:var(--font-display); font-weight:800; font-size:15px; color:rgba(14,13,11,0.45);">Sydney</div>
+
+              <!-- legend -->
+              <div style="position:absolute; left:14px; top:14px; z-index:5; display:flex; align-items:center; gap:14px; background:#fff; border-radius:99px; padding:7px 14px; box-shadow:var(--sh-2); font-size:12px; font-weight:700; color:var(--ink-700);"><span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:50%; background:var(--danger-500);"></span>Shift location</span><span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:16px; height:16px; border-radius:50%; background:var(--brand-500); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:9px; font-weight:800;">w</span>Worker</span></div>
+              <!-- map controls -->
+              <div style="position:absolute; right:14px; top:14px; z-index:5; display:flex; flex-direction:column; gap:6px;">
+                <button style="width:34px; height:34px; border-radius:9px; background:#fff; border:none; box-shadow:var(--sh-2); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-700);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button>
+                <button style="width:34px; height:34px; border-radius:9px; background:#fff; border:none; box-shadow:var(--sh-2); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-700);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+              </div>
+
+              <!-- shift location pin -->
+              <div style="position:absolute; left:62%; top:52%; transform:translate(-50%,-100%); z-index:4;">
+                <div style="display:flex; flex-direction:column; align-items:center;">
+                  <span style="font-size:10px; font-weight:800; color:#fff; background:var(--danger-500); padding:3px 8px; border-radius:99px; white-space:nowrap; box-shadow:var(--sh-2); margin-bottom:3px;">Shift location</span>
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="var(--danger-500)" stroke="#fff" stroke-width="1.6"><path d="M20 10c0 4.4-5.6 8.9-7.4 10.2a1 1 0 0 1-1.2 0C9.6 18.9 4 14.4 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.5" fill="#fff" stroke="none"/></svg>
+                </div>
+              </div>
+
+              <!-- worker avatar pins (selectable) -->
+              <sc-for list="{{ mapPins }}" as="m" hint-placeholder-count="6">
+                <button onClick="{{ m.onToggle }}" style="{{ m.style }}"><span style="{{ m.avatarStyle }}">{{ m.initials }}</span><sc-if value="{{ m.selected }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; right:-3px; top:-3px; width:16px; height:16px; border-radius:50%; background:var(--success-500); border:2px solid #fff; display:flex; align-items:center; justify-content:center;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></sc-if></button>
+              </sc-for>
+
+              <!-- cluster bubbles (decorative density) -->
+              <sc-for list="{{ clusters }}" as="c" hint-placeholder-count="6">
+                <div style="{{ c.style }}">{{ c.n }}</div>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- map side: selected list -->
+          <div class="card" style="flex:1 1 280px; min-width:0; max-width:360px; align-self:stretch; display:flex; flex-direction:column;">
+            <div style="padding:15px 16px; border-bottom:1px solid var(--ink-50);"><div style="font-size:13px; font-weight:700; color:var(--ink-900);">Selected workers</div><div style="font-size:12px; color:var(--ink-400); margin-top:2px;">Tap a pin to add or remove.</div></div>
+            <div data-scroll style="flex:1; overflow-y:auto; max-height:430px;">
+              <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+                <sc-for list="{{ selectedList }}" as="w" hint-placeholder-count="2">
+                  <div style="display:flex; align-items:center; gap:11px; padding:12px 16px; border-bottom:1px solid var(--ink-50);">
+                    <span style="{{ w.avatarStyle }}">{{ w.initials }}</span>
+                    <span style="flex:1; min-width:0;"><span style="display:block; font-size:13.5px; font-weight:700; color:var(--ink-900);">{{ w.name }}</span><span style="display:block; font-size:12px; color:var(--ink-400); margin-top:1px;">{{ w.suburb }} · {{ w.dist }}km</span></span>
+                    <button onClick="{{ w.onToggle }}" style="width:28px; height:28px; border-radius:8px; background:none; border:none; color:var(--ink-300); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;" style-hover="background:var(--danger-50); color:var(--danger-500);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+                  </div>
+                </sc-for>
+              </sc-if>
+              <sc-if value="{{ noSelection }}" hint-placeholder-val="{{ true }}">
+                <div style="padding:40px 22px; text-align:center;"><div style="width:48px; height:48px; border-radius:50%; background:var(--ink-50); display:flex; align-items:center; justify-content:center; margin:0 auto 12px; color:var(--ink-300);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.4-5.6 8.9-7.4 10.2a1 1 0 0 1-1.2 0C9.6 18.9 4 14.4 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div><div style="font-size:13px; font-weight:700; color:var(--ink-700);">No workers picked yet</div><div style="font-size:12.5px; color:var(--ink-400); margin-top:4px; line-height:1.5;">Tap pins on the map to build your crew.</div></div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== OPEN TO MARKET (scheduling option) ===== -->
+      <sc-if value="{{ schedulingOn }}" hint-placeholder-val="{{ true }}">
+        <div class="card" style="display:flex; align-items:center; gap:16px; padding:18px 20px; margin-top:22px; animation:fadeUp .25s var(--ease-out-quint);">
+          <span style="width:42px; height:42px; border-radius:11px; background:var(--brand-50); color:var(--brand-700); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+          <div style="flex:1; min-width:0;">
+            <div style="font-size:14.5px; font-weight:700; color:var(--ink-900);">Open to market if unfilled</div>
+            <div style="font-size:13px; color:var(--ink-400); margin-top:2px; line-height:1.5;">If your picks haven't accepted in time, we'll release the shift to all qualified workers — so it still gets filled.</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:9px; flex-shrink:0;">
+            <input value="{{ openToMarket }}" onInput="{{ onOpenToMarket }}" inputmode="numeric" class="fld" style="width:72px; text-align:center; font-family:var(--font-mono);">
+            <span style="font-size:13px; color:var(--ink-400); font-weight:600;">hrs before</span>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- sticky footer bar -->
+    <div style="position:sticky; bottom:0; z-index:15; background:rgba(250,248,244,0.92); backdrop-filter:blur(8px); border-top:1px solid var(--ink-100);">
+      <div style="max-width:1180px; margin:0 auto; padding:14px 32px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+        <a href="Select Workers.dc.html" style="display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--ink-700); border:1.5px solid var(--ink-100); border-radius:var(--r-md); padding:12px 20px; font-family:var(--font-body); font-weight:700; font-size:14px; cursor:pointer; text-decoration:none;" style-hover="background:var(--ink-50);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</a>
+        <div style="display:flex; align-items:center; gap:18px;">
+          <div style="text-align:right;">
+            <div style="font-family:var(--font-display); font-weight:800; font-size:16px; color:var(--ink-900); line-height:1;">{{ selSummary }}</div>
+            <div style="font-size:11.5px; color:var(--ink-400); margin-top:3px;">{{ selSubLine }}</div>
+          </div>
+          <a href="Review & Post.dc.html" style="display:inline-flex; align-items:center; gap:9px; background:var(--brand-500); color:#fff; border:2.5px solid var(--ink-900); box-shadow:4px 4px 0 var(--ink-900); border-radius:var(--r-md); padding:13px 26px; font-family:var(--font-body); font-weight:700; font-size:15px; text-decoration:none; cursor:{{ ctaCursor }}; opacity:{{ ctaOpacity }};" style-hover="transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--ink-900);" style-active="transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink-900);">{{ ctaLabel }}<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================== WORKER PROFILE DRAWER ===================== -->
+  <sc-if value="{{ profileOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeProfile }}" style="position:fixed; inset:0; z-index:60; background:rgba(14,13,11,0.5); animation:scrimIn .2s ease;"></div>
+    <div data-scroll style="position:fixed; top:0; right:0; bottom:0; z-index:61; width:484px; max-width:94vw; background:var(--ink-0); box-shadow:-12px 0 40px rgba(14,13,11,0.28); overflow-y:auto; animation:drawerIn .3s var(--ease-out-quint);">
+
+      <div style="position:sticky; top:0; z-index:3; background:rgba(250,248,244,0.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--ink-100); padding:13px 20px; display:flex; align-items:center; justify-content:space-between;">
+        <span style="font-family:var(--font-display); font-weight:800; font-size:15px; color:var(--ink-900);">Worker profile</span>
+        <button onClick="{{ closeProfile }}" style="width:32px; height:32px; border-radius:8px; background:#fff; border:1.5px solid var(--ink-100); color:var(--ink-500); cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:var(--ink-50); color:var(--ink-900);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+
+      <!-- hero -->
+      <div style="padding:20px;">
+        <div style="display:flex; gap:16px;">
+          <div style="position:relative; width:96px; height:96px; border-radius:16px; flex-shrink:0; background:{{ profile.tintBg }}; display:flex; align-items:flex-end; justify-content:center; overflow:hidden; border:1.5px solid var(--ink-100);">
+            <sc-if value="{{ profile.hasPhoto }}" hint-placeholder-val="{{ false }}"><div style="{{ profile.photoStyle }}"></div></sc-if>
+            <sc-if value="{{ profile.noPhoto }}" hint-placeholder-val="{{ true }}"><svg width="74" height="74" viewBox="0 0 24 24" fill="{{ profile.tintFg }}" opacity="0.5" style="margin-bottom:-4px;"><path d="M12 12.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9z"/><path d="M3.5 21v-1c0-3.4 3.8-5.6 8.5-5.6s8.5 2.2 8.5 5.6v1z"/></svg></sc-if>
+            <sc-if value="{{ profile.hasVideo }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; right:6px; bottom:6px; width:26px; height:26px; border-radius:50%; background:rgba(14,13,11,0.7); display:flex; align-items:center; justify-content:center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M8 5v14l11-7z"/></svg></span></sc-if>
+          </div>
+          <div style="flex:1; min-width:0;">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;"><span style="font-family:var(--font-display); font-weight:800; font-size:21px; color:var(--ink-900);">{{ profile.name }}</span><span style="display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; color:var(--success-700); background:var(--success-50); padding:3px 8px; border-radius:99px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Verified</span></div>
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:9px;">
+              <sc-if value="{{ profile.topWorker }}" hint-placeholder-val="{{ false }}"><span style="font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:0.03em; color:#fff; background:var(--ink-900); padding:3px 8px; border-radius:99px;">Top worker</span></sc-if>
+              <sc-if value="{{ profile.hasPool }}" hint-placeholder-val="{{ false }}"><span style="font-size:10.5px; font-weight:700; color:var(--brand-700); background:var(--brand-100); padding:3px 8px; border-radius:99px;">In {{ profile.poolLabel }}</span></sc-if>
+              <span style="font-size:10.5px; font-weight:700; color:var(--brand-700); background:var(--brand-100); padding:3px 8px; border-radius:99px;">{{ profile.match }}% match</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:11px; margin-top:11px; font-size:13px; color:var(--ink-500);"><span style="display:inline-flex; align-items:center; gap:4px; font-weight:700;"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--brand-500)" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>{{ profile.ratingLabel }}</span><span style="color:var(--ink-200);">·</span><span>{{ profile.shifts }} shifts worked</span></div>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:18px;">
+          <button onClick="{{ profile.onToggleSelect }}" style="{{ profile.selectStyle }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>{{ profile.selectLabel }}</button>
+          <button style="flex-shrink:0; background:#fff; color:var(--ink-700); border:1.5px solid var(--ink-100); border-radius:var(--r-md); padding:0 16px; font-family:var(--font-body); font-weight:700; font-size:14px; cursor:pointer;" style-hover="background:var(--ink-50);">Add to pool</button>
+        </div>
+      </div>
+
+      <!-- quick facts -->
+      <div class="card" style="margin:0 20px 14px; padding:6px 18px;">
+        <div style="display:flex; flex-wrap:wrap;">
+          <div style="flex:1 1 44%; padding:11px 0;"><div style="font-size:11px; color:var(--ink-400);">Age</div><div style="font-size:14px; font-weight:700; color:var(--ink-900); margin-top:2px;">{{ profile.age }}</div></div>
+          <div style="flex:1 1 44%; padding:11px 0;"><div style="font-size:11px; color:var(--ink-400);">Nationality</div><div style="font-size:14px; font-weight:700; color:var(--ink-900); margin-top:2px;">{{ profile.nationality }}</div></div>
+          <div style="flex:1 1 100%; padding:11px 0; border-top:1px solid var(--ink-50);"><div style="font-size:11px; color:var(--ink-400);">Working rights</div><div style="display:flex; align-items:center; gap:6px; margin-top:3px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg><span style="font-size:14px; font-weight:700; color:var(--ink-900);">{{ profile.rights }}</span></div></div>
+          <div style="flex:1 1 44%; padding:11px 0; border-top:1px solid var(--ink-50);"><div style="font-size:11px; color:var(--ink-400);">Location</div><div style="font-size:14px; font-weight:700; color:var(--ink-900); margin-top:2px;">{{ profile.suburb }} · {{ profile.dist }}km</div></div>
+          <div style="flex:1 1 44%; padding:11px 0; border-top:1px solid var(--ink-50);"><div style="font-size:11px; color:var(--ink-400);">Travel radius</div><div style="font-size:14px; font-weight:700; color:var(--ink-900); margin-top:2px;">{{ profile.radius }}</div></div>
+          <div style="flex:1 1 100%; padding:11px 0; border-top:1px solid var(--ink-50);"><div style="font-size:11px; color:var(--ink-400);">Availability</div><div style="font-size:14px; font-weight:700; color:var(--ink-900); margin-top:2px;">{{ profile.availability }}</div></div>
+        </div>
+      </div>
+
+      <!-- video profile -->
+      <sc-if value="{{ profile.hasVideo }}" hint-placeholder-val="{{ false }}">
+        <div style="margin:0 20px 14px;">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-400); margin-bottom:10px;">Video profile</div>
+          <div style="position:relative; height:200px; border-radius:var(--r-md); overflow:hidden; background:linear-gradient(135deg, {{ profile.tintBg }}, var(--ink-900)); display:flex; align-items:center; justify-content:center; cursor:pointer; border:1px solid var(--ink-100);">
+            <span style="width:54px; height:54px; border-radius:50%; background:rgba(255,255,255,0.92); display:flex; align-items:center; justify-content:center; box-shadow:var(--sh-2);"><svg width="22" height="22" viewBox="0 0 24 24" fill="var(--ink-900)" stroke="none"><path d="M8 5v14l11-7z"/></svg></span>
+            <span style="position:absolute; left:12px; bottom:12px; font-size:11px; font-weight:700; color:#fff; background:rgba(14,13,11,0.55); padding:4px 9px; border-radius:99px;">0:48 · intro</span>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ratings & reliability -->
+      <div class="card" style="margin:0 20px 14px; padding:16px 18px;">
+        <div style="font-size:11px; font-weight:800; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-400); margin-bottom:12px;">Ratings &amp; reliability</div>
+        <div style="display:flex; gap:10px; margin-bottom:14px;">
+          <div style="flex:1; text-align:center; background:var(--ink-0); border-radius:var(--r-md); padding:11px 6px;"><div style="font-family:var(--font-display); font-weight:800; font-size:18px; color:var(--ink-900);">{{ profile.ratingLabel }}</div><div style="font-size:10.5px; color:var(--ink-400); margin-top:2px;">rating</div></div>
+          <div style="flex:1; text-align:center; background:var(--ink-0); border-radius:var(--r-md); padding:11px 6px;"><div style="font-family:var(--font-display); font-weight:800; font-size:18px; color:var(--ink-900);">{{ profile.relText }}</div><div style="font-size:10.5px; color:var(--ink-400); margin-top:2px;">reliability</div></div>
+          <div style="flex:1; text-align:center; background:var(--ink-0); border-radius:var(--r-md); padding:11px 6px;"><div style="font-family:var(--font-display); font-weight:800; font-size:18px; color:var(--ink-900);">{{ profile.shifts }}</div><div style="font-size:10.5px; color:var(--ink-400); margin-top:2px;">shifts</div></div>
+        </div>
+        <div style="height:7px; border-radius:99px; background:var(--ink-100); overflow:hidden;"><div style="{{ profile.relBarStyle }}"></div></div>
+        <div style="font-size:12px; color:var(--ink-400); margin-top:8px;">{{ profile.relNote }}</div>
+      </div>
+
+      <!-- about -->
+      <div class="card" style="margin:0 20px 14px; padding:16px 18px;">
+        <div style="font-size:11px; font-weight:800; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-400); margin-bottom:10px;">About</div>
+        <p style="font-size:13.5px; line-height:1.6; color:var(--ink-500); margin:0;">{{ profile.bio }}</p>
+      </div>
+
+      <!-- certifications & verifications -->
+      <div class="card" style="margin:0 20px 14px; padding:16px 18px;">
+        <div style="font-size:11px; font-weight:800; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-400); margin-bottom:12px;">Certifications &amp; checks</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+          <sc-for list="{{ profile.certs }}" as="c" hint-placeholder-count="3"><span style="display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:var(--ink-700); background:var(--ink-0); border:1px solid var(--ink-100); padding:7px 12px; border-radius:99px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--success-500)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>{{ c.label }}</span></sc-for>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:9px;">
+          <sc-for list="{{ profile.verifs }}" as="v" hint-placeholder-count="3"><div style="display:flex; align-items:center; gap:9px; font-size:13px; color:var(--ink-500);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg><span style="font-weight:600;">{{ v.label }}</span></div></sc-for>
+        </div>
+      </div>
+
+      <!-- education -->
+      <div class="card" style="margin:0 20px 14px; padding:16px 18px;">
+        <div style="font-size:11px; font-weight:800; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-400); margin-bottom:12px;">Education</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <sc-for list="{{ profile.education }}" as="e" hint-placeholder-count="1"><div style="display:flex; align-items:center; gap:10px;"><span style="width:30px; height:30px; border-radius:8px; background:var(--brand-50); color:var(--brand-700); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5zM6 12v5c3 2 9 2 12 0v-5"/></svg></span><span style="font-size:13.5px; font-weight:600; color:var(--ink-900);">{{ e.label }}</span></div></sc-for>
+        </div>
+      </div>
+
+      <!-- work experience -->
+      <div class="card" style="margin:0 20px 14px; padding:16px 18px;">
+        <div style="font-size:11px; font-weight:800; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-400); margin-bottom:12px;">Work experience</div>
+        <div style="display:flex; flex-direction:column;">
+          <sc-for list="{{ profile.experience }}" as="x" hint-placeholder-count="2"><div style="display:flex; gap:12px; padding:10px 0; border-top:1px solid var(--ink-50);"><div style="flex:1; min-width:0;"><div style="font-size:13.5px; font-weight:700; color:var(--ink-900);">{{ x.role }}</div><div style="font-size:12.5px; color:var(--ink-500); margin-top:1px;">{{ x.org }} · {{ x.place }}</div></div><div style="font-family:var(--font-mono); font-size:11.5px; color:var(--ink-400); white-space:nowrap; flex-shrink:0;">{{ x.period }}</div></div></sc-for>
+        </div>
+      </div>
+
+      <!-- work preferences -->
+      <div class="card" style="margin:0 20px 14px; padding:16px 18px;">
+        <div style="font-size:11px; font-weight:800; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-400); margin-bottom:12px;">Work preferences</div>
+        <div style="font-size:11.5px; color:var(--ink-400); margin-bottom:7px;">Industries</div>
+        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-bottom:14px;"><sc-for list="{{ profile.industries }}" as="n" hint-placeholder-count="2"><span style="font-size:12px; font-weight:600; color:var(--brand-900); background:var(--brand-100); padding:5px 11px; border-radius:99px;">{{ n.label }}</span></sc-for></div>
+        <div style="font-size:11.5px; color:var(--ink-400); margin-bottom:7px;">Roles</div>
+        <div style="display:flex; flex-wrap:wrap; gap:7px;"><sc-for list="{{ profile.roles }}" as="r" hint-placeholder-count="3"><span style="font-size:12px; font-weight:600; color:var(--brand-900); background:var(--brand-100); padding:5px 11px; border-radius:99px;">{{ r.label }}</span></sc-for></div>
+      </div>
+
+      <!-- shifts on mygig -->
+      <div class="card" style="margin:0 20px 18px; padding:16px 18px;">
+        <div style="font-size:11px; font-weight:800; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-400); margin-bottom:12px;">Shifts worked on MyGig</div>
+        <sc-if value="{{ profile.hasShifts }}" hint-placeholder-val="{{ true }}"><div style="display:flex; flex-wrap:wrap; gap:8px;"><sc-for list="{{ profile.myShifts }}" as="m" hint-placeholder-count="2"><span style="font-size:12.5px; font-weight:600; color:var(--ink-700); background:var(--ink-0); border:1px solid var(--ink-100); padding:6px 12px; border-radius:99px;">{{ m.label }}</span></sc-for></div></sc-if>
+        <sc-if value="{{ profile.isNew }}" hint-placeholder-val="{{ false }}"><div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink-500);"><span style="font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:0.03em; color:var(--warn-700); background:var(--warn-50); padding:3px 8px; border-radius:99px;">New</span>No shifts on MyGig yet — fully vetted and ready.</div></sc-if>
+      </div>
+
+      <!-- sticky footer CTA -->
+      <div style="position:sticky; bottom:0; background:rgba(250,248,244,0.94); backdrop-filter:blur(8px); border-top:1px solid var(--ink-100); padding:14px 20px;">
+        <button onClick="{{ profile.onToggleSelect }}" style="{{ profile.selectStyle }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>{{ profile.selectLabel }}</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1080},&quot;defaultView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;cards&quot;,&quot;map&quot;],&quot;default&quot;:&quot;cards&quot;,&quot;tsType&quot;:&quot;'cards' | 'map'&quot;,&quot;section&quot;:&quot;Select workers&quot;,&quot;label&quot;:&quot;Default view&quot;}}">
+class Component extends DCLogic {
+  state = {
+    view: 'cards',
+    scheduling: true,
+    search: '',
+    sort: 'relevancy',
+    selected: { w1: true, w10: true },
+    profileId: null,
+    openToMarket: '4',
+  };
+
+  TINTS = [
+    { bg: '#E8E6F9', fg: '#4B3FD9' }, { bg: '#FCE3D4', fg: '#B5531F' },
+    { bg: '#D7EBDD', fg: '#1F7A44' }, { bg: '#FBE6C8', fg: '#9A6B12' },
+    { bg: '#DCE7F5', fg: '#27548A' }, { bg: '#F3DCEA', fg: '#9B3B72' },
+  ];
+  NEEDED = 3;
+  TOTAL = 265;
+
+  WORKERS = [
+    { id: 'w1', name: 'Angus V.', photo: 'assets/workers/angus.jpeg', rating: 4.8, shifts: 12, suburb: 'Maroubra', dist: 3.1, match: 96, pool: 2, x: 70, y: 60 },
+    { id: 'w2', name: 'Xavier T.', photo: 'assets/workers/xavier.jpeg', rating: 0, shifts: 0, suburb: 'Paddington', dist: 2.4, match: 92, pool: 0, x: 64, y: 53 },
+    { id: 'w3', name: 'Laura R.', rating: 0, shifts: 0, suburb: 'Macquarie Park', dist: 12.0, match: 90, pool: 0, x: 58, y: 26 },
+    { id: 'w4', name: 'Elizabeth G.', rating: 0, shifts: 0, suburb: 'Forest Lodge', dist: 3.8, match: 88, pool: 0, x: 55, y: 50 },
+    { id: 'w5', name: 'Ayaan A.', rating: 0, shifts: 0, suburb: 'Ashfield', dist: 6.4, match: 86, pool: 0, x: 47, y: 52 },
+    { id: 'w6', name: 'Sazzadul Islam R.', rating: 0, shifts: 0, suburb: 'Rockdale', dist: 9.1, match: 84, pool: 0, x: 52, y: 70 },
+    { id: 'w7', name: 'Bibi W.', rating: 4.6, shifts: 5, suburb: 'Pyrmont', dist: 3.0, match: 83, pool: 0, x: 60, y: 48 },
+    { id: 'w8', name: 'Sharokeen Y.', rating: 0, shifts: 0, suburb: 'Gregory Hills', dist: 38.0, match: 78, pool: 0, x: 24, y: 80 },
+    { id: 'w9', name: 'Vladimir C.', rating: 0, shifts: 0, suburb: 'Haymarket', dist: 1.2, match: 79, pool: 0, x: 61, y: 49 },
+    { id: 'w10', name: 'Tania W.', photo: 'assets/workers/tania.jpeg', rating: 4.9, shifts: 22, suburb: 'Dee Why', dist: 18.0, match: 95, pool: 1, x: 78, y: 28 },
+    { id: 'w11', name: 'Yohan B.', photo: 'assets/workers/yohan.jpeg', rating: 4.7, shifts: 8, suburb: 'Newtown', dist: 4.2, match: 88, pool: 0, x: 54, y: 56 },
+    { id: 'w12', name: 'Priya N.', rating: 5.0, shifts: 30, suburb: 'Surry Hills', dist: 1.8, match: 98, pool: 1, x: 62, y: 50 },
+  ];
+  CLUSTERS = [
+    { n: 25, x: 64, y: 53, danger: true }, { n: 10, x: 50, y: 58 }, { n: 7, x: 44, y: 46 },
+    { n: 5, x: 40, y: 52 }, { n: 4, x: 36, y: 44 }, { n: 6, x: 70, y: 60 }, { n: 3, x: 78, y: 40 },
+  ];
+
+  PROFILE_DATA = {
+    w12: { age: 27, nationality: 'India', rights: 'Subclass 482 · full work rights', radius: '40 km', availability: 'Weeknights & weekends', reliability: 99, completion: 99, noShow: 0, hasVideo: true,
+      bio: 'Hospitality all-rounder with 6+ years across events, bars and ticketing. Calm under pressure, great with crowds, and a dependable closer for late shifts.',
+      certs: ['RSA', 'RSG', 'First Aid'], education: ['B. Event Management — UTS (2019)'],
+      experience: [{ role: 'Event supervisor', org: 'Sydney Showground', place: 'Sydney', period: '2021 – Present' }, { role: 'Bartender', org: 'The Winery', place: 'Surry Hills', period: '2019 – 2021' }],
+      industries: ['Events & Entertainment', 'Hospitality'], roles: ['Usher / Ticketing', 'Event Staff / Crew', 'Bartender'] },
+    w1: { age: 34, nationality: 'Australia', rights: 'Australian citizen · unrestricted', radius: '25 km', availability: 'Flexible — most days', reliability: 96, completion: 97, noShow: 1, hasVideo: false,
+      bio: 'Friendly, punctual and customer-focused. Background in retail and in-store promotions, comfortable on his feet all day.',
+      certs: ['RSA', 'White Card'], education: ['Cert III Retail — TAFE NSW (2014)'],
+      experience: [{ role: 'Brand ambassador', org: 'Red Bull', place: 'Sydney', period: '2020 – Present' }, { role: 'Retail assistant', org: 'JB Hi-Fi', place: 'Maroubra', period: '2016 – 2020' }],
+      industries: ['Retail', 'Customer Service & Clerical'], roles: ['Retail Assistant', 'Brand Ambassador'] },
+    w10: { age: 31, nationality: 'New Zealand', rights: 'Subclass 444 · unrestricted', radius: '60 km', availability: 'Weekends', reliability: 98, completion: 98, noShow: 1, hasVideo: true,
+      bio: 'Experienced event crew and usher. Has run gate and accreditation for stadium events up to 40k capacity.',
+      certs: ['RSA', 'First Aid', 'Working with Children'], education: ['Dip. Hospitality — Le Cordon Bleu (2015)'],
+      experience: [{ role: 'Gate supervisor', org: 'Allianz Stadium', place: 'Moore Park', period: '2019 – Present' }, { role: 'Usher', org: 'ICC Sydney', place: 'Darling Harbour', period: '2017 – 2019' }],
+      industries: ['Events & Entertainment'], roles: ['Usher / Ticketing', 'Event Staff / Crew'] },
+    w2: { age: 24, nationality: 'Australia', rights: 'Australian citizen · unrestricted', radius: '20 km', availability: 'Weeknights', reliability: 100, completion: 100, noShow: 0, hasVideo: false,
+      bio: 'New to MyGig but brings 2 years of café and customer-service experience. Keen, flexible and quick to learn.',
+      certs: ['RSA'], education: ['Studying B. Commerce — UNSW'],
+      experience: [{ role: 'Café all-rounder', org: 'Single O', place: 'Surry Hills', period: '2022 – Present' }],
+      industries: ['Hospitality', 'Customer Service & Clerical'], roles: ['Customer Service Assistant', 'Usher / Ticketing'] },
+  };
+  DEFAULT_PROFILE = { age: 28, nationality: 'Australia', rights: 'Australian citizen · unrestricted', radius: '50 km', availability: 'Weeknights & weekends', reliability: 95, completion: 96, noShow: 2, hasVideo: false,
+    bio: 'Vetted MyGig worker matched to this position. Full work history and references available on request.',
+    certs: ['RSA'], education: ['Cert II — TAFE NSW'],
+    experience: [{ role: 'Customer service assistant', org: 'Various venues', place: 'Sydney', period: '2021 – Present' }],
+    industries: ['Customer Service & Clerical'], roles: ['Usher / Ticketing', 'Customer Service Assistant'] };
+
+  initialsOf(n) { return n.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(); }
+  tintFor(i) { return this.TINTS[i % this.TINTS.length]; }
+  idx(id) { return this.WORKERS.findIndex(w => w.id === id); }
+
+  componentDidMount() { const v = this.props.defaultView; if (v && v !== this.state.view) this.setState({ view: v }); }
+
+  setView = (v) => () => this.setState({ view: v });
+  toggle = (k) => () => this.setState(s => ({ [k]: !s[k] }));
+  field = (k) => (e) => this.setState({ [k]: e.target.value });
+  toggleSel = (id) => () => this.setState(s => ({ selected: { ...s.selected, [id]: !s.selected[id] } }));
+  clearSel = () => this.setState({ selected: {} });
+  openProfile = (id) => (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ profileId: id }); };
+  closeProfile = () => this.setState({ profileId: null });
+  next = () => {};
+
+  renderVals() {
+    const s = this.state;
+    const trk = (on) => `position:relative; display:inline-block; width:42px; height:24px; border-radius:99px; flex-shrink:0; border:none; cursor:pointer; padding:0; transition:background .2s; background:${on ? 'var(--brand-500)' : 'var(--ink-200)'};`;
+    const knob = (on) => `position:absolute; top:3px; left:${on ? 21 : 3}px; width:18px; height:18px; border-radius:50%; background:#fff; box-shadow:var(--sh-1); transition:left .2s;`;
+    const tab = (on) => `display:inline-flex; align-items:center; gap:7px; padding:8px 15px; border-radius:9px; border:none; font-family:var(--font-body); font-weight:700; font-size:13px; cursor:pointer; transition:all .15s; background:${on ? '#fff' : 'transparent'}; color:${on ? 'var(--ink-900)' : 'rgba(255,255,255,0.65)'};`;
+
+    let list = this.WORKERS.filter(w => !s.search || w.name.toLowerCase().includes(s.search.toLowerCase()));
+    list = [...list].sort((a, b) =>
+      s.sort === 'rating' ? (b.rating - a.rating) :
+      s.sort === 'distance' ? (a.dist - b.dist) :
+      s.sort === 'shifts' ? (b.shifts - a.shifts) : (b.match - a.match));
+
+    const ratingLabel = (w) => w.rating > 0 ? w.rating.toFixed(1) : 'New';
+
+    const workerCards = list.map((w) => {
+      const i = this.idx(w.id); const t = this.tintFor(i); const on = !!s.selected[w.id];
+      return { id: w.id, name: w.name, initials: this.initialsOf(w.name), match: w.match,
+        ratingLabel: ratingLabel(w), shifts: w.shifts, suburb: w.suburb, dist: w.dist,
+        hasPool: w.pool > 0, poolLabel: w.pool + (w.pool === 1 ? ' pool' : ' pools'),
+        selected: on, onToggle: this.toggleSel(w.id), onView: this.openProfile(w.id),
+        photo: w.photo || '', hasPhoto: !!w.photo, noPhoto: !w.photo, photoStyle: w.photo ? `position:absolute; inset:0; background:url('${w.photo}') center/cover;` : '',
+        tintBg: t.bg, tintFg: t.fg,
+        cardStyle: `flex:1 1 200px; max-width:222px; min-width:0; border-radius:var(--r-md); overflow:hidden; cursor:pointer; background:#fff; transition:all .15s var(--ease-out-quint); border:${on ? '2px solid var(--brand-500)' : '1.5px solid var(--ink-100)'}; box-shadow:${on ? '0 4px 14px rgba(108,96,255,0.14)' : 'var(--sh-1)'};`,
+        checkStyle: `position:absolute; right:10px; top:10px; width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; background:${on ? 'var(--brand-500)' : 'rgba(255,255,255,0.92)'}; border:${on ? 'none' : '1.5px solid var(--ink-200)'}; box-shadow:var(--sh-1);`,
+        pickStyle: `font-size:11.5px; font-weight:800; ${on ? 'color:var(--brand-700);' : 'color:var(--ink-300);'}`,
+        pickLabel: on ? 'Selected' : 'Tap to add',
+      };
+    });
+
+    const selIds = this.WORKERS.filter(w => s.selected[w.id]);
+    const selectedCount = selIds.length;
+
+    const mapPins = this.WORKERS.map((w) => {
+      const i = this.idx(w.id); const t = this.tintFor(i); const on = !!s.selected[w.id];
+      return { id: w.id, initials: w.photo ? '' : this.initialsOf(w.name), selected: on, onToggle: this.toggleSel(w.id),
+        style: `position:absolute; left:${w.x}%; top:${w.y}%; transform:translate(-50%,-50%); z-index:${on ? 6 : 3}; background:none; border:none; padding:0; cursor:pointer;`,
+        avatarStyle: `display:flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; font-family:var(--font-display); font-weight:800; font-size:12px; color:${t.fg}; border:${on ? '3px solid var(--brand-500)' : '2px solid #fff'}; box-shadow:var(--sh-2); background:${w.photo ? `url('${w.photo}') center/cover, ${t.bg}` : t.bg};` };
+    });
+    const clusters = this.CLUSTERS.map(c => ({ n: c.n,
+      style: `position:absolute; left:${c.x}%; top:${c.y}%; transform:translate(-50%,-50%); z-index:2; width:${28 + c.n / 2}px; height:${28 + c.n / 2}px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:12px; color:#fff; border:2px solid #fff; box-shadow:var(--sh-1); background:${c.danger ? 'var(--danger-500)' : 'var(--brand-500)'}; opacity:0.92;` }));
+
+    const selectedList = selIds.map((w) => {
+      const i = this.idx(w.id); const t = this.tintFor(i);
+      return { name: w.name, initials: w.photo ? '' : this.initialsOf(w.name), suburb: w.suburb, dist: w.dist, onToggle: this.toggleSel(w.id),
+        avatarStyle: `width:36px; height:36px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:12px; color:${t.fg}; border:1.5px solid var(--ink-100); background:${w.photo ? `url('${w.photo}') center/cover, ${t.bg}` : t.bg};` };
+    });
+
+    const pages = [1, 2, 3, 4].map(n => ({ n, style: `width:34px; height:34px; border-radius:9px; font-family:var(--font-body); font-weight:700; font-size:13px; cursor:pointer; background:${n === 1 ? 'var(--brand-500)' : '#fff'}; color:${n === 1 ? '#fff' : 'var(--ink-700)'}; border:1.5px solid ${n === 1 ? 'var(--brand-500)' : 'var(--ink-100)'};` }));
+
+    let profile = null;
+    if (s.profileId) {
+      const pw = this.WORKERS[this.idx(s.profileId)];
+      if (pw) {
+        const pi = this.idx(pw.id); const pt = this.tintFor(pi);
+        const d = this.PROFILE_DATA[pw.id] || this.DEFAULT_PROFILE;
+        const isNew = pw.shifts === 0; const on = !!s.selected[pw.id];
+        const topN = Math.max(1, Math.round(pw.shifts * 0.3));
+        profile = {
+          name: pw.name, tintBg: pt.bg, tintFg: pt.fg, photo: pw.photo || '', hasPhoto: !!pw.photo, noPhoto: !pw.photo, photoStyle: pw.photo ? `position:absolute; inset:0; background:url('${pw.photo}') center/cover;` : '',
+          ratingLabel: ratingLabel(pw), match: pw.match, shifts: pw.shifts,
+          suburb: pw.suburb, dist: pw.dist, radius: d.radius, availability: d.availability,
+          age: d.age, nationality: d.nationality, rights: d.rights,
+          hasPool: pw.pool > 0, poolLabel: pw.pool + (pw.pool === 1 ? ' pool' : ' pools'), topWorker: pw.match >= 95,
+          hasVideo: !!d.hasVideo, bio: d.bio,
+          relText: isNew ? 'New' : (d.reliability + '%'),
+          relBarStyle: `width:${isNew ? 8 : d.reliability}%; height:100%; border-radius:99px; background:${isNew ? 'var(--ink-200)' : 'var(--success-500)'};`,
+          relNote: isNew ? 'Not enough shifts yet to score reliability.' : (d.completion + '% shift completion · ' + d.noShow + '% no-show rate'),
+          certs: (d.certs || []).map(c => ({ label: c })),
+          verifs: [{ label: 'Identity verified' }, { label: 'Working rights verified' }, { label: 'National police check' }],
+          education: (d.education || []).map(e => ({ label: e })),
+          experience: (d.experience || []),
+          industries: (d.industries || []).map(x => ({ label: x })),
+          roles: (d.roles || []).map(x => ({ label: x })),
+          isNew, hasShifts: !isNew,
+          myShifts: isNew ? [] : [{ label: 'Usher / ticketing (' + topN + ')' }, { label: 'Customer service (' + (pw.shifts - topN) + ')' }],
+          onToggleSelect: this.toggleSel(pw.id),
+          selectLabel: on ? 'Selected for shift' : 'Add to shift',
+          selectStyle: `display:flex; align-items:center; justify-content:center; gap:9px; width:100%; border-radius:var(--r-md); padding:13px; font-family:var(--font-body); font-weight:700; font-size:15px; cursor:pointer; transition:all 120ms var(--ease-out-quint); border:2.5px solid var(--ink-900); box-shadow:4px 4px 0 var(--ink-900); background:${on ? 'var(--success-500)' : 'var(--brand-500)'}; color:#fff;`,
+        };
+      }
+    }
+
+    const ctaEnabled = selectedCount > 0;
+    return {
+      isCards: s.view === 'cards', isMap: s.view === 'map',
+      setCards: this.setView('cards'), setMap: this.setView('map'),
+      cardsTabStyle: tab(s.view === 'cards'), mapTabStyle: tab(s.view === 'map'),
+      scheduling: s.scheduling, schedulingOn: s.scheduling, toggleScheduling: this.toggle('scheduling'),
+      schedTrack: trk(s.scheduling), schedKnob: knob(s.scheduling),
+      search: s.search, onSearch: this.field('search'),
+      sort: s.sort, onSort: this.field('sort'),
+      hasFilters: true,
+      matchCount: this.TOTAL, shownCount: list.length,
+      workerCards, pages,
+      mapPins, clusters, selectedList,
+      hasSelection: selectedCount > 0, noSelection: selectedCount === 0, clearSel: this.clearSel,
+      openToMarket: s.openToMarket, onOpenToMarket: this.field('openToMarket'),
+      selSummary: selectedCount > 0 ? (selectedCount + ' of ' + this.NEEDED + ' picked') : 'No workers picked',
+      selSubLine: selectedCount >= this.NEEDED ? 'All positions covered' : (this.NEEDED - selectedCount) + ' more to fill the booking',
+      ctaLabel: ctaEnabled ? 'Review & post' : 'Pick workers to continue',
+      ctaOpacity: ctaEnabled ? '1' : '0.45', ctaCursor: ctaEnabled ? 'pointer' : 'not-allowed',
+      profileOpen: !!profile, profile, closeProfile: this.closeProfile,
+      next: this.next,
+    };
+  }
+}
+</script>
+</body>
+</html>

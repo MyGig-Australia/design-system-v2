@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="../_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; padding:0; background:var(--ink-0); }
+  * { box-sizing:border-box; }
+  @keyframes scrimIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes modalIn { from { opacity:0; transform:translateY(12px) scale(0.99); } to { opacity:1; transform:translateY(0) scale(1); } }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+  [data-scroll]::-webkit-scrollbar { width:9px; }
+  [data-scroll]::-webkit-scrollbar-thumb { background:var(--ink-100); border-radius:99px; }
+</style>
+</helmet>
+
+<!-- faux page backdrop + scrim -->
+<div style="position:relative; width:100%; height:100vh; overflow:hidden; font-family:var(--font-body); color:var(--ink-700); background:var(--ink-0);">
+  <div style="position:absolute; inset:0; padding:40px 56px; filter:blur(3px); opacity:0.55; pointer-events:none;">
+    <div style="height:30px; width:240px; background:var(--ink-100); border-radius:8px; margin-bottom:26px;"></div>
+    <div style="display:flex; gap:24px;">
+      <div style="flex:1; display:flex; flex-direction:column; gap:16px;"><div style="height:120px; background:#fff; border:1px solid var(--ink-100); border-radius:14px;"></div><div style="height:120px; background:#fff; border:1px solid var(--ink-100); border-radius:14px;"></div><div style="height:160px; background:#fff; border:1px solid var(--ink-100); border-radius:14px;"></div></div>
+      <div style="width:360px; height:300px; background:#fff; border:1px solid var(--ink-100); border-radius:14px;"></div>
+    </div>
+  </div>
+
+  <div style="position:absolute; inset:0; background:rgba(14,13,11,0.55); display:flex; align-items:center; justify-content:center; padding:28px; animation:scrimIn .2s ease;">
+
+    <!-- MODAL -->
+    <div data-scroll style="width:100%; max-width:548px; max-height:calc(100vh - 56px); overflow-y:auto; background:#fff; border-radius:var(--r-xl); box-shadow:0 24px 60px rgba(14,13,11,0.35); animation:modalIn .28s var(--ease-out-quint);">
+
+      <!-- header -->
+      <div style="position:sticky; top:0; z-index:3; background:#fff; padding:22px 24px 16px; border-bottom:1px solid var(--ink-50);">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="width:40px; height:40px; border-radius:11px; background:var(--brand-50); color:var(--brand-700); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg></span>
+            <div><div style="font-family:var(--font-display); font-weight:800; font-size:19px; letter-spacing:-0.01em; color:var(--ink-900);">Payment method</div><div style="font-size:13px; color:var(--ink-400); margin-top:2px;">You're only charged after a shift's approved hours.</div></div>
+          </div>
+          <button style="width:34px; height:34px; border-radius:9px; background:var(--ink-0); border:none; color:var(--ink-500); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;" style-hover="background:var(--ink-100); color:var(--ink-900);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+      </div>
+
+      <!-- body -->
+      <div style="padding:18px 24px 8px;">
+
+        <!-- method radio list -->
+        <div style="display:flex; flex-direction:column; gap:9px;">
+
+          <button onClick="{{ pickDynamic }}" style="{{ cardDynamic }}">
+            <span style="width:38px; height:38px; border-radius:10px; background:var(--ink-0); border:1px solid var(--ink-100); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--ink-700);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h4M17 12h4M7 7l2 2M15 15l2 2M7 17l2-2M15 9l2-2"/></svg></span>
+            <span style="flex:1; min-width:0; text-align:left;">
+              <span style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;"><span style="font-size:14.5px; font-weight:700; color:var(--ink-900);">Dynamic billing</span><span style="font-size:10px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#fff; background:var(--brand-500); padding:3px 8px; border-radius:99px;">Recommended</span></span>
+              <span style="display:block; font-size:12.5px; color:var(--ink-400); margin-top:4px; line-height:1.45;">We pick the lowest-fee method for each invoice, automatically.</span>
+            </span>
+            <span style="{{ radioDynamic }}"></span>
+          </button>
+
+          <button onClick="{{ pickCard }}" style="{{ cardCard }}">
+            <span style="width:38px; height:38px; border-radius:10px; background:var(--ink-0); border:1px solid var(--ink-100); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--ink-700);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg></span>
+            <span style="flex:1; min-width:0; text-align:left;"><span style="display:block; font-size:14.5px; font-weight:700; color:var(--ink-900);">Credit / debit card</span><span style="display:block; font-size:12.5px; color:var(--ink-400); margin-top:4px;">Visa •••• 4242 · 1.7% + A$0.30</span></span>
+            <span style="{{ radioCard }}"></span>
+          </button>
+
+          <button onClick="{{ pickPayto }}" style="{{ cardPayto }}">
+            <span style="width:38px; height:38px; border-radius:10px; background:var(--ink-0); border:1px solid var(--ink-100); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--ink-700);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 18 0M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M9 14v3M15 14v3"/></svg></span>
+            <span style="flex:1; min-width:0; text-align:left;"><span style="display:block; font-size:14.5px; font-weight:700; color:var(--ink-900);">PayTo</span><span style="display:block; font-size:12.5px; color:var(--ink-400); margin-top:4px;">Direct from your bank · 1% + A$0.30 · A$3.50 cap</span></span>
+            <span style="{{ radioPayto }}"></span>
+          </button>
+
+          <button onClick="{{ pickEnpl }}" style="{{ cardEnpl }}">
+            <span style="width:38px; height:38px; border-radius:10px; background:var(--ink-0); border:1px solid var(--ink-100); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--ink-700);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+            <span style="flex:1; min-width:0; text-align:left;"><span style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;"><span style="font-size:14.5px; font-weight:700; color:var(--ink-900);">Employ Now, Pay Later</span><span style="font-size:10px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#fff; background:var(--ink-900); padding:3px 8px; border-radius:99px;">Cashflow</span></span><span style="display:block; font-size:12.5px; color:var(--ink-400); margin-top:4px; line-height:1.45;">Finance this booking and repay in 7, 14, 30 or 60 days.</span></span>
+            <span style="{{ radioEnpl }}"></span>
+          </button>
+        </div>
+
+        <!-- DYNAMIC CONFIG -->
+        <sc-if value="{{ isDynamic }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:18px; animation:fadeUp .25s var(--ease-out-quint);">
+            <div style="display:flex; gap:10px; padding:13px 15px; background:var(--brand-50); border:1px solid var(--brand-200); border-radius:var(--r-md); margin-bottom:18px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--brand-700)" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><path d="M12 3v18M3 12h4M17 12h4M7 7l2 2M15 15l2 2M7 17l2-2M15 9l2-2"/></svg><span style="font-size:12.5px; line-height:1.5; color:var(--brand-900);">For every invoice, Dynamic compares the methods you allow below and charges the cheapest available one.</span></div>
+
+            <div style="font-size:12px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-400); margin-bottom:10px;">Methods Dynamic can use</div>
+            <div style="display:flex; flex-direction:column; gap:9px; margin-bottom:20px;">
+              <div style="{{ cardRow }}">
+                <span style="width:34px; height:34px; border-radius:9px; background:#fff; border:1px solid var(--ink-100); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--ink-700);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg></span>
+                <span style="flex:1; min-width:0;"><span style="display:block; font-size:13.5px; font-weight:700; color:var(--ink-900);">Credit / debit card</span><span style="display:block; font-size:12px; color:var(--ink-400); margin-top:1px;">Visa •••• 4242</span></span>
+                <span style="font-family:var(--font-mono); font-size:12.5px; font-weight:700; color:var(--ink-500); margin-right:4px;">1.7% + 30¢</span>
+                <button onClick="{{ toggleCardAllowed }}" style="{{ cardTrack }}"><span style="{{ cardKnob }}"></span></button>
+              </div>
+              <div style="{{ paytoRow }}">
+                <span style="width:34px; height:34px; border-radius:9px; background:#fff; border:1px solid var(--ink-100); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--ink-700);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 18 0M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11"/></svg></span>
+                <span style="flex:1; min-width:0;"><span style="display:block; font-size:13.5px; font-weight:700; color:var(--ink-900);">PayTo</span><span style="display:block; font-size:12px; color:var(--ink-400); margin-top:1px;">CBA •••• 8821 · A$3.50 cap</span></span>
+                <span style="font-family:var(--font-mono); font-size:12.5px; font-weight:700; color:var(--ink-500); margin-right:4px;">1% + 30¢</span>
+                <button onClick="{{ togglePaytoAllowed }}" style="{{ paytoTrack }}"><span style="{{ paytoKnob }}"></span></button>
+              </div>
+              <div style="{{ bankRow }}">
+                <span style="width:34px; height:34px; border-radius:9px; background:#fff; border:1px solid var(--ink-100); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--ink-700);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></span>
+                <span style="flex:1; min-width:0;"><span style="display:block; font-size:13.5px; font-weight:700; color:var(--ink-900);">Bank transfer / invoice</span><span style="display:block; font-size:12px; color:var(--ink-400); margin-top:1px;">BECS direct debit · A$3.50 cap</span></span>
+                <span style="font-family:var(--font-mono); font-size:12.5px; font-weight:700; color:var(--ink-500); margin-right:4px;">1% + 30¢</span>
+                <button onClick="{{ toggleBankAllowed }}" style="{{ bankTrack }}"><span style="{{ bankKnob }}"></span></button>
+              </div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:13px; padding:14px 16px; background:var(--ink-900); border-radius:var(--r-md);">
+              <span style="width:38px; height:38px; border-radius:50%; background:var(--brand-500); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></svg></span>
+              <div style="flex:1; min-width:0;"><div style="font-size:13px; color:rgba(255,255,255,0.6);">On this booking ({{ bookingTotal }})</div><div style="font-family:var(--font-display); font-weight:800; font-size:16px; color:#fff; margin-top:2px;">{{ savingsLine }}</div></div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:11px; margin-top:14px; padding:13px 0 4px;">
+              <span style="width:34px; height:34px; border-radius:9px; background:var(--ink-0); border:1px solid var(--ink-100); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--ink-500);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg></span>
+              <div style="flex:1; min-width:0;"><div style="font-size:13px; font-weight:700; color:var(--ink-900);">Backup card on file</div><div style="font-size:12px; color:var(--ink-400); margin-top:1px;">Visa •••• 4242 — used if a method fails</div></div>
+              <button style="background:none; border:none; color:var(--brand-700); font-family:var(--font-body); font-weight:700; font-size:12.5px; cursor:pointer; padding:4px 6px;">Manage</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- EMPLOY NOW, PAY LATER CONFIG -->
+        <sc-if value="{{ isEnpl }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:18px; animation:fadeUp .25s var(--ease-out-quint);">
+            <div style="display:flex; gap:10px; padding:13px 15px; background:var(--brand-50); border:1px solid var(--brand-200); border-radius:var(--r-md); margin-bottom:18px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--brand-700)" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span style="font-size:12.5px; line-height:1.5; color:var(--brand-900);">Finance this payroll and repay later through our fintech partner — a financing fee of about 0.15% per day applies to the invoice.</span></div>
+            <div style="font-size:12px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-400); margin-bottom:10px;">Repayment term</div>
+            <div style="display:flex; gap:8px; margin-bottom:18px;">
+              <sc-for list="{{ enplTermOptions }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onPick }}" style="{{ t.style }}"><span style="font-family:var(--font-display); font-weight:800; font-size:14.5px;">{{ t.label }}</span><span style="font-size:11px; opacity:0.82; margin-top:2px;">{{ t.feeLabel }}</span></button></sc-for>
+            </div>
+            <div style="display:flex; align-items:center; gap:13px; padding:14px 16px; background:var(--ink-900); border-radius:var(--r-md);">
+              <span style="width:38px; height:38px; border-radius:50%; background:var(--brand-500); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+              <div style="flex:1; min-width:0;"><div style="font-size:13px; color:rgba(255,255,255,0.6);">On this booking ({{ bookingTotal }})</div><div style="font-family:var(--font-display); font-weight:800; font-size:16px; color:#fff; margin-top:2px;">{{ enplReadout }}</div></div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:14px; padding:12px 14px; background:var(--ink-0); border-radius:var(--r-md);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg><span style="font-size:12px; line-height:1.5; color:var(--ink-500);">A one-time soft credit check with our fintech partner sets your limit — about 2 minutes, no impact to your score.</span></div>
+          </div>
+        </sc-if>
+
+        <!-- NON-DYNAMIC contextual note -->
+        <sc-if value="{{ showOtherNote }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:16px; display:flex; gap:10px; padding:14px 16px; background:var(--ink-0); border-radius:var(--r-md); animation:fadeUp .25s var(--ease-out-quint);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <span style="font-size:12.5px; line-height:1.5; color:var(--ink-500);">{{ otherNote }}</span>
+          </div>
+        </sc-if>
+      </div>
+
+      <!-- footer -->
+      <div style="position:sticky; bottom:0; background:#fff; padding:16px 24px; border-top:1px solid var(--ink-50); display:flex; align-items:center; justify-content:space-between; gap:12px;">
+        <span style="font-size:12px; color:var(--ink-400); display:flex; align-items:center; gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Securely stored</span>
+        <div style="display:flex; gap:10px;">
+          <button style="background:#fff; color:var(--ink-700); border:1.5px solid var(--ink-100); border-radius:var(--r-md); padding:11px 18px; font-family:var(--font-body); font-weight:700; font-size:14px; cursor:pointer;" style-hover="background:var(--ink-50);">Cancel</button>
+          <button onClick="{{ save }}" style="{{ saveStyle }}">{{ saveLabel }}<sc-if value="{{ saved }}" hint-placeholder-val="{{ false }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:920}}">
+class Component extends DCLogic {
+  state = {
+    method: 'dynamic',
+    allowed: { card: true, payto: true, bank: true },
+    enplTerm: 30,
+    saved: false,
+  };
+
+  BOOKING_TOTAL = 897.93;
+  FEE_DEFS = {
+    card:  { pct: 0.017, fixed: 0.30, cap: null },
+    payto: { pct: 0.01,  fixed: 0.30, cap: 3.50 },
+    bank:  { pct: 0.01,  fixed: 0.30, cap: 3.50 },
+  };
+  feeAmount(k) { const d = this.FEE_DEFS[k]; let f = d.pct * this.BOOKING_TOTAL + d.fixed; if (d.cap != null) f = Math.min(f, d.cap); return f; }
+
+  pick = (m) => () => this.setState({ method: m, saved: false });
+  toggleAllowed = (k) => () => this.setState(s => {
+    const enabledCount = Object.values(s.allowed).filter(Boolean).length;
+    if (s.allowed[k] && enabledCount <= 1) return null; // keep at least one
+    return { allowed: { ...s.allowed, [k]: !s.allowed[k] }, saved: false };
+  });
+  setTerm = (t) => () => this.setState({ enplTerm: t, saved: false });
+  save = () => this.setState({ saved: true });
+
+  money(n) { return '$' + (n || 0).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+  renderVals() {
+    const s = this.state;
+    const radio = (on) => `width:22px; height:22px; border-radius:50%; flex-shrink:0; align-self:center; border:${on ? '6px solid var(--brand-500)' : '2px solid var(--ink-200)'}; transition:all .15s;`;
+    const card = (on) => `display:flex; align-items:flex-start; gap:13px; width:100%; text-align:left; padding:14px 16px; border-radius:var(--r-md); cursor:pointer; font-family:var(--font-body); transition:all .15s var(--ease-out-quint); background:${on ? 'var(--brand-50)' : '#fff'}; border:${on ? '2px solid var(--brand-500)' : '1.5px solid var(--ink-100)'};`;
+    const trk = (on) => `position:relative; display:inline-block; width:42px; height:24px; border-radius:99px; flex-shrink:0; border:none; cursor:pointer; padding:0; transition:background .2s; background:${on ? 'var(--brand-500)' : 'var(--ink-200)'};`;
+    const knob = (on) => `position:absolute; top:3px; left:${on ? 21 : 3}px; width:18px; height:18px; border-radius:50%; background:#fff; box-shadow:var(--sh-1); transition:left .2s;`;
+
+    const am = (k) => { const on = !!s.allowed[k]; return {
+      onToggle: this.toggleAllowed(k), track: trk(on), knob: knob(on),
+      rowStyle: `display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--r-md); background:${on ? '#fff' : 'var(--ink-0)'}; border:1.5px solid ${on ? 'var(--brand-200)' : 'var(--ink-100)'}; transition:all .15s;` }; };
+    const amCard = am('card'), amPayto = am('payto'), amBank = am('bank');
+
+    const enabledKeys = Object.keys(s.allowed).filter(k => s.allowed[k]);
+    const dynFee = enabledKeys.length ? Math.min(...enabledKeys.map(k => this.feeAmount(k))) : this.feeAmount('card');
+    const cardFee = this.feeAmount('card');
+    const saving = Math.max(0, cardFee - dynFee);
+    const savingsLine = saving > 0.005
+      ? ('Fee ' + this.money(dynFee) + ' · saves ' + this.money(saving) + ' vs card')
+      : ('Fee ' + this.money(dynFee) + ' · lowest available');
+
+    const notes = {
+      card: 'Each approved invoice is charged to your Visa ending 4242. A 1.7% + A$0.30 Stripe fee applies.',
+      payto: 'Funds are debited directly from your linked bank account via PayTo, at 1% + A$0.30 (capped at A$3.50) — cheaper than card.',
+    };
+    const ENPL_TERMS = [7, 14, 30, 60];
+    const enplPct = (d) => parseFloat((d * 0.15).toFixed(2));
+    const enplFee = s.enplTerm * 0.0015 * this.BOOKING_TOTAL;
+    const enplTermOptions = ENPL_TERMS.map(t => { const on = s.enplTerm === t; return {
+      label: t + ' days', feeLabel: enplPct(t) + '%', onPick: this.setTerm(t),
+      style: `flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding:12px 0; border-radius:var(--r-md); cursor:pointer; font-family:var(--font-body); transition:all .15s; background:${on ? 'var(--brand-500)' : '#fff'}; color:${on ? '#fff' : 'var(--ink-900)'}; border:1.5px solid ${on ? 'var(--brand-500)' : 'var(--ink-100)'};` }; });
+    const enplReadout = 'Fee ' + this.money(enplFee) + ' (' + enplPct(s.enplTerm) + '%) · repay within ' + s.enplTerm + ' days';
+
+    const saveBtn = `display:inline-flex; align-items:center; gap:8px; border-radius:var(--r-md); padding:11px 22px; font-family:var(--font-body); font-weight:700; font-size:14px; cursor:pointer; border:2.5px solid var(--ink-900); transition:all 120ms var(--ease-out-quint); background:${s.saved ? 'var(--success-500)' : 'var(--brand-500)'}; color:#fff; box-shadow:3px 3px 0 var(--ink-900);`;
+
+    return {
+      isDynamic: s.method === 'dynamic',
+      pickDynamic: this.pick('dynamic'), pickCard: this.pick('card'), pickPayto: this.pick('payto'), pickEnpl: this.pick('enpl'),
+      cardDynamic: card(s.method === 'dynamic'), cardCard: card(s.method === 'card'), cardPayto: card(s.method === 'payto'), cardEnpl: card(s.method === 'enpl'),
+      radioDynamic: radio(s.method === 'dynamic'), radioCard: radio(s.method === 'card'), radioPayto: radio(s.method === 'payto'), radioEnpl: radio(s.method === 'enpl'),
+      isEnpl: s.method === 'enpl', enplTermOptions, enplReadout,
+
+      cardRow: amCard.rowStyle, cardTrack: amCard.track, cardKnob: amCard.knob, toggleCardAllowed: amCard.onToggle,
+      paytoRow: amPayto.rowStyle, paytoTrack: amPayto.track, paytoKnob: amPayto.knob, togglePaytoAllowed: amPayto.onToggle,
+      bankRow: amBank.rowStyle, bankTrack: amBank.track, bankKnob: amBank.knob, toggleBankAllowed: amBank.onToggle,
+      bookingTotal: this.money(this.BOOKING_TOTAL), savingsLine,
+
+      showOtherNote: s.method === 'card' || s.method === 'payto', otherNote: notes[s.method] || '',
+
+      save: this.save, saved: s.saved,
+      saveLabel: s.saved ? 'Saved' : 'Save changes', saveStyle: saveBtn,
+    };
+  }
+}
+</script>
+</body>
+</html>

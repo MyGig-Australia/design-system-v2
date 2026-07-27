@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="../_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; padding:0; background:var(--ink-0); }
+  * { box-sizing:border-box; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes popIn { from { transform:scale(0.97); } to { transform:scale(1); } }
+  @keyframes pulseDot { 0%,100% { opacity:1; } 50% { opacity:0.35; } }
+  .card { background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); box-shadow:var(--sh-1); }
+  .navitem { display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:10px; font-size:14px; font-weight:600; color:rgba(255,255,255,0.62); cursor:pointer; transition:all .15s; }
+  .navitem:hover { background:rgba(255,255,255,0.06); color:#fff; }
+  [data-scroll]::-webkit-scrollbar { width:9px; height:9px; }
+  [data-scroll]::-webkit-scrollbar-thumb { background:var(--ink-100); border-radius:99px; }
+</style>
+</helmet>
+
+<div style="display:flex; width:100%; height:100vh; overflow:hidden; font-family:var(--font-body); color:var(--ink-700); background:var(--ink-0);">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside style="width:236px; flex-shrink:0; background:var(--ink-900); display:flex; flex-direction:column; padding:22px 16px 16px;">
+    <div style="display:flex; align-items:center; gap:9px; padding:0 6px 22px;">
+      <img src="../assets/logo-wordmark-white.png" alt="MyGig" style="height:24px;">
+      <span style="font-size:10px; font-weight:700; letter-spacing:0.04em; color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.2); padding:3px 7px; border-radius:99px;">Business</span>
+    </div>
+    <a href="Post a Shift.dc.html" style="display:flex; align-items:center; justify-content:center; gap:9px; width:100%; background:var(--brand-500); color:#fff; border:none; border-radius:var(--r-md); padding:12px; font-family:var(--font-body); font-weight:700; font-size:14.5px; cursor:pointer; box-shadow:var(--sh-1); margin-bottom:18px; text-decoration:none;" style-hover="background:var(--brand-700);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>Book workers</a>
+    <nav style="display:flex; flex-direction:column; gap:3px;">
+      <div class="navitem" style="background:rgba(255,255,255,0.06); color:#fff;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Dashboard</div>
+      <div class="navitem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Shifts</div>
+      <div class="navitem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>Timesheets</div>
+      <div class="navitem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Workers</div>
+      <div class="navitem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>Reports</div>
+    </nav>
+    <div style="margin-top:auto; display:flex; align-items:center; gap:10px; padding:10px 8px; border-top:1px solid rgba(255,255,255,0.1);">
+      <div style="width:30px; height:30px; border-radius:50%; background:var(--brand-100); color:var(--brand-700); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:12px;">EV</div>
+      <span style="font-size:13px; font-weight:600; color:rgba(255,255,255,0.8);">My account</span>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main data-scroll style="flex:1; min-width:0; overflow-y:auto; position:relative;">
+
+    <!-- topbar -->
+    <div style="position:sticky; top:0; z-index:20; height:64px; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:0 32px; background:rgba(250,248,244,0.88); backdrop-filter:blur(8px); border-bottom:1px solid var(--ink-100);">
+      <span style="font-family:var(--font-display); font-weight:800; font-size:17px; color:var(--ink-900);">Dashboard</span>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1.5px solid var(--ink-100); border-radius:99px; padding:7px 13px 7px 9px; font-family:var(--font-body); font-weight:700; font-size:13px; color:var(--ink-700); cursor:pointer;" style-hover="border-color:var(--brand-300);"><span style="width:20px; height:20px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #B8B1F7, #6C60FF 70%, #4B3FD9); display:inline-flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:800; font-size:9px;">Aa</span>Ask Amy<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-300); border:1px solid var(--ink-100); border-radius:5px; padding:1px 5px;">⌘K</span></button>
+        <a href="Post a Shift.dc.html" style="display:inline-flex; align-items:center; gap:8px; background:var(--brand-500); color:#fff; border:2px solid var(--ink-900); box-shadow:3px 3px 0 var(--ink-900); border-radius:var(--r-md); padding:9px 16px; font-family:var(--font-body); font-weight:700; font-size:13.5px; text-decoration:none; transition:all 120ms var(--ease-out-quint);" style-hover="transform:translate(-1px,-1px); box-shadow:4px 4px 0 var(--ink-900);" style-active="transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink-900);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>Post a shift</a>
+      </div>
+    </div>
+
+    <div style="max-width:1140px; margin:0 auto; padding:28px 32px 80px;">
+
+      <!-- greeting -->
+      <div style="margin-bottom:20px;">
+        <h1 style="font-family:var(--font-display); font-weight:800; font-size:26px; line-height:1.1; letter-spacing:-0.02em; color:var(--ink-900); margin:0 0 6px;">{{ greeting }}, {{ firstName }}.</h1>
+        <p style="font-size:14px; color:var(--ink-400); margin:0;">{{ todayLine }}</p>
+      </div>
+
+      <!-- AMY PROACTIVE BANNER -->
+      <sc-if value="{{ amyBannerOn }}" hint-placeholder-val="{{ true }}">
+        <div style="background:var(--ink-900); border-radius:var(--r-md); padding:16px 20px; margin-bottom:24px; animation:fadeUp .3s var(--ease-out-quint);">
+          <sc-if value="{{ amyIdle }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+              <span style="width:32px; height:32px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #B8B1F7, #6C60FF 70%, #4B3FD9); display:inline-flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:800; font-size:12px; flex-shrink:0;">Aa</span>
+              <div style="flex:1; min-width:240px;">
+                <div style="font-size:10px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-300); margin-bottom:3px;">✦ Amy · noticed something</div>
+                <div style="font-size:14px; font-weight:600; color:#fff; line-height:1.45;">Tonight's Event steward shift at Hordern Pavilion is still 1 short. Want me to invite your top 3 matched workers?</div>
+              </div>
+              <div style="display:flex; gap:8px; flex-shrink:0;">
+                <button onClick="{{ amyAccept }}" style="background:var(--brand-500); color:#fff; border:none; border-radius:var(--r-md); padding:10px 16px; font-family:var(--font-body); font-weight:700; font-size:13px; cursor:pointer;" style-hover="background:var(--brand-700);">Invite all 3</button>
+                <button onClick="{{ amyDismiss }}" style="background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.75); border:1px solid rgba(255,255,255,0.18); border-radius:var(--r-md); padding:10px 16px; font-family:var(--font-body); font-weight:700; font-size:13px; cursor:pointer;" style-hover="background:rgba(255,255,255,0.14);">Not now</button>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ amyDone }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; align-items:center; gap:14px; animation:popIn .3s var(--ease-out-quint);">
+              <span style="width:32px; height:32px; border-radius:50%; background:var(--success-500); display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+              <div style="flex:1; min-width:0;"><div style="font-size:14px; font-weight:600; color:#fff;">Done — invited Priya N., Angus V. and Megan G.</div><div style="font-size:12.5px; color:rgba(255,255,255,0.6); margin-top:2px;">✦ I'll let you know as they accept. First responses usually land within 20 minutes.</div></div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- KPI ROW -->
+      <div style="display:flex; flex-wrap:wrap; gap:14px; margin-bottom:24px;">
+        <div class="card" style="flex:1 1 200px; min-width:0; padding:16px 18px;">
+          <div style="display:flex; align-items:center; gap:7px; font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-400);"><span style="width:8px; height:8px; border-radius:50%; background:var(--success-500); animation:pulseDot 1.6s infinite;"></span>On the job now</div>
+          <div style="display:flex; align-items:baseline; gap:8px; margin-top:9px;"><span style="font-family:var(--font-display); font-weight:800; font-size:30px; color:var(--ink-900); line-height:1;">{{ kpiOnJob }}</span><span style="font-size:12.5px; color:var(--ink-400);">workers · 2 sites</span></div>
+        </div>
+        <div class="card" style="flex:1 1 200px; min-width:0; padding:16px 18px;">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-400);">This week</div>
+          <div style="display:flex; align-items:baseline; gap:8px; margin-top:9px;"><span style="font-family:var(--font-display); font-weight:800; font-size:30px; color:var(--ink-900); line-height:1;">12</span><span style="font-size:12.5px; color:var(--ink-400);">shifts · <strong style="color:var(--success-700); font-weight:700;">92% filled</strong></span></div>
+        </div>
+        <button onClick="{{ goTimesheets }}" class="card" style="flex:1 1 200px; min-width:0; padding:16px 18px; text-align:left; cursor:pointer; font-family:var(--font-body); border:1.5px solid var(--warn-500); background:var(--warn-50);">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--warn-700);">Timesheets to approve</div>
+          <div style="display:flex; align-items:baseline; gap:8px; margin-top:9px;"><span style="font-family:var(--font-display); font-weight:800; font-size:30px; color:var(--ink-900); line-height:1;">{{ kpiTimesheets }}</span><span style="font-size:12.5px; color:var(--warn-700); font-weight:700;">due before Wed payrun →</span></div>
+        </button>
+        <div class="card" style="flex:1 1 200px; min-width:0; padding:16px 18px;">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-400);">July spend</div>
+          <div style="display:flex; align-items:baseline; gap:8px; margin-top:9px;"><span style="font-family:var(--font-display); font-weight:800; font-size:30px; color:var(--ink-900); line-height:1;">$8,420</span><span style="font-size:12.5px; color:var(--ink-400);">on budget</span></div>
+        </div>
+      </div>
+
+      <!-- TWO-COLUMN -->
+      <div style="display:flex; flex-wrap:wrap; gap:22px; align-items:flex-start;">
+
+        <!-- LEFT: TODAY -->
+        <div style="flex:1 1 520px; min-width:0;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+            <h2 style="font-family:var(--font-display); font-weight:800; font-size:18px; letter-spacing:-0.01em; color:var(--ink-900); margin:0;">Happening today</h2>
+            <button style="background:none; border:none; color:var(--brand-700); font-family:var(--font-body); font-weight:700; font-size:12.5px; cursor:pointer; padding:4px;">View all shifts →</button>
+          </div>
+          <div class="card" style="overflow:hidden;">
+            <sc-for list="{{ todayShifts }}" as="t" hint-placeholder-count="4">
+              <div style="display:flex; align-items:center; gap:14px; padding:14px 18px; border-bottom:1px solid var(--ink-50);">
+                <div style="width:74px; flex-shrink:0;"><div style="font-family:var(--font-mono); font-size:12.5px; font-weight:600; color:var(--ink-900);">{{ t.start }}</div><div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-300); margin-top:1px;">{{ t.end }}</div></div>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-size:14px; font-weight:700; color:var(--ink-900);">{{ t.title }}</div>
+                  <div style="font-size:12.5px; color:var(--ink-400); margin-top:2px; display:flex; align-items:center; gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.4-5.6 8.9-7.4 10.2a1 1 0 0 1-1.2 0C9.6 18.9 4 14.4 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>{{ t.venue }}</div>
+                </div>
+                <div style="display:flex; flex-shrink:0;">
+                  <sc-for list="{{ t.avatars }}" as="a" hint-placeholder-count="2"><span style="{{ a.style }}">{{ a.initials }}</span></sc-for>
+                </div>
+                <span style="{{ t.pillStyle }}">{{ t.status }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- RIGHT: ATTENTION + WEEK -->
+        <div style="flex:1 1 300px; min-width:0; max-width:380px; display:flex; flex-direction:column; gap:20px;">
+
+          <div>
+            <h2 style="font-family:var(--font-display); font-weight:800; font-size:18px; letter-spacing:-0.01em; color:var(--ink-900); margin:0 0 12px;">Needs your attention</h2>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div class="card" style="padding:14px 16px; border-left:3px solid var(--danger-500);">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                  <div style="min-width:0;"><div style="font-size:13.5px; font-weight:700; color:var(--ink-900);">1 unfilled position tonight</div><div style="font-size:12px; color:var(--ink-400); margin-top:2px;">Event steward · Hordern Pavilion · 5:00pm</div></div>
+                  <button onClick="{{ amyAccept }}" style="flex-shrink:0; background:var(--ink-900); color:#fff; border:none; border-radius:9px; padding:8px 12px; font-family:var(--font-body); font-weight:700; font-size:12px; cursor:pointer;" style-hover="background:var(--ink-700);">✦ Ask Amy</button>
+                </div>
+              </div>
+              <button onClick="{{ goTimesheets }}" class="card" style="padding:14px 16px; border-left:3px solid var(--warn-500); text-align:left; cursor:pointer; font-family:var(--font-body); width:100%;">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                  <div style="min-width:0;"><div style="font-size:13.5px; font-weight:700; color:var(--ink-900);">{{ kpiTimesheets }} timesheets awaiting approval</div><div style="font-size:12px; color:var(--ink-400); margin-top:2px;">Approve by Tue 6pm for Wednesday's payrun</div></div>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-300)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="m9 18 6-6-6-6"/></svg>
+                </div>
+              </button>
+              <div class="card" style="padding:14px 16px; border-left:3px solid var(--brand-500);">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                  <div style="min-width:0;"><div style="font-size:13.5px; font-weight:700; color:var(--ink-900);">Pay Later repayment Friday</div><div style="font-size:12px; color:var(--ink-400); margin-top:2px;">$2,140 · invoice #INV-2094 · 30-day term</div></div>
+                  <button style="flex-shrink:0; background:none; border:none; color:var(--brand-700); font-family:var(--font-body); font-weight:700; font-size:12px; cursor:pointer;">Review</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h2 style="font-family:var(--font-display); font-weight:800; font-size:18px; letter-spacing:-0.01em; color:var(--ink-900); margin:0 0 12px;">This week</h2>
+            <div class="card" style="padding:16px 18px;">
+              <div style="display:flex; align-items:flex-end; gap:8px; height:86px;">
+                <sc-for list="{{ weekBars }}" as="b" hint-placeholder-count="7">
+                  <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; height:100%; justify-content:flex-end;">
+                    <div style="{{ b.barStyle }}"></div>
+                    <span style="{{ b.labelStyle }}">{{ b.day }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex; align-items:center; gap:14px; margin-top:12px; padding-top:12px; border-top:1px solid var(--ink-50); font-size:11.5px; color:var(--ink-400);">
+                <span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:9px; height:9px; border-radius:3px; background:var(--brand-500);"></span>Filled</span>
+                <span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:9px; height:9px; border-radius:3px; background:var(--ink-100);"></span>Open</span>
+                <span style="margin-left:auto; font-weight:700; color:var(--ink-700);">12 shifts · 1 open</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1366,&quot;height&quot;:900},&quot;userName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Enguerrand Vidor&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Dashboard&quot;,&quot;label&quot;:&quot;User name&quot;},&quot;showAmyBanner&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Dashboard&quot;,&quot;label&quot;:&quot;Amy proactive banner&quot;}}">
+class Component extends DCLogic {
+  state = { amy: 'idle', timesheets: 4 };
+
+  TINTS = [
+    { bg: '#E8E6F9', fg: '#4B3FD9' }, { bg: '#FCE3D4', fg: '#B5531F' },
+    { bg: '#D7EBDD', fg: '#1F7A44' }, { bg: '#FBE6C8', fg: '#9A6B12' },
+    { bg: '#DCE7F5', fg: '#27548A' },
+  ];
+
+  TODAY = [
+    { start: '6:30am', end: '2:00pm', title: '2× Barista', venue: 'Surry Hills café', status: 'On the job', kind: 'live',
+      people: [{ n: 'Tania W.', photo: 'assets/workers/tania.jpeg' }, { n: 'Yohan B.', photo: 'assets/workers/yohan.jpeg' }] },
+    { start: '9:00am', end: '3:30pm', title: '3× Usher / Ticketing', venue: 'MyGig New Office', status: '1 on their way', kind: 'transit',
+      people: [{ n: 'Angus V.', photo: 'assets/workers/angus.jpeg' }, { n: 'Priya N.' }, { n: 'Sarah M.' }] },
+    { start: '2:00pm', end: '10:00pm', title: '2× Bartender', venue: 'The Norfolk Hotel', status: 'Starts 2:00pm', kind: 'upcoming',
+      people: [{ n: 'Xavier T.', photo: 'assets/workers/xavier.jpeg' }, { n: 'Mei L.' }] },
+    { start: '5:00pm', end: '11:00pm', title: '4× Event steward', venue: 'Hordern Pavilion', status: '1 unfilled', kind: 'gap',
+      people: [{ n: 'Daniel O.' }, { n: 'Liam T.' }, { n: 'Amara K.' }] },
+  ];
+
+  WEEK = [
+    { day: 'Mon', filled: 2, open: 0 }, { day: 'Tue', filled: 1, open: 0 },
+    { day: 'Wed', filled: 2, open: 0 }, { day: 'Thu', filled: 3, open: 1 },
+    { day: 'Fri', filled: 2, open: 0 }, { day: 'Sat', filled: 1, open: 0 }, { day: 'Sun', filled: 0, open: 0 },
+  ];
+
+  initialsOf(n) { return n.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(); }
+
+  amyAccept = () => this.setState({ amy: 'done' });
+  amyDismiss = () => this.setState({ amy: 'hidden' });
+  goTimesheets = () => {};
+
+  renderVals() {
+    const s = this.state;
+    const hour = new Date().getHours();
+    const greeting = hour < 12 ? 'Good morning' : (hour < 17 ? 'Good afternoon' : 'Good evening');
+    const firstName = (this.props.userName ?? 'Enguerrand').toString().split(' ')[0];
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const now = new Date();
+    const todayLine = days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()] + ' · 4 shifts today · 1 needs attention';
+
+    const pill = (kind) => {
+      if (kind === 'live') return 'flex-shrink:0; font-size:11px; font-weight:800; letter-spacing:0.02em; color:var(--success-700); background:var(--success-50); padding:5px 11px; border-radius:99px; white-space:nowrap;';
+      if (kind === 'transit') return 'flex-shrink:0; font-size:11px; font-weight:800; letter-spacing:0.02em; color:var(--brand-700); background:var(--brand-100); padding:5px 11px; border-radius:99px; white-space:nowrap;';
+      if (kind === 'gap') return 'flex-shrink:0; font-size:11px; font-weight:800; letter-spacing:0.02em; color:#fff; background:var(--danger-500); padding:5px 11px; border-radius:99px; white-space:nowrap;';
+      return 'flex-shrink:0; font-size:11px; font-weight:800; letter-spacing:0.02em; color:var(--ink-500); background:var(--ink-50); padding:5px 11px; border-radius:99px; white-space:nowrap;';
+    };
+
+    const todayShifts = this.TODAY.map(t => ({
+      start: t.start, end: t.end, title: t.title, venue: t.venue, status: t.status,
+      pillStyle: pill(t.kind),
+      avatars: t.people.map((p, i) => {
+        const tt = this.TINTS[i % this.TINTS.length];
+        return { initials: p.photo ? '' : this.initialsOf(p.n),
+          style: `width:30px; height:30px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:10.5px; color:${tt.fg}; border:2px solid #fff; box-shadow:var(--sh-1); ${i > 0 ? 'margin-left:-9px;' : ''} background:${p.photo ? `url('${p.photo}') center/cover, ${tt.bg}` : tt.bg};` };
+      }),
+    }));
+
+    const maxUnits = Math.max(...this.WEEK.map(w => w.filled + w.open), 1);
+    const todayIdx = (now.getDay() + 6) % 7;
+    const weekBars = this.WEEK.map((w, i) => {
+      const units = w.filled + w.open;
+      const h = units === 0 ? 6 : Math.round((units / maxUnits) * 62);
+      const isToday = i === todayIdx;
+      const bg = units === 0 ? 'var(--ink-50)' : (w.open > 0 ? `linear-gradient(to top, var(--brand-500) ${Math.round((w.filled/units)*100)}%, var(--ink-100) ${Math.round((w.filled/units)*100)}%)` : 'var(--brand-500)');
+      return { day: w.day,
+        barStyle: `width:100%; max-width:26px; height:${h}px; border-radius:6px; background:${bg}; ${units === 0 ? '' : ''}`,
+        labelStyle: `font-size:10.5px; font-weight:${isToday ? '800' : '600'}; color:${isToday ? 'var(--ink-900)' : 'var(--ink-300)'}; ${isToday ? 'text-decoration:underline; text-underline-offset:3px;' : ''}` };
+    });
+
+    return {
+      greeting, firstName, todayLine,
+      amyBannerOn: (this.props.showAmyBanner ?? true) && s.amy !== 'hidden',
+      amyIdle: s.amy === 'idle', amyDone: s.amy === 'done',
+      amyAccept: this.amyAccept, amyDismiss: this.amyDismiss,
+      kpiOnJob: 5, kpiTimesheets: s.timesheets,
+      goTimesheets: this.goTimesheets,
+      todayShifts, weekBars,
+    };
+  }
+}
+</script>
+</body>
+</html>

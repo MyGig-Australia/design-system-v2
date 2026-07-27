@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="../_ds_bundle.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: var(--ink-900); }
+  * { box-sizing: border-box; }
+  @keyframes stepIn { from { transform: translateY(10px); } to { transform: translateY(0); } }
+  @keyframes popIn { from { transform: scale(0.975); } to { transform: scale(1); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  input::placeholder, textarea::placeholder { color: var(--ink-300); }
+  [data-rail] { scrollbar-width: none; -ms-overflow-style: none; }
+  [data-rail]::-webkit-scrollbar { width: 0; height: 0; }
+  .fld { width:100%; padding:12px 14px; border:1.5px solid var(--ink-100); border-radius:var(--r-md); font-family:var(--font-body); font-size:15px; background:#fff; color:var(--ink-900); outline:none; transition:border-color .15s, box-shadow .15s; }
+  .fld:focus { border-color:var(--brand-500); box-shadow:0 0 0 3px rgba(108,96,255,.12); }
+  textarea.fld { min-height:84px; resize:vertical; line-height:1.5; font-family:var(--font-body); }
+  .lbl { display:block; font-size:13px; font-weight:700; color:var(--ink-700); margin-bottom:8px; }
+  .lbl .opt { color:var(--ink-300); font-weight:500; }
+  select.fld { -webkit-appearance:none; appearance:none; cursor:pointer; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' stroke='%236F6A60' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>"); background-repeat:no-repeat; background-position:right 14px center; padding-right:42px; }
+</style>
+</helmet>
+
+<div style="display:flex; width:100%; height:100vh; overflow:hidden; font-family:var(--font-body); color:var(--ink-700);">
+
+  <!-- ===================== LEFT — VALUE RAIL ===================== -->
+  <aside style="width:440px; flex-shrink:0; background:var(--ink-900); color:#fff; display:flex; flex-direction:column; padding:36px 40px 32px; position:relative; overflow:hidden;">
+    <div style="position:absolute; right:-80px; top:-80px; width:280px; height:280px; border-radius:50%; background:radial-gradient(circle, rgba(108,96,255,0.22), transparent 70%); pointer-events:none;"></div>
+
+    <div style="display:flex; align-items:center; gap:10px; position:relative;">
+      <img src="../assets/logo-wordmark-white.png" alt="MyGig" style="height:26px;">
+      <span style="font-size:11px; font-weight:700; letter-spacing:0.04em; color:rgba(255,255,255,0.55); border-left:1px solid rgba(255,255,255,0.2); padding-left:10px;">Business</span>
+    </div>
+
+    <div data-rail style="flex:1; display:flex; flex-direction:column; justify-content:center; position:relative; min-height:0; overflow-y:auto; padding:20px 0;">
+
+      <!-- WELCOME HERO -->
+      <sc-if value="{{ isWelcome }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:stepIn 0.4s var(--ease-out-quint);">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:var(--brand-300); margin-bottom:18px;">Workforce-as-a-Service</div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:36px; line-height:1.05; letter-spacing:-0.02em; margin:0 0 14px;">Hire casual staff without the paperwork.</h1>
+          <p style="font-size:14.5px; line-height:1.55; color:rgba(255,255,255,0.7); margin:0 0 24px; max-width:330px;">MyGig is your Employer of Record. Post a shift — we bring vetted workers, run payroll, and handle compliance.</p>
+          <div style="display:flex; gap:26px; margin-bottom:28px;">
+            <div><div style="font-family:var(--font-display); font-weight:800; font-size:30px; line-height:1; color:var(--brand-300);">90%+</div><div style="font-size:12px; color:rgba(255,255,255,0.55); margin-top:5px;">fill rate<br>(avg is 65%)</div></div>
+            <div><div style="font-family:var(--font-display); font-weight:800; font-size:30px; line-height:1; color:var(--brand-300);">2%</div><div style="font-size:12px; color:rgba(255,255,255,0.55); margin-top:5px;">no-show<br>rate</div></div>
+            <div><div style="font-family:var(--font-display); font-weight:800; font-size:30px; line-height:1; color:var(--brand-300);">30+</div><div style="font-size:12px; color:rgba(255,255,255,0.55); margin-top:5px;">checks per<br>worker</div></div>
+          </div>
+          <sc-if value="{{ showSocialProof }}" hint-placeholder-val="{{ true }}">
+            <div style="border-top:1px solid rgba(255,255,255,0.12); padding-top:22px; max-width:360px;">
+              <div style="font-family:var(--font-script); font-size:18px; line-height:1.35; color:#fff;">"Filled 40 shifts last month and never touched a payslip."</div>
+              <div style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:10px;">Priya N. · Ops Manager, Sydney hospitality group</div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- SETUP — STEPPER + PROOF -->
+      <sc-if value="{{ inSetup }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:22px;">Get set up</div>
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <sc-for list="{{ stepNodes }}" as="node" hint-placeholder-count="6">
+              <button onClick="{{ node.onGo }}" style="{{ node.rowStyle }}">
+                <span style="{{ node.circleStyle }}">
+                  <sc-if value="{{ node.isDone }}" hint-placeholder-val="{{ false }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if>
+                  <sc-if value="{{ node.showNum }}" hint-placeholder-val="{{ true }}">{{ node.n }}</sc-if>
+                </span>
+                <span style="{{ node.labelStyle }}">{{ node.label }}</span>
+                <sc-if value="{{ node.showSub }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto; font-family:var(--font-mono); font-size:11px; font-weight:600; color:var(--brand-300);">{{ node.subText }}</span></sc-if>
+              </button>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ isProofRail }}" hint-placeholder-val="{{ true }}">
+            <div style="margin-top:30px; padding:20px 22px; background:rgba(255,255,255,0.05); border-left:3px solid var(--brand-500); border-radius:0 14px 14px 0; animation:stepIn 0.35s var(--ease-out-quint);">
+              <div style="font-size:10px; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:var(--brand-300); margin-bottom:8px;">{{ railProof.kicker }}</div>
+              <div style="font-family:var(--font-display); font-weight:700; font-size:19px; line-height:1.2; margin-bottom:8px;">{{ railProof.title }}</div>
+              <div style="font-size:13px; line-height:1.5; color:rgba(255,255,255,0.6);">{{ railProof.body }}</div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- EOR STAMP -->
+    <div style="display:flex; align-items:center; gap:14px; position:relative; flex-shrink:0; margin-top:18px;">
+      <div style="background:var(--brand-500); color:#fff; padding:9px 12px; border-radius:10px; border:2px solid #fff; box-shadow:3px 3px 0 var(--brand-700); transform:rotate(-3deg); font-family:var(--font-display); font-weight:800; font-size:13px; line-height:1; text-align:center; flex-shrink:0;">EOR<div style="font-size:8px; letter-spacing:0.06em; margin-top:3px; font-weight:700;">NSW·WA·TAS·NT</div></div>
+      <div style="font-size:12px; line-height:1.5; color:rgba(255,255,255,0.55);">You're the client.<br>We're the Employer of Record.</div>
+    </div>
+  </aside>
+
+  <!-- ===================== RIGHT — STEPS ===================== -->
+  <main style="flex:1; min-width:0; background:var(--ink-0); overflow-y:auto; position:relative;">
+    <div style="position:sticky; top:0; z-index:5; background:rgba(250,248,244,0.85); backdrop-filter:blur(8px); border-bottom:1px solid var(--ink-100);">
+      <div style="height:60px; display:flex; align-items:center; justify-content:flex-end; gap:18px; padding:0 36px;">
+        <span style="font-size:12px; font-weight:700; color:var(--ink-400); font-family:var(--font-mono); letter-spacing:0.04em;">{{ stepCounter }}</span>
+        <button style="background:none; border:none; font-family:var(--font-body); font-size:13px; font-weight:600; color:var(--ink-400); cursor:pointer; padding:8px 4px;" style-hover="color:var(--ink-900);">Save &amp; exit</button>
+      </div>
+      <div style="height:3px; background:var(--ink-100);"><div style="height:100%; width:{{ progressPct }}; background:var(--brand-500); transition:width 300ms var(--ease-out-quint);"></div></div>
+    </div>
+
+    <div style="max-width:620px; margin:0 auto; padding:44px 48px 96px;">
+
+      <!-- ============ WELCOME ============ -->
+      <sc-if value="{{ isWelcome }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:stepIn 0.4s var(--ease-out-quint);">
+          <div style="font-size:12px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-700); margin-bottom:12px;">Let's get you set up</div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:34px; line-height:1.1; letter-spacing:-0.02em; color:var(--ink-900); margin:0 0 12px;">Welcome to MyGig Business</h1>
+          <p style="font-size:15px; line-height:1.6; color:var(--ink-400); margin:0 0 32px;">A few quick steps and you'll be ready to post your first shift. We've kept it short — and you can edit anything later.</p>
+
+          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:34px;">
+            <div style="display:flex; align-items:center; gap:16px; padding:15px 18px; background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); box-shadow:var(--sh-1);">
+              <span style="width:40px; height:40px; border-radius:11px; background:var(--brand-50); color:var(--brand-700); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/></svg></span>
+              <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:15px; color:var(--ink-900);">Verify your business</div><div style="font-size:13px; color:var(--ink-400); margin-top:2px;">Just your ABN</div></div>
+              <span style="font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--ink-300);">01</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:16px; padding:15px 18px; background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); box-shadow:var(--sh-1);">
+              <span style="width:40px; height:40px; border-radius:11px; background:var(--brand-50); color:var(--brand-700); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+              <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:15px; color:var(--ink-900);">Set up your profile</div><div style="font-size:13px; color:var(--ink-400); margin-top:2px;">Who workers deal with</div></div>
+              <span style="font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--ink-300);">02</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:16px; padding:15px 18px; background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); box-shadow:var(--sh-1);">
+              <span style="width:40px; height:40px; border-radius:11px; background:var(--brand-50); color:var(--brand-700); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.4-5.6 8.9-7.4 10.2a1 1 0 0 1-1.2 0C9.6 18.9 4 14.4 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+              <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:15px; color:var(--ink-900);">Add a work location</div><div style="font-size:13px; color:var(--ink-400); margin-top:2px;">Address, geofence &amp; amenities</div></div>
+              <span style="font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--ink-300);">03</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:16px; padding:15px 18px; background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); box-shadow:var(--sh-1);">
+              <span style="width:40px; height:40px; border-radius:11px; background:var(--brand-50); color:var(--brand-700); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+              <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:15px; color:var(--ink-900);">Add a position</div><div style="font-size:13px; color:var(--ink-400); margin-top:2px;">We apply the award for you</div></div>
+              <span style="font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--ink-300);">04</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:16px; padding:15px 18px; background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); box-shadow:var(--sh-1);">
+              <span style="width:40px; height:40px; border-radius:11px; background:var(--brand-50); color:var(--brand-700); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg></span>
+              <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:15px; color:var(--ink-900);">Set up payment</div><div style="font-size:13px; color:var(--ink-400); margin-top:2px;">Only charged after shifts run</div></div>
+              <span style="font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--ink-300);">05</span>
+            </div>
+          </div>
+
+          <button onClick="{{ start }}" style="display:inline-flex; align-items:center; gap:10px; background:var(--brand-500); color:#fff; border:2.5px solid var(--ink-900); box-shadow:4px 4px 0 var(--ink-900); border-radius:var(--r-md); padding:15px 26px; font-family:var(--font-body); font-weight:700; font-size:16px; cursor:pointer; transition:all 120ms var(--ease-out-quint);" style-hover="transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--ink-900);" style-active="transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink-900);">Get started<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+          <div style="font-size:12px; color:var(--ink-400); margin-top:16px;">No card needed to set up · Takes about 3 minutes</div>
+        </div>
+      </sc-if>
+
+      <!-- ============ BUSINESS ============ -->
+      <sc-if value="{{ isBusiness }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:stepIn 0.4s var(--ease-out-quint);">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-700); margin-bottom:10px;">Your business</div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:28px; line-height:1.15; letter-spacing:-0.015em; color:var(--ink-900); margin:0 0 8px;">Let's verify your business</h1>
+          <p style="font-size:14px; line-height:1.55; color:var(--ink-400); margin:0 0 28px;">Enter your ABN — we look it up live on the Australian Business Register and fill in your details. No typing.</p>
+
+          <label class="lbl">Australian Business Number (ABN)</label>
+          <div style="display:flex; gap:10px; align-items:stretch;">
+            <input value="{{ abn }}" onInput="{{ onAbn }}" placeholder="e.g. 35 673 219 737" inputmode="numeric" class="fld" style="flex:1; font-family:var(--font-mono);">
+            <button onClick="{{ verify }}" style="flex-shrink:0; background:var(--ink-900); color:#fff; border:none; border-radius:var(--r-md); padding:0 22px; font-family:var(--font-body); font-weight:700; font-size:14px; cursor:pointer; display:inline-flex; align-items:center; gap:8px; transition:background 150ms;" style-hover="background:var(--ink-700);">
+              <sc-if value="{{ abnVerifying }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin 0.7s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>Checking</sc-if>
+              <sc-if value="{{ abnIdle }}" hint-placeholder-val="{{ true }}">Look up</sc-if>
+            </button>
+          </div>
+          <div style="font-size:12px; color:var(--ink-400); margin-top:8px; display:flex; align-items:center; gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>Verified instantly via the ABR / ASIC lookup.</div>
+
+          <sc-if value="{{ abnVerified }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:18px; animation:popIn 0.4s var(--ease-out-quint);">
+              <div style="display:flex; align-items:center; gap:12px; padding:16px 18px; background:var(--success-50); border:1px solid #BFE3CC; border-radius:var(--r-md);">
+                <span style="width:34px; height:34px; border-radius:50%; background:var(--success-500); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+                <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:14px; color:var(--success-700);">{{ legalName }}</div><div style="font-size:12px; color:var(--success-700); opacity:0.85; margin-top:2px;">ABN active · GST registered · entity matched on the ABR</div></div>
+              </div>
+
+              <div style="margin-top:24px; display:flex; flex-direction:column; gap:20px;">
+                <div>
+                  <label class="lbl">Trading name <span class="opt">· optional</span></label>
+                  <input value="{{ tradingName }}" onInput="{{ onTrading }}" placeholder="If you trade under a different name" class="fld">
+                </div>
+                <div style="display:flex; gap:16px;">
+                  <div style="flex:1; min-width:0;">
+                    <label class="lbl">Industry</label>
+                    <select value="{{ industry }}" onChange="{{ onIndustry }}" class="fld"><option value="">Select…</option><sc-for list="{{ industries }}" as="ind" hint-placeholder-count="6"><option value="{{ ind }}">{{ ind }}</option></sc-for></select>
+                  </div>
+                  <div style="flex:1; min-width:0;">
+                    <label class="lbl">Team size</label>
+                    <select value="{{ employees }}" onChange="{{ onEmployees }}" class="fld"><option value="">Select…</option><sc-for list="{{ teamSizes }}" as="t" hint-placeholder-count="5"><option value="{{ t }}">{{ t }}</option></sc-for></select>
+                  </div>
+                </div>
+                <div>
+                  <label class="lbl">What does your business do? <span class="opt">· shown to workers</span></label>
+                  <textarea value="{{ bizDesc }}" onInput="{{ onBizDesc }}" placeholder="e.g. A group of three specialty coffee venues across inner Sydney." class="fld"></textarea>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ============ PROFILE ============ -->
+      <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:stepIn 0.4s var(--ease-out-quint);">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-700); margin-bottom:10px;">Your profile</div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:28px; line-height:1.15; letter-spacing:-0.015em; color:var(--ink-900); margin:0 0 8px;">Who are workers dealing with?</h1>
+          <p style="font-size:14px; line-height:1.55; color:var(--ink-400); margin:0 0 28px;">This is the contact workers and our team see for your shifts. You can invite more team members once you're in.</p>
+
+          <div style="display:flex; align-items:center; gap:16px; margin-bottom:24px;">
+            <div style="width:64px; height:64px; border-radius:50%; background:var(--brand-100); border:1.5px solid var(--ink-100); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:22px; color:var(--brand-700); flex-shrink:0;">{{ initials }}</div>
+            <button style="background:#fff; color:var(--ink-700); border:1.5px solid var(--ink-100); border-radius:var(--r-md); padding:10px 16px; font-family:var(--font-body); font-weight:700; font-size:13px; cursor:pointer; display:inline-flex; align-items:center; gap:8px;" style-hover="background:var(--ink-50);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>Upload photo</button>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div style="display:flex; gap:16px;">
+              <div style="flex:1; min-width:0;"><label class="lbl">First name</label><input value="{{ contactFirst }}" onInput="{{ onFirst }}" placeholder="Enguerrand" class="fld"></div>
+              <div style="flex:1; min-width:0;"><label class="lbl">Last name</label><input value="{{ contactLast }}" onInput="{{ onLast }}" placeholder="Vidor" class="fld"></div>
+            </div>
+            <div><label class="lbl">Job title <span class="opt">· optional</span></label><input value="{{ contactTitle }}" onInput="{{ onTitle }}" placeholder="e.g. Operations Manager" class="fld"></div>
+            <div style="display:flex; gap:16px;">
+              <div style="flex:1; min-width:0;"><label class="lbl">Work email</label><input value="{{ contactEmail }}" onInput="{{ onEmail }}" placeholder="you@business.com.au" type="email" class="fld"></div>
+              <div style="flex:1; min-width:0;"><label class="lbl">Mobile</label><input value="{{ contactPhone }}" onInput="{{ onPhone }}" placeholder="04xx xxx xxx" inputmode="tel" class="fld"></div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ LOCATION 1 — STREET ADDRESS ============ -->
+      <sc-if value="{{ isLoc1 }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:stepIn 0.4s var(--ease-out-quint);">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-700); margin-bottom:10px;">Location · 1 of 4 · Street address</div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:28px; line-height:1.15; letter-spacing:-0.015em; color:var(--ink-900); margin:0 0 8px;">Add your first work site</h1>
+          <p style="font-size:14px; line-height:1.55; color:var(--ink-400); margin:0 0 28px;">We use it to find workers nearby. You can add more sites later.</p>
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div><label class="lbl">Location name</label><input value="{{ locName }}" onInput="{{ onLocName }}" placeholder="e.g. HQ, Surry Hills café, Yennora DC" class="fld"></div>
+            <div style="display:flex; gap:16px;">
+              <div style="flex:0 0 130px;"><label class="lbl">Unit / level <span class="opt">· optional</span></label><input value="{{ locUnit }}" onInput="{{ onLocUnit }}" placeholder="Lvl 2" class="fld"></div>
+              <div style="flex:1; min-width:0;"><label class="lbl">Street address</label><input value="{{ locAddress }}" onInput="{{ onLocAddress }}" placeholder="Start typing an address…" class="fld"></div>
+            </div>
+            <sc-if value="{{ hasAddress }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1px solid var(--ink-100); border-radius:var(--r-md); overflow:hidden; box-shadow:var(--sh-1); animation:popIn 0.4s var(--ease-out-quint);">
+                <div style="height:150px; position:relative; background:repeating-linear-gradient(45deg, #ECE8DF, #ECE8DF 22px, #E5E1D7 22px, #E5E1D7 44px);">
+                  <div style="position:absolute; left:46%; top:42%; transform:translate(-50%,-100%);"><svg width="32" height="32" viewBox="0 0 24 24" fill="var(--brand-500)" stroke="#fff" stroke-width="1.5"><path d="M20 10c0 4.4-5.6 8.9-7.4 10.2a1 1 0 0 1-1.2 0C9.6 18.9 4 14.4 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.5" fill="#fff" stroke="none"/></svg></div>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; padding:12px 16px; background:#fff;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-400)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.4-5.6 8.9-7.4 10.2a1 1 0 0 1-1.2 0C9.6 18.9 4 14.4 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span style="font-size:13px; color:var(--ink-500); font-weight:500;">{{ locAddress }}</span></div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ LOCATION 2 — MEETING SPOT ============ -->
+      <sc-if value="{{ isLoc2 }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:stepIn 0.4s var(--ease-out-quint);">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-700); margin-bottom:10px;">Location · 2 of 4 · Meeting spot</div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:28px; line-height:1.15; letter-spacing:-0.015em; color:var(--ink-900); margin:0 0 8px;">Where do workers check in?</h1>
+          <p style="font-size:14px; line-height:1.55; color:var(--ink-400); margin:0 0 28px;">A clear meeting point means no one's lost on a big site or in a back lane. Workers see this before every shift.</p>
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div><label class="lbl">Meeting spot</label><input value="{{ meetingSpot }}" onInput="{{ onMeeting }}" placeholder="e.g. Loading dock, Gate 3 · Staff entrance off Foster St" class="fld"></div>
+            <div><label class="lbl">Arrival notes <span class="opt">· optional</span></label><textarea value="{{ meetingNotes }}" onInput="{{ onMeetingNotes }}" placeholder="e.g. Ask for the duty manager. Wear closed shoes. Lifts are out — use the south stairwell." class="fld"></textarea></div>
+            <div style="display:flex; align-items:flex-start; gap:10px; padding:14px 16px; background:var(--brand-50); border:1px solid var(--brand-200); border-radius:var(--r-md);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand-700)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span style="font-size:13px; color:var(--brand-900); line-height:1.5;">Sites with a clear meeting spot see fewer late starts and a lower no-show rate.</span></div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ LOCATION 3 — GEOFENCE ============ -->
+      <sc-if value="{{ isLoc3 }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:stepIn 0.4s var(--ease-out-quint);">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-700); margin-bottom:10px;">Location · 3 of 4 · Geofence</div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:28px; line-height:1.15; letter-spacing:-0.015em; color:var(--ink-900); margin:0 0 8px;">Set the clock-in zone</h1>
+          <p style="font-size:14px; line-height:1.55; color:var(--ink-400); margin:0 0 24px;">Workers can only clock on once they're inside this radius — so hours are accurate, automatically. No disputes.</p>
+          <div style="border:1px solid var(--ink-100); border-radius:var(--r-md); overflow:hidden; box-shadow:var(--sh-1);">
+            <div style="height:200px; position:relative; background:repeating-linear-gradient(45deg, #ECE8DF, #ECE8DF 22px, #E5E1D7 22px, #E5E1D7 44px); display:flex; align-items:center; justify-content:center;">
+              <div style="width:{{ geofenceCircle }}; height:{{ geofenceCircle }}; border-radius:50%; background:rgba(108,96,255,0.16); border:2px solid var(--brand-500); transition:all 200ms var(--ease-out-quint); display:flex; align-items:center; justify-content:center;"><span style="width:14px; height:14px; border-radius:50%; background:var(--brand-500); border:2px solid #fff; box-shadow:var(--sh-1);"></span></div>
+            </div>
+            <div style="padding:18px 20px; background:#fff;">
+              <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;"><label class="lbl" style="margin:0;">Clock-in radius</label><span style="font-family:var(--font-display); font-weight:800; font-size:18px; color:var(--ink-900);">{{ geofence }}m</span></div>
+              <input type="range" min="50" max="500" step="10" value="{{ geofence }}" onInput="{{ onGeofence }}" style="width:100%; accent-color:var(--brand-500); cursor:pointer;">
+              <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; color:var(--ink-300); margin-top:6px;"><span>50m · tight</span><span>500m · large site</span></div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ LOCATION 4 — AMENITIES ============ -->
+      <sc-if value="{{ isLoc4 }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:stepIn 0.4s var(--ease-out-quint);">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-700); margin-bottom:10px;">Location · 4 of 4 · Amenities</div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:28px; line-height:1.15; letter-spacing:-0.015em; color:var(--ink-900); margin:0 0 8px;">What's on site?</h1>
+          <p style="font-size:14px; line-height:1.55; color:var(--ink-400); margin:0 0 24px;">Workers value knowing what to expect. Tap everything that applies — all optional.</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <sc-for list="{{ amenityOptions }}" as="a" hint-placeholder-count="8">
+              <button onClick="{{ a.onToggle }}" style="{{ a.style }}">
+                <span style="{{ a.checkStyle }}"><sc-if value="{{ a.selected }}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if></span>
+                <span style="font-size:14px; font-weight:600; color:var(--ink-900);">{{ a.label }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ POSITION (slot) ============ -->
+      <sc-if value="{{ isPosition }}" hint-placeholder-val="{{ false }}">
+        <div data-position-slot style="animation:stepIn 0.4s var(--ease-out-quint);">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-700); margin-bottom:10px;">Positions</div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:28px; line-height:1.15; letter-spacing:-0.015em; color:var(--ink-900); margin:0 0 8px;">Add a position</h1>
+          <p style="font-size:14px; line-height:1.55; color:var(--ink-400); margin:0 0 24px;">Pick a role and we'll apply the correct modern award and pay rate automatically — Fair Work compliant, every time.</p>
+
+          <label class="lbl">Select a role</label>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <sc-for list="{{ roleOptions }}" as="r" hint-placeholder-count="6">
+              <button onClick="{{ r.onPick }}" style="{{ r.style }}">
+                <span style="width:36px; height:36px; border-radius:9px; background:var(--ink-0); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--ink-700);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+                <span style="flex:1;">{{ r.label }}</span>
+                <span style="font-size:11px; font-weight:700; color:var(--ink-900); background:var(--ink-50); padding:3px 9px; border-radius:var(--r-pill);">{{ r.tag }}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ positionChosen }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:28px; animation:popIn 0.4s var(--ease-out-quint);">
+
+              <label class="lbl">Tasks &amp; duties</label>
+              <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px;">
+                <sc-for list="{{ dutyOptions }}" as="d" hint-placeholder-count="6">
+                  <button onClick="{{ d.onToggle }}" style="{{ d.style }}"><sc-if value="{{ d.selected }}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if>{{ d.label }}</button>
+                </sc-for>
+              </div>
+
+              <div style="background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); box-shadow:var(--sh-1); overflow:hidden;">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px; border-bottom:1px solid var(--ink-50);">
+                  <div style="display:flex; align-items:center; gap:9px;"><span style="width:30px; height:30px; border-radius:8px; background:var(--brand-50); color:var(--brand-700); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span><span style="font-family:var(--font-display); font-weight:700; font-size:16px; color:var(--ink-900);">Award &amp; classification</span></div>
+                  <sc-if value="{{ awardNotConfirmed }}" hint-placeholder-val="{{ true }}"><span style="font-size:11px; font-weight:700; color:var(--brand-700); background:var(--brand-100); padding:5px 10px; border-radius:var(--r-pill); white-space:nowrap;">AI matched · {{ positionConfidence }}%</span></sc-if>
+                  <sc-if value="{{ awardConfirmed }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:var(--success-700); background:var(--success-50); padding:5px 10px; border-radius:var(--r-pill); white-space:nowrap;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Validated</span></sc-if>
+                </div>
+                <div style="padding:18px;">
+                  <p style="font-size:13px; line-height:1.5; color:var(--ink-400); margin:0 0 16px;">We verify this against Fair Work automatically. These settings define the pay rules for this position.</p>
+
+                  <div style="border:1px solid var(--ink-100); border-radius:var(--r-md); padding:13px 15px; display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px;"><div style="min-width:0;"><div style="font-size:11px; color:var(--ink-400); margin-bottom:2px;">Modern award</div><div style="font-size:14px; font-weight:600; color:var(--ink-900);">{{ positionAwardFull }}</div></div><span style="font-size:10px; font-weight:700; color:var(--ink-400); white-space:nowrap;">Auto-selected</span></div>
+
+                  <div style="border:1px solid var(--ink-100); border-radius:var(--r-md); padding:13px 15px; margin-bottom:14px;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;"><div style="min-width:0;"><div style="font-size:11px; color:var(--ink-400); margin-bottom:2px;">Classification</div><div style="font-size:14px; font-weight:600; color:var(--ink-900);">{{ positionClassName }}</div></div><div style="text-align:right; flex-shrink:0;"><div style="font-size:11px; color:var(--ink-400); margin-bottom:2px;">Base from</div><div style="font-family:var(--font-display); font-weight:800; font-size:17px; color:var(--ink-900);">${{ positionRateFull }}<span style="font-size:11px; font-weight:600; color:var(--ink-400);">/hr</span></div></div></div>
+                    <div style="font-size:12px; line-height:1.5; color:var(--ink-400); margin-top:10px; padding-top:10px; border-top:1px solid var(--ink-50);">{{ positionClsDesc }}</div>
+                  </div>
+
+                  <div style="display:flex; gap:14px; margin-bottom:16px;">
+                    <div style="flex:1; min-width:0;"><div style="font-size:11px; font-weight:700; color:var(--success-700); margin-bottom:4px;">Who it covers</div><div style="font-size:12px; line-height:1.45; color:var(--ink-400);">{{ positionCovers }}</div></div>
+                    <div style="flex:1; min-width:0;"><div style="font-size:11px; font-weight:700; color:var(--ink-400); margin-bottom:4px;">Who it doesn't</div><div style="font-size:12px; line-height:1.45; color:var(--ink-400);">{{ positionExcludes }}</div></div>
+                  </div>
+
+                  <div style="display:flex; gap:10px; padding:14px 16px; background:var(--success-50); border-radius:var(--r-md);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--success-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg><div><div style="font-size:13px; font-weight:700; color:var(--ink-900); margin-bottom:3px;">AI validation summary</div><div style="font-size:12.5px; line-height:1.5; color:var(--ink-500);">Matched the {{ positionAwardFull }}, {{ positionClassName }}. Compliant and ready for payroll processing.</div></div></div>
+
+                  <sc-if value="{{ awardNotConfirmed }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex; gap:10px; margin-top:16px;"><button onClick="{{ confirmAward }}" style="flex:1; display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--ink-900); color:#fff; border:none; border-radius:var(--r-md); padding:12px; font-family:var(--font-body); font-weight:700; font-size:14px; cursor:pointer; transition:background 150ms;" style-hover="background:var(--ink-700);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Confirm — it's compliant</button><button style="flex-shrink:0; background:#fff; color:var(--ink-700); border:1.5px solid var(--ink-100); border-radius:var(--r-md); padding:12px 16px; font-family:var(--font-body); font-weight:700; font-size:14px; cursor:pointer;" style-hover="background:var(--ink-50);">Request a change</button></div>
+                  </sc-if>
+                  <sc-if value="{{ awardConfirmed }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:16px; padding:12px 16px; background:var(--success-50); border:1px solid #BFE3CC; border-radius:var(--r-md);"><span style="display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; color:var(--success-700);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Confirmed · ready for payroll</span><button style="background:none; border:none; font-family:var(--font-body); font-weight:700; font-size:13px; color:var(--ink-500); cursor:pointer; text-decoration:underline;">Request a change</button></div>
+                  </sc-if>
+                  <div style="font-size:11px; color:var(--ink-300); margin-top:10px;">Any manual change to the award or classification needs Payroll Manager approval before you can publish shifts.</div>
+                </div>
+              </div>
+
+              <div style="margin-top:24px;">
+                <label class="lbl">Position title</label>
+                <input value="{{ title }}" onInput="{{ onTitle }}" placeholder="e.g. Bar Attendant" class="fld">
+                <div style="font-size:12px; color:var(--ink-400); margin-top:8px;">What workers see on the shift. The award above still governs pay.</div>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:12px; margin:32px 0 20px;"><div style="height:1px; flex:1; background:var(--ink-100);"></div><span style="font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-300);">Refine for the right workers · optional</span><div style="height:1px; flex:1; background:var(--ink-100);"></div></div>
+
+              <div style="margin-bottom:24px;">
+                <label class="lbl">Required certificates, experience or age</label>
+                <p style="font-size:12px; color:var(--ink-400); margin:0 0 10px;">Only workers who hold these can apply.</p>
+                <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                  <sc-for list="{{ certOptions }}" as="c" hint-placeholder-count="6">
+                    <button onClick="{{ c.onToggle }}" style="{{ c.style }}"><sc-if value="{{ c.selected }}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if>{{ c.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="display:flex; gap:16px; margin-bottom:24px;">
+                <div style="flex:1; min-width:0;"><label class="lbl">Attire instruction</label><input value="{{ attireInstruction }}" onInput="{{ onAttireInstruction }}" placeholder="e.g. Black bistro, closed shoes" class="fld"></div>
+                <div style="flex:0 0 170px;"><label class="lbl">Dress code</label><select value="{{ attireRestriction }}" onChange="{{ onAttireRestriction }}" class="fld"><sc-for list="{{ attireLevels }}" as="lvl" hint-placeholder-count="4"><option value="{{ lvl }}">{{ lvl }}</option></sc-for></select></div>
+              </div>
+
+              <div style="margin-bottom:24px;"><label class="lbl">Grooming</label><select value="{{ grooming }}" onChange="{{ onGrooming }}" class="fld"><sc-for list="{{ groomingLevels }}" as="g" hint-placeholder-count="4"><option value="{{ g }}">{{ g }}</option></sc-for></select></div>
+
+              <div>
+                <label class="lbl">Other instructions <span class="opt">· optional</span></label>
+                <textarea value="{{ otherDesc }}" onInput="{{ onOtherDesc }}" placeholder="Describe the role, any extra abilities, or upload a brief." class="fld"></textarea>
+                <button style="margin-top:10px; display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--ink-700); border:1.5px solid var(--ink-100); border-radius:var(--r-md); padding:9px 14px; font-family:var(--font-body); font-weight:700; font-size:13px; cursor:pointer;" style-hover="background:var(--ink-50);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>Attach a file</button>
+              </div>
+
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ============ PAYMENT ============ -->
+      <sc-if value="{{ isPayment }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:stepIn 0.4s var(--ease-out-quint);">
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-700); margin-bottom:10px;">Payment</div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:28px; line-height:1.15; letter-spacing:-0.015em; color:var(--ink-900); margin:0 0 8px;">How would you like to pay?</h1>
+          <p style="font-size:14px; line-height:1.55; color:var(--ink-400); margin:0 0 16px;">You're only charged after a shift is completed and the hours are approved. Pick a default — change it any time.</p>
+          <div style="display:flex; align-items:center; gap:10px; padding:12px 16px; background:var(--brand-50); border:1px solid var(--brand-200); border-radius:var(--r-md); margin-bottom:22px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand-700)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span style="font-size:13px; color:var(--brand-900); font-weight:500;">Free cancellation up to 24 hours before a shift — or any time it isn't filled.</span></div>
+
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <sc-for list="{{ paymentOptions }}" as="opt" hint-placeholder-count="5">
+              <button onClick="{{ opt.onChoose }}" style="{{ opt.cardStyle }}">
+                <span style="width:40px; height:40px; border-radius:10px; background:var(--ink-0); border:1px solid var(--ink-100); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--ink-700);">{{ opt.icon }}</span>
+                <span style="flex:1; min-width:0;">
+                  <span style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;"><span style="font-weight:700; font-size:14.5px; color:var(--ink-900);">{{ opt.name }}</span><sc-if value="{{ opt.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="{{ opt.badgeStyle }}">{{ opt.badge }}</span></sc-if></span>
+                  <span style="display:block; font-size:12.5px; color:var(--ink-400); margin-top:4px; line-height:1.45;">{{ opt.desc }}</span>
+                </span>
+                <span style="{{ opt.radioStyle }}"></span>
+              </button>
+            </sc-for>
+          </div>
+
+          <!-- ENPL expansion -->
+          <sc-if value="{{ payIsEnpl }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:14px; padding:20px; background:var(--ink-900); border-radius:var(--r-md); animation:popIn 0.35s var(--ease-out-quint);">
+              <div style="font-size:10px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-300); margin-bottom:12px;">Choose a repayment term</div>
+              <div style="display:flex; gap:8px;">
+                <sc-for list="{{ termOptions }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onPick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for>
+              </div>
+              <div style="display:flex; align-items:flex-start; gap:10px; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.12);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><path d="M9 12l2 2 4-4"/><path d="M21 12c-1 0-3-1-3-3s2-3 3-3-1-3-3-3-3 2-3 3-2-1-3-3-3 1-3 3 2 3 3 3-1 3-3 3-3-2-3-3"/></svg>
+                <div style="font-size:12.5px; line-height:1.5; color:rgba(255,255,255,0.65);">A one-time soft credit check with our fintech partner sets your limit — about 2 minutes, no impact to your score. You'll finish that after setup.</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- Invoice expansion -->
+          <sc-if value="{{ payIsInvoice }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:14px; padding:18px 20px; background:#fff; border:1.5px solid var(--ink-100); border-radius:var(--r-md); animation:popIn 0.35s var(--ease-out-quint);">
+              <sc-if value="{{ invoiceNotRequested }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; align-items:center; gap:14px;">
+                  <div style="flex:1;"><div style="font-weight:700; font-size:14px; color:var(--ink-900);">Consolidated monthly invoicing</div><div style="font-size:12.5px; color:var(--ink-400); margin-top:3px; line-height:1.45;">14-day terms on approved accounts. We'll review your ABN and trading history — usually same day.</div></div>
+                  <button onClick="{{ requestInvoice }}" style="flex-shrink:0; background:var(--ink-900); color:#fff; border:none; border-radius:var(--r-md); padding:11px 18px; font-family:var(--font-body); font-weight:700; font-size:13px; cursor:pointer;" style-hover="background:var(--ink-700);">Request access</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ invoiceRequested }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; align-items:center; gap:12px;"><span style="width:30px; height:30px; border-radius:50%; background:var(--warn-50); color:var(--warn-700); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><div><div style="font-weight:700; font-size:14px; color:var(--ink-900);">Access requested</div><div style="font-size:12.5px; color:var(--ink-400); margin-top:2px;">We're reviewing — you'll hear within one business day. Use card in the meantime.</div></div></div>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ============ DONE ============ -->
+      <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:stepIn 0.4s var(--ease-out-quint);">
+          <div style="display:inline-flex; align-items:center; gap:8px; background:var(--ink-900); color:#fff; padding:8px 14px; border-radius:var(--r-pill); border:2px solid var(--ink-900); box-shadow:3px 3px 0 var(--brand-500); transform:rotate(-1.5deg); font-family:var(--font-display); font-weight:800; font-size:13px; white-space:nowrap; margin-bottom:22px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> ALL SET</div>
+          <h1 style="font-family:var(--font-display); font-weight:800; font-size:32px; line-height:1.1; letter-spacing:-0.02em; color:var(--ink-900); margin:0 0 10px;">You're ready to hire, {{ firstName }}.</h1>
+          <p style="font-size:15px; line-height:1.6; color:var(--ink-400); margin:0 0 28px;">Your account is set up and fully covered. Post your first shift and we'll notify matched workers in your area straight away.</p>
+
+          <div style="background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); box-shadow:var(--sh-1); overflow:hidden; margin-bottom:28px;">
+            <sc-for list="{{ recap }}" as="r" hint-placeholder-count="5">
+              <div style="display:flex; align-items:center; gap:13px; padding:13px 18px; border-bottom:1px solid var(--ink-50);">
+                <span style="width:26px; height:26px; border-radius:50%; background:var(--success-50); color:var(--success-500); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+                <span style="font-size:13px; color:var(--ink-400); width:92px; flex-shrink:0;">{{ r.label }}</span>
+                <span style="flex:1; min-width:0; font-size:14px; font-weight:600; color:var(--ink-900); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.value }}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ posted }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; align-items:center; gap:14px; padding:20px 22px; background:var(--ink-900); border-radius:var(--r-md); animation:popIn 0.4s var(--ease-out-quint);">
+              <div style="background:var(--brand-500); color:#fff; padding:10px 13px; border-radius:10px; border:2px solid #fff; box-shadow:3px 3px 0 var(--brand-700); transform:rotate(-3deg); font-family:var(--font-display); font-weight:800; font-size:12px; flex-shrink:0;">ON THE<br>JOB</div>
+              <div><div style="font-family:var(--font-display); font-weight:700; font-size:16px; color:#fff;">Shift posted.</div><div style="font-size:13px; color:rgba(255,255,255,0.6); margin-top:3px;">We're notifying matched workers near {{ recapLoc }} now. Applicants roll in within the hour.</div></div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ notPosted }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <button onClick="{{ postShift }}" style="display:inline-flex; align-items:center; gap:10px; background:var(--brand-500); color:#fff; border:2.5px solid var(--ink-900); box-shadow:4px 4px 0 var(--ink-900); border-radius:var(--r-md); padding:15px 26px; font-family:var(--font-body); font-weight:700; font-size:16px; cursor:pointer; transition:all 120ms var(--ease-out-quint);" style-hover="transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--ink-900);" style-active="transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink-900);">Post your first shift<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+
+              <sc-if value="{{ amyAssist }}" hint-placeholder-val="{{ true }}">
+                <div style="margin-top:22px;">
+                  <button onClick="{{ toggleAmy }}" style="display:inline-flex; align-items:center; gap:9px; background:var(--brand-100); border:1.5px solid var(--brand-200); border-radius:var(--r-pill); padding:9px 16px 9px 9px; font-family:var(--font-body); font-weight:700; font-size:13px; color:var(--brand-900); cursor:pointer; transition:all 150ms;" style-hover="background:var(--brand-200);"><span style="width:24px; height:24px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #B8B1F7, #6C60FF 70%, #4B3FD9); display:inline-flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:800; font-size:10px;">Aa</span>…or let Amy draft it for you</button>
+
+                  <sc-if value="{{ amyOpen }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:14px; background:#fff; border:1.5px solid var(--brand-200); border-radius:var(--r-md); padding:16px; box-shadow:0 4px 16px rgba(108,96,255,0.1); animation:popIn 0.35s var(--ease-out-quint); max-width:430px;">
+                      <div style="display:flex; gap:10px;"><span style="width:24px; height:24px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #B8B1F7, #6C60FF 70%, #4B3FD9); display:inline-flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:800; font-size:10px; flex-shrink:0;">Aa</span><div style="font-size:13px; line-height:1.45; color:var(--ink-700);">Done. I drafted your first shift — it follows the {{ positionAward }}. Confirm and I'll invite top workers near {{ recapLoc }}.</div></div>
+                      <div style="margin-top:12px; background:var(--ink-0); border:1px solid var(--brand-200); border-radius:var(--r-md); padding:13px;">
+                        <div style="font-size:9px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-700); margin-bottom:8px;">✦ Draft shift · ready to post</div>
+                        <div style="font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--ink-900);">{{ recapPos }} · {{ recapLoc }}</div>
+                        <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-500); margin-top:5px; font-weight:600;">Tomorrow · 9:00am – 5:00pm · ×1 position</div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px;"><span style="font-size:11px; color:var(--ink-400);">Casual loading 25% · super incl.</span><span style="font-family:var(--font-display); font-weight:700; font-size:16px; color:var(--ink-900);">${{ positionRate }}<span style="font-size:11px; color:var(--ink-400); font-weight:500;">/hr</span></span></div>
+                      </div>
+                      <div style="display:flex; gap:8px; margin-top:12px;"><button style="flex:0 0 auto; background:#fff; color:var(--ink-700); border:1.5px solid var(--ink-100); border-radius:var(--r-sm); padding:9px 16px; font-family:var(--font-body); font-weight:700; font-size:12px; cursor:pointer;">Edit</button><button onClick="{{ postShift }}" style="flex:1; background:var(--brand-500); color:#fff; border:2px solid var(--ink-900); box-shadow:2px 2px 0 var(--ink-900); border-radius:var(--r-sm); padding:9px; font-family:var(--font-body); font-weight:700; font-size:12px; cursor:pointer;">Post &amp; invite top workers</button></div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <div style="display:flex; gap:10px; margin-top:34px; padding-top:24px; border-top:1px solid var(--ink-100);">
+            <div style="flex:1; text-align:center;"><div style="font-family:var(--font-display); font-weight:800; font-size:22px; color:var(--ink-900);">90%+</div><div style="font-size:11px; color:var(--ink-400); margin-top:2px;">fill rate</div></div>
+            <div style="flex:1; text-align:center; border-left:1px solid var(--ink-100); border-right:1px solid var(--ink-100);"><div style="font-family:var(--font-display); font-weight:800; font-size:22px; color:var(--ink-900);">60s</div><div style="font-size:11px; color:var(--ink-400); margin-top:2px;">to post a shift</div></div>
+            <div style="flex:1; text-align:center;"><div style="font-family:var(--font-display); font-weight:800; font-size:22px; color:var(--ink-900);">2%</div><div style="font-size:11px; color:var(--ink-400); margin-top:2px;">no-show rate</div></div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ SHARED FOOTER ============ -->
+      <sc-if value="{{ inFormSteps }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:40px; padding-top:24px; border-top:1px solid var(--ink-100);">
+          <button onClick="{{ back }}" style="display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--ink-700); border:1.5px solid var(--ink-100); border-radius:var(--r-md); padding:12px 20px; font-family:var(--font-body); font-weight:700; font-size:14px; cursor:pointer; transition:background 150ms;" style-hover="background:var(--ink-50);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button>
+          <button onClick="{{ next }}" style="display:inline-flex; align-items:center; gap:9px; background:var(--brand-500); color:#fff; border:2.5px solid var(--ink-900); box-shadow:4px 4px 0 var(--ink-900); border-radius:var(--r-md); padding:13px 24px; font-family:var(--font-body); font-weight:700; font-size:15px; cursor:{{ continueCursor }}; opacity:{{ continueOpacity }}; transition:all 120ms var(--ease-out-quint);" style-hover="transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--ink-900);" style-active="transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink-900);">{{ continueLabel }}<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860},&quot;railVariant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;proof&quot;,&quot;minimal&quot;],&quot;default&quot;:&quot;proof&quot;,&quot;tsType&quot;:&quot;'proof' | 'minimal'&quot;,&quot;section&quot;:&quot;Onboarding&quot;,&quot;label&quot;:&quot;Left rail style&quot;},&quot;amyAssist&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Onboarding&quot;,&quot;label&quot;:&quot;Offer Amy draft on finish&quot;},&quot;showSocialProof&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Onboarding&quot;,&quot;label&quot;:&quot;Welcome testimonial&quot;},&quot;contactName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Enguerrand Vidor&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Onboarding&quot;,&quot;label&quot;:&quot;Contact name fallback&quot;}}">
+class Component extends DCLogic {
+  state = {
+    step: 0,
+    abn: '', abnVerifying: false, abnVerified: false,
+    legalName: '', tradingName: '', bizDesc: '', industry: '', employees: '',
+    contactFirst: '', contactLast: '', contactTitle: '', contactPhone: '', contactEmail: '',
+    locName: '', locUnit: '', locAddress: '',
+    meetingSpot: '', meetingNotes: '',
+    geofence: 100,
+    amenities: ['parking', 'toilets'],
+    role: '', duties: [], title: '', awardConfirmed: false,
+    certs: ['RSA'], attireInstruction: 'Black Bistro', attireRestriction: 'Basic', grooming: 'Standard', otherDesc: '',
+    payMethod: 'dynamic', enplTerm: 30, invoiceRequested: false,
+    amyOpen: false, posted: false,
+  };
+
+  SCREENS = [
+    { key: 'welcome', section: null },
+    { key: 'business', section: 'Business' },
+    { key: 'profile', section: 'Profile' },
+    { key: 'loc1', section: 'Locations', sub: 1 },
+    { key: 'loc2', section: 'Locations', sub: 2 },
+    { key: 'loc3', section: 'Locations', sub: 3 },
+    { key: 'loc4', section: 'Locations', sub: 4 },
+    { key: 'position', section: 'Positions' },
+    { key: 'payment', section: 'Payment' },
+    { key: 'done', section: null },
+  ];
+  SECTIONS = ['Business', 'Profile', 'Locations', 'Positions', 'Payment', 'Post a shift'];
+
+  ROLES = {
+    'Bartender': { tag: 'Hospitality', award: 'Hospitality Industry (General) Award 2020', awardShort: 'Hospitality Award', cls: 'Level 2 — Food & beverage attendant grade 2', rate: '32.30', confidence: 90, duties: ['Serve drinks', 'Restock bar', 'Maintain cleanliness', 'Take payment', 'Check IDs', 'Collect glassware', 'Cash handling'], covers: 'Cafés, restaurants, bars, pubs, clubs and catering — food & beverage service, kitchen and guest services.', excludes: 'Restaurants under the Restaurant Industry Award, and clubs under the Registered Clubs Award.', clsDesc: 'Serving drinks and food, taking payment, glassware, and keeping the bar clean and stocked. Serving alcohol places this at grade 2 or higher.' },
+    'Restaurant server': { tag: 'Hospitality', award: 'Hospitality Industry (General) Award 2020', awardShort: 'Hospitality Award', cls: 'Level 2 — Food & beverage attendant grade 2', rate: '31.19', confidence: 92, duties: ['Greet guests', 'Take orders', 'Serve food & drinks', 'Take payment', 'Set & clear tables', 'Maintain cleanliness'], covers: 'Cafés, restaurants, bars, pubs, clubs and catering — food & beverage and guest services.', excludes: 'Restaurants under the Restaurant Industry Award, and clubs under the Registered Clubs Award.', clsDesc: 'Taking orders, serving food and beverages, setting and clearing tables, and handling payment.' },
+    'Barista': { tag: 'Hospitality', award: 'Hospitality Industry (General) Award 2020', awardShort: 'Hospitality Award', cls: 'Level 3 — Food & beverage attendant grade 3', rate: '33.04', confidence: 88, duties: ['Make coffee', 'Serve customers', 'Take payment', 'Restock', 'Maintain cleanliness'], covers: 'Cafés, restaurants and catering — espresso and beverage service.', excludes: 'Restaurants under the Restaurant Industry Award.', clsDesc: 'Specialist coffee preparation, customer service and point of sale, with stock and cleanliness duties.' },
+    'Warehouse picker': { tag: 'Warehousing', award: 'Storage Services & Wholesale Award 2020', awardShort: 'Storage Award', cls: 'Storeworker grade 1', rate: '30.74', confidence: 91, duties: ['Pick & pack orders', 'Scan stock', 'Load & unload', 'Maintain cleanliness'], covers: 'Warehousing, storage and wholesale distribution operations.', excludes: 'Road transport covered by the Road Transport & Distribution Award.', clsDesc: 'Order picking, packing, scanning and general storeperson duties to grade 1.' },
+    'Event steward': { tag: 'Events', award: 'Amusement, Events & Recreation Award 2020', awardShort: 'Events Award', cls: 'Level 2 — Steward / gate', rate: '32.40', confidence: 87, duties: ['Check tickets', 'Direct patrons', 'Monitor entry', 'Assist with queries'], covers: 'Events, amusement and recreation venues — stewarding and patron services.', excludes: 'Licensed security work covered by the Security Services Award.', clsDesc: 'Ticket checking, patron direction, entry monitoring and general event assistance.' },
+    'Retail assistant': { tag: 'Retail', award: 'General Retail Industry Award 2020', awardShort: 'Retail Award', cls: 'Retail employee level 1', rate: '30.10', confidence: 90, duties: ['Serve customers', 'Operate register', 'Restock shelves', 'Maintain displays'], covers: 'General retail — sales, point of sale and merchandising.', excludes: 'Fast food covered by the Fast Food Industry Award.', clsDesc: 'Customer service, point of sale, restocking and merchandising to level 1.' },
+  };
+
+  AMENITIES = [
+    { key: 'parking', label: 'On-site parking' }, { key: 'toilets', label: 'Toilets' },
+    { key: 'break', label: 'Break room' }, { key: 'lockers', label: 'Lockers / storage' },
+    { key: 'refreshments', label: 'Tea & coffee' }, { key: 'transport', label: 'Public transport' },
+    { key: 'accessible', label: 'Wheelchair access' }, { key: 'meals', label: 'Staff meals' },
+  ];
+  CERTS = ['RSA', 'RSG', 'Food Safety Supervisor', 'White Card', 'First Aid', 'Working with Children'];
+  GROOMING = ['Standard', 'Neat & tidy', 'Formal', 'Customer-facing'];
+  ATTIRE_LEVELS = ['None', 'Basic', 'Standard', 'Strict'];
+  INDUSTRIES = ['Hospitality', 'Events', 'Warehousing & logistics', 'Construction', 'Retail', 'Mining', 'Agriculture', 'Other'];
+  TEAM_SIZES = ['1–10', '11–50', '51–200', '201–500', '500+'];
+
+  RAILPROOF = {
+    Business: { kicker: 'Employer of Record', title: 'We take the legal weight.', body: 'Payroll, super, workers comp and award interpretation — all handled. You stay the client, never the employer.' },
+    Profile: { kicker: 'One account, your whole team', title: 'Invite who you need.', body: 'Add managers and approvers once you\u2019re in. Everyone works from the same shifts, timesheets and invoices.' },
+    Locations: { kicker: '90%+ fill rate', title: 'Workers near every site.', body: 'Industry average is 65%. A precise address and geofence means we match — and verify arrivals — fast.' },
+    Positions: { kicker: 'Fair Work compliant', title: 'The award, sorted for you.', body: 'Pick a role and our AI matches the modern award and classification — validated, with the basis shown.' },
+    Payment: { kicker: 'Only pay for work done', title: 'Pay after the shift.', body: 'No upfront cost. Card, PayTo, invoice — or finance it with Employ Now, Pay Later.' },
+    Done: { kicker: 'Post in 60 seconds', title: 'You\u2019re ready to hire.', body: 'Pre-vetted workers, 30+ checks, a 2% no-show rate. Post a shift and we do the rest.' },
+  };
+
+  field = (k) => (e) => this.setState({ [k]: e.target.value });
+  toggleArr = (k, v) => () => this.setState(s => { const a = s[k]; return { [k]: a.includes(v) ? a.filter(x => x !== v) : [...a, v] }; });
+  verify = () => { if (this.state.abnVerifying) return; this.setState({ abnVerifying: true }); setTimeout(() => this.setState({ abnVerifying: false, abnVerified: true, legalName: 'WORKFORCE TECHNOLOGIES PTY LTD' }), 750); };
+  pickRole = (r) => () => { const d = this.ROLES[r]; this.setState({ role: r, awardConfirmed: false, duties: d ? d.duties.slice(0, 3) : [], title: this.state.title || r }); };
+  confirmAward = () => this.setState({ awardConfirmed: true });
+  setPay = (k) => () => this.setState({ payMethod: k });
+  setTerm = (t) => () => this.setState({ enplTerm: t });
+  requestInvoice = () => this.setState({ invoiceRequested: true });
+  start = () => this.setState({ step: 1 });
+  back = () => this.setState(s => ({ step: Math.max(0, s.step - 1) }));
+  toggleAmy = () => this.setState(s => ({ amyOpen: !s.amyOpen }));
+  postShift = () => this.setState({ posted: true });
+
+  goSection = (name) => () => this.setState(s => {
+    const curSec = this.SECTIONS.indexOf(this.SCREENS[s.step].section);
+    const tgtSec = this.SECTIONS.indexOf(name);
+    if (tgtSec < 0 || tgtSec >= curSec) return null;
+    const idx = this.SCREENS.findIndex(sc => sc.section === name);
+    return idx >= 0 ? { step: idx } : null;
+  });
+
+  canContinue(key, s) {
+    if (key === 'business') return s.abnVerified && !!s.industry;
+    if (key === 'profile') return s.contactFirst.trim() && s.contactLast.trim() && s.contactEmail.trim();
+    if (key === 'loc1') return s.locName.trim() && s.locAddress.trim();
+    if (key === 'loc2') return s.meetingSpot.trim() !== '';
+    if (key === 'position') return !!s.role && s.duties.length > 0 && s.awardConfirmed && s.title.trim();
+    return true;
+  }
+  next = () => this.setState(s => {
+    const cur = this.SCREENS[s.step];
+    if (!this.canContinue(cur.key, s)) return null;
+    return { step: Math.min(this.SCREENS.length - 1, s.step + 1) };
+  });
+
+  payLabel(k, s) {
+    if (k === 'card') return 'Credit / debit card';
+    if (k === 'payto') return 'PayTo';
+    if (k === 'invoice') return s.invoiceRequested ? 'Invoice (access requested)' : 'Invoice';
+    if (k === 'enpl') return 'Employ Now, Pay Later · ' + s.enplTerm + ' days';
+    return 'Dynamic billing';
+  }
+
+  ic(paths) { return React.createElement('svg', { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.75, strokeLinecap: 'round', strokeLinejoin: 'round' }, paths.map((d, i) => React.createElement('path', { key: i, d }))); }
+
+  renderVals() {
+    const s = this.state;
+    const cur = this.SCREENS[s.step];
+    const key = cur.key;
+    const railVariant = this.props.railVariant ?? 'proof';
+    const amyAssist = this.props.amyAssist ?? true;
+    const showSocialProof = this.props.showSocialProof ?? true;
+
+    const curSecIdx = key === 'done' ? this.SECTIONS.indexOf('Post a shift') : this.SECTIONS.indexOf(cur.section);
+    const stepNodes = this.SECTIONS.map((label, i) => {
+      const status = i < curSecIdx ? 'done' : (i === curSecIdx ? 'active' : 'upcoming');
+      const circleBg = status === 'done' ? 'var(--brand-500)' : (status === 'active' ? '#fff' : 'transparent');
+      const circleBorder = status === 'upcoming' ? '1.5px solid rgba(255,255,255,0.22)' : (status === 'done' ? '1.5px solid var(--brand-500)' : '1.5px solid #fff');
+      const circleColor = status === 'active' ? 'var(--ink-900)' : (status === 'upcoming' ? 'rgba(255,255,255,0.4)' : '#fff');
+      const clickable = i < curSecIdx;
+      return {
+        n: i + 1, label,
+        isDone: status === 'done', showNum: status !== 'done',
+        showSub: label === 'Locations' && cur.section === 'Locations', subText: cur.sub + ' / 4',
+        onGo: clickable ? this.goSection(label) : (() => {}),
+        rowStyle: `display:flex; align-items:center; gap:14px; width:100%; text-align:left; background:none; border:none; padding:7px 0; font-family:var(--font-body); cursor:${clickable ? 'pointer' : 'default'};`,
+        circleStyle: `width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; font-family:var(--font-display); background:${circleBg}; border:${circleBorder}; color:${circleColor}; transition:all 200ms var(--ease-out-quint);`,
+        labelStyle: `font-size:14.5px; color:${status === 'upcoming' ? 'rgba(255,255,255,0.4)' : '#fff'}; font-weight:${status === 'active' ? '700' : '500'};`,
+      };
+    });
+
+    const p = this.ROLES[s.role] || null;
+    const railKey = key === 'done' ? 'Done' : cur.section;
+    const railProof = this.RAILPROOF[railKey] || this.RAILPROOF.Business;
+
+    // amenities
+    const amenityOptions = this.AMENITIES.map(a => {
+      const sel = s.amenities.includes(a.key);
+      return { key: a.key, label: a.label, selected: sel, onToggle: this.toggleArr('amenities', a.key),
+        style: `display:flex; align-items:center; gap:12px; width:100%; text-align:left; padding:13px 15px; border-radius:var(--r-md); cursor:pointer; transition:all 150ms var(--ease-out-quint); background:${sel ? 'var(--brand-50)' : '#fff'}; border:${sel ? '2px solid var(--brand-500)' : '1.5px solid var(--ink-100)'};`,
+        checkStyle: `width:22px; height:22px; border-radius:6px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:${sel ? 'var(--brand-500)' : '#fff'}; border:${sel ? 'none' : '1.5px solid var(--ink-200)'};` };
+    });
+
+    // payment
+    const ICONS = {
+      card: this.ic(['M2 7h20', 'M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z']),
+      bank: this.ic(['m3 21 18 0', 'M3 10h18', 'M5 6l7-3 7 3', 'M4 10v11', 'M20 10v11', 'M9 14v3', 'M15 14v3']),
+      spark: this.ic(['M12 3v18', 'M3 12h4', 'M17 12h4', 'M7 7l2 2', 'M15 15l2 2', 'M7 17l2-2', 'M15 9l2-2']),
+      invoice: this.ic(['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z', 'M14 2v6h6', 'M9 13h6', 'M9 17h4']),
+      finance: this.ic(['M12 2v20', 'M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6']),
+    };
+    const payDefs = [
+      { key: 'card', name: 'Credit / debit card', desc: 'Charged automatically after each shift is approved.', badge: '', badgeKind: '', icon: 'card' },
+      { key: 'payto', name: 'PayTo', desc: 'Paid direct from your bank — lower fees on larger invoices.', badge: '', badgeKind: '', icon: 'bank' },
+      { key: 'dynamic', name: 'Dynamic — optimise fees', desc: 'We pick the cheapest method for each invoice automatically.', badge: 'Recommended', badgeKind: 'brand', icon: 'spark' },
+      { key: 'invoice', name: 'Invoice', desc: 'Consolidated monthly invoicing on approved 14-day terms.', badge: 'Request access', badgeKind: 'ghost', icon: 'invoice' },
+      { key: 'enpl', name: 'Employ Now, Pay Later', desc: 'Finance your invoices and repay in 7, 14, 30 or 60 days, via our fintech partner.', badge: 'Cashflow', badgeKind: 'ink', icon: 'finance' },
+    ];
+    const radio = (sel) => `width:20px; height:20px; border-radius:50%; flex-shrink:0; align-self:center; border:${sel ? '6px solid var(--brand-500)' : '2px solid var(--ink-200)'}; transition:all 150ms;`;
+    const badgeStyle = (kind) => {
+      if (kind === 'brand') return 'font-size:10px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#fff; background:var(--brand-500); padding:3px 8px; border-radius:var(--r-pill);';
+      if (kind === 'ink') return 'font-size:10px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#fff; background:var(--ink-900); padding:3px 8px; border-radius:var(--r-pill);';
+      return 'font-size:10px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:var(--brand-700); background:var(--brand-100); padding:3px 8px; border-radius:var(--r-pill);';
+    };
+    const paymentOptions = payDefs.map(d => {
+      const sel = s.payMethod === d.key;
+      return { ...d, icon: ICONS[d.icon], hasBadge: !!d.badge, badgeStyle: badgeStyle(d.badgeKind), onChoose: this.setPay(d.key),
+        cardStyle: `display:flex; align-items:flex-start; gap:14px; width:100%; text-align:left; padding:16px 18px; border-radius:var(--r-md); cursor:pointer; transition:all 150ms var(--ease-out-quint); background:${sel ? 'var(--brand-50)' : '#fff'}; border:${sel ? '2px solid var(--brand-500)' : '1.5px solid var(--ink-100)'};`,
+        radioStyle: radio(sel) };
+    });
+    const termOptions = [7, 14, 30, 60].map(t => {
+      const sel = s.enplTerm === t;
+      return { t, label: t + ' days', onPick: this.setTerm(t),
+        style: `flex:1; padding:11px 0; border-radius:var(--r-md); font-family:var(--font-body); font-weight:700; font-size:13px; cursor:pointer; transition:all 150ms; background:${sel ? 'var(--brand-500)' : 'rgba(255,255,255,0.06)'}; color:#fff; border:${sel ? '1.5px solid var(--brand-300)' : '1.5px solid rgba(255,255,255,0.15)'};` };
+    });
+
+    const firstName = (s.contactFirst || (this.props.contactName ?? 'there').toString().split(' ')[0]) || 'there';
+    const lastName = s.contactLast || '';
+    const initials = ((s.contactFirst[0] || '') + (s.contactLast[0] || '')).toUpperCase() || 'You';
+    const recapLoc = s.locName || 'your site';
+
+    const recap = [
+      { label: 'Business', value: s.legalName || '—' },
+      { label: 'Contact', value: (firstName + ' ' + lastName).trim() || '—' },
+      { label: 'Location', value: s.locName ? (s.locName + (s.locAddress ? ' · ' + s.locAddress : '')) : '—' },
+      { label: 'Position', value: p ? (s.title || s.role) : '—' },
+      { label: 'Payment', value: this.payLabel(s.payMethod, s) },
+    ];
+
+    const roleOptions = Object.keys(this.ROLES).map(r => {
+      const it = this.ROLES[r]; const sel = s.role === r;
+      return { label: r, tag: it.tag, selected: sel, onPick: this.pickRole(r),
+        style: `display:flex; align-items:center; gap:12px; width:100%; text-align:left; padding:13px 16px; border-radius:var(--r-md); font-family:var(--font-body); font-size:14.5px; font-weight:600; cursor:pointer; transition:all 150ms var(--ease-out-quint); color:var(--ink-900); background:${sel ? 'var(--brand-50)' : '#fff'}; border:${sel ? '2px solid var(--brand-500)' : '1.5px solid var(--ink-100)'};` };
+    });
+    const pillStyle = (sel) => `display:inline-flex; align-items:center; gap:7px; padding:8px 14px; border-radius:var(--r-pill); font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer; transition:all 150ms; background:${sel ? 'var(--brand-500)' : '#fff'}; color:${sel ? '#fff' : 'var(--ink-700)'}; border:${sel ? '2px solid var(--brand-500)' : '1.5px solid var(--ink-100)'};`;
+    const dutyOptions = (p ? p.duties : []).map(d => ({ label: d, selected: s.duties.includes(d), onToggle: this.toggleArr('duties', d), style: pillStyle(s.duties.includes(d)) }));
+    const certOptions = this.CERTS.map(c => ({ label: c, selected: s.certs.includes(c), onToggle: this.toggleArr('certs', c), style: pillStyle(s.certs.includes(c)) }));
+    const canCont = this.canContinue(key, s);
+    const counterLabel = cur.section ? (cur.section === 'Locations' ? 'LOCATION · ' + cur.sub + ' OF 4' : cur.section.toUpperCase()) : '';
+    const progressPct = key === 'welcome' ? '0%' : (key === 'done' ? '100%' : Math.round(((curSecIdx + (cur.sub ? cur.sub / 4 : 1)) / 5) * 100) + '%');
+
+    return {
+      isWelcome: key === 'welcome', isBusiness: key === 'business', isProfile: key === 'profile',
+      isLoc1: key === 'loc1', isLoc2: key === 'loc2', isLoc3: key === 'loc3', isLoc4: key === 'loc4',
+      isPosition: key === 'position', isPayment: key === 'payment', isDone: key === 'done',
+      inSetup: key !== 'welcome', inFormSteps: key !== 'welcome' && key !== 'done',
+      stepCounter: counterLabel, progressPct,
+      stepNodes, isProofRail: railVariant === 'proof', railProof,
+      showSocialProof, amyAssist,
+
+      welcomeSteps: [
+        { n: '01', title: 'Verify your business', sub: 'Just your ABN', icon: this.ic(['M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z', 'M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2', 'M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2', 'M10 6h4M10 10h4M10 14h4M10 18h4']) },
+        { n: '02', title: 'Set up your profile', sub: 'Who workers deal with', icon: this.ic(['M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2', 'M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z']) },
+        { n: '03', title: 'Add a work location', sub: 'Address, geofence & amenities', icon: this.ic(['M20 10c0 4.4-5.6 8.9-7.4 10.2a1 1 0 0 1-1.2 0C9.6 18.9 4 14.4 4 10a8 8 0 0 1 16 0Z', 'M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z']) },
+        { n: '04', title: 'Add a position', sub: 'We apply the award for you', icon: this.ic(['M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16', 'M4 7h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z']) },
+        { n: '05', title: 'Set up payment', sub: 'Only charged after shifts run', icon: this.ic(['M2 7h20', 'M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z']) },
+      ],
+
+      abn: s.abn, onAbn: this.field('abn'), verify: this.verify,
+      abnVerifying: s.abnVerifying, abnIdle: !s.abnVerifying, abnVerified: s.abnVerified, legalName: s.legalName,
+      tradingName: s.tradingName, onTrading: this.field('tradingName'),
+      industry: s.industry, onIndustry: this.field('industry'), industries: this.INDUSTRIES,
+      employees: s.employees, onEmployees: this.field('employees'), teamSizes: this.TEAM_SIZES,
+      bizDesc: s.bizDesc, onBizDesc: this.field('bizDesc'),
+
+      contactFirst: s.contactFirst, onFirst: this.field('contactFirst'),
+      contactLast: s.contactLast, onLast: this.field('contactLast'),
+      contactTitle: s.contactTitle, onTitle: this.field('contactTitle'),
+      contactEmail: s.contactEmail, onEmail: this.field('contactEmail'),
+      contactPhone: s.contactPhone, onPhone: this.field('contactPhone'),
+      initials,
+
+      locName: s.locName, onLocName: this.field('locName'),
+      locUnit: s.locUnit, onLocUnit: this.field('locUnit'),
+      locAddress: s.locAddress, onLocAddress: this.field('locAddress'), hasAddress: s.locAddress.trim() !== '',
+      meetingSpot: s.meetingSpot, onMeeting: this.field('meetingSpot'),
+      meetingNotes: s.meetingNotes, onMeetingNotes: this.field('meetingNotes'),
+      geofence: s.geofence, onGeofence: this.field('geofence'), geofenceCircle: Math.round(60 + (s.geofence - 50) / 450 * 110) + 'px',
+      amenityOptions,
+
+      paymentOptions, payIsEnpl: s.payMethod === 'enpl', payIsInvoice: s.payMethod === 'invoice',
+      termOptions, invoiceRequested: s.invoiceRequested, invoiceNotRequested: !s.invoiceRequested, requestInvoice: this.requestInvoice,
+
+      start: this.start, back: this.back, next: this.next,
+      continueOpacity: canCont ? '1' : '0.4', continueCursor: canCont ? 'pointer' : 'not-allowed',
+      continueLabel: key === 'payment' ? 'Finish setup' : 'Continue',
+
+      roleOptions, dutyOptions, certOptions,
+      positionChosen: !!p,
+      positionConfidence: p ? p.confidence : 0,
+      positionAwardFull: p ? p.award : '',
+      positionCovers: p ? p.covers : '',
+      positionExcludes: p ? p.excludes : '',
+      positionClassName: p ? p.cls : '',
+      positionClsDesc: p ? p.clsDesc : '',
+      positionRateFull: p ? p.rate : '',
+      awardConfirmed: s.awardConfirmed, awardNotConfirmed: !s.awardConfirmed, confirmAward: this.confirmAward,
+      title: s.title, onTitle: this.field('title'),
+      attireInstruction: s.attireInstruction, onAttireInstruction: this.field('attireInstruction'),
+      attireRestriction: s.attireRestriction, onAttireRestriction: this.field('attireRestriction'), attireLevels: this.ATTIRE_LEVELS,
+      grooming: s.grooming, onGrooming: this.field('grooming'), groomingLevels: this.GROOMING,
+      otherDesc: s.otherDesc, onOtherDesc: this.field('otherDesc'),
+      positionAward: p ? p.awardShort : 'Hospitality Award', positionRate: p ? p.rate : '32.30',
+      firstName, recap, recapLoc, recapPos: p ? (s.title || s.role) : 'a worker',
+      posted: s.posted, notPosted: !s.posted, postShift: this.postShift,
+      amyOpen: s.amyOpen, toggleAmy: this.toggleAmy,
+    };
+  }
+}
+</script>
+</body>
+</html>
