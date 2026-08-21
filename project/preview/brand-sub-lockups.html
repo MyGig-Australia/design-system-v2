@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" viewport="760x380" name="Logo — sub-brand lockups" subtitle="MyGig Business · MyGig Worker — divider + label construction" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--ink-0); }
+  body { padding: 20px; font-family: var(--font-body); color: var(--ink-700); min-height: 380px; }
+  .lockup { display: inline-flex; align-items: center; gap: 18px; }
+  .lockup img { height: 34px; display: block; }
+  .lockup .div { width: 1.5px; height: 30px; background: currentColor; opacity: 0.35; }
+  .lockup .sub { font-family: var(--font-body); font-weight: 700; font-size: 17px; letter-spacing: 0.22em; text-transform: uppercase; }
+  
+</style>
+</head>
+<body>
+
+  <div style="display:flex; flex-direction:column; gap:16px;">
+    <div class="mg-eyebrow" style="color:var(--ink-400);">Sub-brand lockups — Business &amp; Worker</div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div style="background:var(--ink-900); border-radius:var(--r-md); padding:34px 32px; display:flex; align-items:center; justify-content:center; color:white;">
+        <div class="lockup">
+          <img src="../assets/logo-wordmark-white.png" alt="MyGig">
+          <span class="div"></span>
+          <span class="sub" style="color:var(--brand-300);">Worker</span>
+        </div>
+      </div>
+      <div style="background:var(--ink-900); border-radius:var(--r-md); padding:34px 32px; display:flex; align-items:center; justify-content:center; color:white;">
+        <div class="lockup">
+          <img src="../assets/logo-wordmark-white.png" alt="MyGig">
+          <span class="div"></span>
+          <span class="sub" style="color:var(--brand-300);">Business</span>
+        </div>
+      </div>
+      <div style="background:var(--surface-0); border:1px solid var(--ink-100); border-radius:var(--r-md); padding:34px 32px; display:flex; align-items:center; justify-content:center; color:var(--ink-900);">
+        <div class="lockup">
+          <img src="../assets/logo-wordmark-black.png" alt="MyGig">
+          <span class="div"></span>
+          <span class="sub" style="color:var(--brand-700);">Worker</span>
+        </div>
+      </div>
+      <div style="background:var(--surface-0); border:1px solid var(--ink-100); border-radius:var(--r-md); padding:34px 32px; display:flex; align-items:center; justify-content:center; color:var(--ink-900);">
+        <div class="lockup">
+          <img src="../assets/logo-wordmark-black.png" alt="MyGig">
+          <span class="div"></span>
+          <span class="sub" style="color:var(--brand-700);">Business</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mg-body-sm" style="color:var(--ink-400); max-width:640px;">
+      Construction: wordmark · 1.5px divider at 35% opacity · sub-label in Manrope 700, +0.22em tracking, uppercase. Label sits in <span class="mg-mono" style="font-size:12px;">brand-300</span> on dark, <span class="mg-mono" style="font-size:12px;">brand-700</span> on light. Divider height = wordmark cap-height; gap = 18px each side.
+    </div>
+  </div>
+
+</body>
+</html>

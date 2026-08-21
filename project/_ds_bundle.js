@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":3,"namespace":"MyGigDesignSystem_019e00","components":[],"sourceHashes":{"deck-stage.js":"0c125b8b1e23","ui_kits/jobboard/ds-base.js":"a966d020f88e"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":4,"namespace":"MyGigDesignSystem_019e00","components":[],"sourceHashes":{"deck-stage.js":"0c125b8b1e23","ui_kits/jobboard/ds-base.js":"a966d020f88e"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
 
