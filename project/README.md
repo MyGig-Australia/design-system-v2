@@ -4,10 +4,27 @@
 
 This is the design system for **MyGig** — Australia's AI-powered Workforce‑as‑a‑Service platform and Employer of Record (EOR). The system is built to serve two very different audiences from a single, coherent brand:
 
-1. **Businesses** — managers and HR teams who post shifts, manage casual workforces, and need to feel that compliance, payroll, and award interpretation are handled.
+1. **Businesses** — SMBs that need frontline and blue-collar workers across work sites in every industry. The buyers are managing directors and finance leads (CFO, finance manager); ops and site managers post shifts day to day. They need to feel that compliance, payroll, and award interpretation are handled.
 2. **Workers** — casuals, students, backpackers, and tradies who pick up shifts on their phone, clock in, get paid, and build a profile.
 
 The brand also speaks publicly through a **marketing site** (mygig.com.au) targeting both audiences.
+
+**Industry priority (marketing):** 1. Warehousing and Retail · 2. Hospitality and Events · 3. Logistics and Construction · then Mining, Agriculture and the rest.
+
+**Offer:** one public price, a **15% service fee**, default for every business. It covers recruitment, onboarding, time and attendance, payroll, compliance and payments, including running super, tax and workers compensation. Statutory costs (super contributions, workers compensation premiums, payroll tax) are not part of the fee: never imply they are free.
+
+### Copy rules (all channels)
+- Say "Workforce-as-a-Service" and "platform". Never "marketplace" or "labour hire".
+- Say "Employer of Record in NSW, WA, TAS and NT". Never "licensed" or "authorised" about MyGig's regulatory status. MyGig operates only in states that don't require a labour hire licence; changing that list is a legal sign-off.
+- Never state a total number of Modern Awards.
+- The URL is mygig.com.au, written and spoken correctly.
+- No em dashes in emails.
+
+### AI people and Amy
+- **AI-generated people are allowed** for presenters, scenes and ads, without an on-image label, in the documentary look below. Start from real people (staff, partners, clients) with their written consent to use their likeness.
+- **Never** present an AI person as a named real worker or client, and never give an AI person a testimonial, quote or earnings claim. Worker stories and quotes come from real people.
+- Switch on a platform's AI-content setting where its rules require it (TikTok does for realistic AI content).
+- **Amy** is MyGig's AI assistant with one fixed human face (profile portrait, black MyGig tee, same office set, Ainsley voice). Always introduce her as AI; never present her as a human employee. The violet spark orb is her compact in-product mark; ✦ prefixes AI suggestions.
 
 ---
 
@@ -73,7 +90,8 @@ We are not corporate HR-speak. We are not Silicon-Valley breezy. We are direct, 
 - **2%** no-show rate
 - **30+** data points verified per worker
 - **$31.19/hr** national minimum
-- States MyGig is an authorised EOR in: **NSW, WA, TAS, NT** (QLD, VIC, SA, ACT pending — _always state this honestly_)
+- States MyGig operates in as EOR: **NSW, WA, TAS, NT** (states without labour hire licensing). Never write "authorised EOR" or "licensed".
+- These figures come from MyGig's early operations: say so where space allows ("since launch") and refresh them from the Admin every quarter.
 
 ### Tagline use
 
@@ -175,7 +193,7 @@ We **do** use:
 - **The hero stack** — the signature marketing composition: three photo-cards rotated at `+3°`, `−2°`, and straight. Always include at least one ink-900 card in the mix; never three light cards in a row.
 - **Diversity** — represent Australia's casual workforce honestly. Age, gender, ethnicity — all real, all on the floor.
 
-> **We do not generate fake AI worker photography.** If real photography isn't available for a layout, use a solid ink-900 block at the intended dimensions with a brand-300 corner label naming the planned shot (e.g. "Sarah, espresso pull, Single O Surry Hills"). This is the only sanctioned placeholder — see the Imagery preview card for the exact treatment.
+> **Real photography first; AI people follow the rules in "AI people and Amy" above.** If neither is available for a layout, use a solid ink-900 block at the intended dimensions with a brand-300 corner label naming the planned shot (e.g. "Sarah, espresso pull, Single O Surry Hills"). See the Imagery preview card for the exact treatment.
 
 ### Avatars
 Worker avatars follow a single rule: **use the worker's profile photo when we have it; otherwise initials on a coloured background.** Both variants share the circular crop and a `1.5px` ink border. The coloured background for initials is randomly assigned from the **industry tag tints** so it stays on-system. See the Worker chip preview card for the exact pattern.
@@ -268,7 +286,7 @@ The two product lines share one lockup pattern (see the **Logo — sub-brand loc
 | **Inside flows** | "Post or ask Amy" replaces standalone "+ Post a shift" — natural-language input feeds the shift composer. |
 
 ### Amy's visual identity
-- **The Amy mark** — a small purple radial-gradient orb with "Aa" inside. Three sizes (`sm 18`, `md 24`, `lg 32`). Use this anywhere Amy "speaks" — never a stock robot icon, never a human-style avatar.
+- **The Amy mark** — a small purple radial-gradient orb with "Aa" inside. Three sizes (`sm 18`, `md 24`, `lg 32`). Use this compact mark in product chrome where a face is too small to read; Amy's human face (profile portrait) is used for her avatar, videos and marketing. Never a stock robot icon.
 - **The spark glyph (`✦`)** — Amy's signature glyph. Use it as a bullet in front of Amy-generated suggestions, draft artifacts, and proactive labels.
 - **Brand-300 type on dark** for Amy-labelled headings (e.g. "AMY · NOTICED SOMETHING") so she reads as "AI, helpful" rather than competing with semantic colours.
 
